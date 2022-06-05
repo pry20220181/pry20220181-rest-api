@@ -35,7 +35,8 @@ namespace pry20220181_data_layer
         public DbSet<Vaccine> Vaccines { get; set; }
         private void SeedData()
         {
-            Vaccines.AddRange(new List<Vaccine>() {
+            if (Vaccines.Count() == 0)
+                Vaccines.AddRange(new List<Vaccine>() {
                 new Vaccine() { Name = "Influenza", Description = "Vacuna para la influenza" },
                 new Vaccine() { Name = "Neumococo", Description = "Vacuna para la neumococo" }
             });
