@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pry20220181-rest-api", "pry20220181-rest-api\pry20220181-rest-api.csproj", "{213E0BDF-9C6D-4C7F-A865-06D6E812E58E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pry20220181-rest-api", "pry20220181-rest-api\pry20220181-rest-api.csproj", "{213E0BDF-9C6D-4C7F-A865-06D6E812E58E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pry20220181-core-layer", "pry20220181-core-layer\pry20220181-core-layer.csproj", "{AE726EE8-21CE-46A2-BB13-A283CED8B360}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pry20220181-data-layer", "pry20220181-data-layer\pry20220181-data-layer.csproj", "{3B8619E8-4DA2-4AB3-8B1B-742FD452D322}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{213E0BDF-9C6D-4C7F-A865-06D6E812E58E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{213E0BDF-9C6D-4C7F-A865-06D6E812E58E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{213E0BDF-9C6D-4C7F-A865-06D6E812E58E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE726EE8-21CE-46A2-BB13-A283CED8B360}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE726EE8-21CE-46A2-BB13-A283CED8B360}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE726EE8-21CE-46A2-BB13-A283CED8B360}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE726EE8-21CE-46A2-BB13-A283CED8B360}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B8619E8-4DA2-4AB3-8B1B-742FD452D322}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B8619E8-4DA2-4AB3-8B1B-742FD452D322}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B8619E8-4DA2-4AB3-8B1B-742FD452D322}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B8619E8-4DA2-4AB3-8B1B-742FD452D322}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

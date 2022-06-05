@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>pry20220181_core_layer</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+    <Folder Include="Modules\Campaigns\DTOs\" />
+    <Folder Include="Modules\Campaigns\Models\" />
+    <Folder Include="Modules\Campaigns\Repositories\" />
+    <Folder Include="Modules\Campaigns\Services\" />
+    <Folder Include="Modules\Inventory\DTOs\" />
+    <Folder Include="Modules\Inventory\Models\" />
+    <Folder Include="Modules\Inventory\Repositories\" />
+    <Folder Include="Modules\Inventory\Services\" />
+    <Folder Include="Utils\" />
+  </ItemGroup>
+
+</Project>

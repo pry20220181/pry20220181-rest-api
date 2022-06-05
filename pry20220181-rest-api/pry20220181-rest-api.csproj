@@ -8,7 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.5" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\pry20220181-core-layer\pry20220181-core-layer.csproj" />
+    <ProjectReference Include="..\pry20220181-data-layer\pry20220181-data-layer.csproj" />
   </ItemGroup>
 
 </Project>
