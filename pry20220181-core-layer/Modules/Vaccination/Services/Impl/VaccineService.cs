@@ -1,4 +1,5 @@
-﻿using pry20220181_core_layer.Modules.Vaccination.Models;
+﻿using pry20220181_core_layer.Modules.Vaccination.DTOs;
+using pry20220181_core_layer.Modules.Vaccination.Models;
 using pry20220181_core_layer.Modules.Vaccination.Repositories;
 using System;
 using System.Collections.Generic;
@@ -17,14 +18,34 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
             _vaccineRepository = vaccineRepository;
         }
 
-        public Vaccine GetVaccineById(int id)
+        public VaccineDTO GetVaccineById(int id)
         {
-            return _vaccineRepository.GetById(id);
+            var vaccineFromDb = _vaccineRepository.GetById(id);
+
+            var vaccineToReturn = new VaccineDTO()
+            {
+                Id = vaccineFromDb.Id,
+                Name = vaccineFromDb.Name,
+                Description = vaccineFromDb.Description
+            };
+
+            return vaccineToReturn;
         }
 
-        public List<Vaccine> GetVaccines()
+        public List<VaccineDTO> GetVaccines()
         {
-            return _vaccineRepository.Get();
+            var vaccinesToReturn = new List<VaccineDTO>();
+            var vaccinesFromDb = _vaccineRepository.Get();
+            foreach (var vaccine in vaccinesFromDb)
+            {
+                vaccinesToReturn.Add(new VaccineDTO()
+                {
+                    Id = vaccine.Id,
+                    Name = vaccine.Name,
+                    Description = vaccine.Description
+                });
+            }
+            return vaccinesToReturn;
         }
     }
 }
