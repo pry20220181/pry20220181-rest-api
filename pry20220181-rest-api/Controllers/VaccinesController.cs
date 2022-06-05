@@ -19,9 +19,16 @@ namespace pry20220181_rest_api.Controllers
         }
 
         [HttpGet(Name = "GetVaccines")]
-        public IEnumerable<VaccineDTO> Get()
+        public async Task<IEnumerable<VaccineDTO>> Get()
         {
-            return _vaccineService.GetVaccines();
+            return await _vaccineService.GetVaccines();
+        }
+
+        [HttpGet("{id}", Name = "GetVaccineById")]
+        public async Task<VaccineDTO> GetById(int id)
+        {
+            var vaccine = await _vaccineService.GetVaccineById(id);
+            return vaccine;
         }
     }
 }

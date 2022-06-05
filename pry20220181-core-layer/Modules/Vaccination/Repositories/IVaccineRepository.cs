@@ -13,13 +13,13 @@ namespace pry20220181_core_layer.Modules.Vaccination.Repositories
         /// Obtain the list of Vaccines
         /// </summary>
         /// <returns></returns>
-        public List<Vaccine> Get();
+        public Task<List<Vaccine>> Get();
         /// <summary>
         /// 
         /// </summary>
         /// <param name="id">The id of the vaccine</param>
         /// <returns></returns>
-        public Vaccine GetById(int id);
+        public Task<Vaccine> GetById(int id);
         public Vaccine Create(Vaccine vaccine);
         public Vaccine Update(Vaccine vaccine);
         public bool Delete(int id);

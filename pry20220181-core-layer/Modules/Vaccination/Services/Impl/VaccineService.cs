@@ -18,9 +18,9 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
             _vaccineRepository = vaccineRepository;
         }
 
-        public VaccineDTO GetVaccineById(int id)
+        public async Task<VaccineDTO> GetVaccineById(int id)
         {
-            var vaccineFromDb = _vaccineRepository.GetById(id);
+            var vaccineFromDb = await _vaccineRepository.GetById(id);
 
             var vaccineToReturn = new VaccineDTO()
             {
@@ -32,10 +32,10 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
             return vaccineToReturn;
         }
 
-        public List<VaccineDTO> GetVaccines()
+        public async Task<List<VaccineDTO>> GetVaccines()
         {
             var vaccinesToReturn = new List<VaccineDTO>();
-            var vaccinesFromDb = _vaccineRepository.Get();
+            var vaccinesFromDb = await _vaccineRepository.Get();
             foreach (var vaccine in vaccinesFromDb)
             {
                 vaccinesToReturn.Add(new VaccineDTO()

@@ -1,4 +1,5 @@
-﻿using pry20220181_core_layer.Modules.Vaccination.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using pry20220181_core_layer.Modules.Vaccination.Models;
 using pry20220181_core_layer.Modules.Vaccination.Repositories;
 using System;
 using System.Collections.Generic;
@@ -18,14 +19,14 @@ namespace pry20220181_data_layer.Repositories
         }
 
 
-        public List<Vaccine> Get()
+        public async Task<List<Vaccine>> Get()
         {
-            return _dbContext.Vaccines.ToList();
+            return await _dbContext.Vaccines.ToListAsync();
         }
 
-        public Vaccine GetById(int id)
+        public async Task<Vaccine> GetById(int id)
         {
-            return _dbContext.Vaccines.Find(id);
+            return await _dbContext.Vaccines.FindAsync(id);
         }
 
         public Vaccine Create(Vaccine vaccine)
