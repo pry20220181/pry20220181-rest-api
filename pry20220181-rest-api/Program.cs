@@ -13,6 +13,8 @@ builder.Services.AddDbContext<PRY20220181DbContext>(options =>
 {
     options.UseInMemoryDatabase("pry20220181db");
 });
+builder.Services.AddPRY20220181Repositories();
+builder.Services.AddPRY20220181Services();
 
 var app = builder.Build();
 
