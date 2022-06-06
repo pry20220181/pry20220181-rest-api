@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using pry20220181_data_layer;
 
@@ -10,9 +11,10 @@ using pry20220181_data_layer;
 namespace pry20220181_data_layer.Migrations
 {
     [DbContext(typeof(PRY20220181DbContext))]
-    partial class PRY20220181DbContextModelSnapshot : ModelSnapshot
+    [Migration("20220606003108_AddIdentity")]
+    partial class AddIdentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

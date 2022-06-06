@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using pry20220181_core_layer.Modules.Vaccination.DTOs;
 using pry20220181_core_layer.Modules.Vaccination.Services;
 
 namespace pry20220181_rest_api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("vaccines")]
     public class VaccinesController : ControllerBase
