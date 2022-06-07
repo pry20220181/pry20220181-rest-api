@@ -86,5 +86,12 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
 
             return vaccineToReturn;
         }
+
+        public async Task<bool> DeleteVaccineAsync(int id)
+        {
+            var result = await _vaccineRepository.DeleteAsync(id);
+
+            return result;
+        }
     }
 }

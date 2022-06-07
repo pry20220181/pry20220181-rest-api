@@ -4,6 +4,7 @@ using pry20220181_core_layer.Modules.Vaccination.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -52,7 +53,16 @@ namespace pry20220181_data_layer.Repositories
 
         public async Task<bool> DeleteAsync(int id)
         {
-            return false;
+            var vaccineInDb = await _dbContext.Vaccines.FindAsync(id);
+
+            if (vaccineInDb == null)
+                return false;
+
+            _dbContext.Vaccines.Remove(vaccineInDb);
+
+            await _dbContext.SaveChangesAsync();
+
+            return true;
         }
     }
 }

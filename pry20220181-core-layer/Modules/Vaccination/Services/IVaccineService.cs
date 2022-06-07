@@ -38,5 +38,12 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services
         /// <param name="vaccineUpdateDTO"></param>
         /// <returns>The Vaccine with its updated data</returns>
         public Task<VaccineDTO> UpdateVaccineAsync(int id, VaccineUpdateDTO vaccineUpdateDTO);
+
+        /// <summary>
+        /// Delete the specified Vaccine
+        /// </summary>
+        /// <param name="id">Id of the Vaccine to delete</param>
+        /// <returns>True if the deleting was successful, False if an error has occurred deleting</returns>
+        public Task<bool> DeleteVaccineAsync(int id);
     }
 }

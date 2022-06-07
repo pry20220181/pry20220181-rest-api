@@ -45,5 +45,12 @@ namespace pry20220181_rest_api.Controllers
         {
             return await _vaccineService.UpdateVaccineAsync(id, vaccineUpdateDTO);
         }
+
+        [HttpDelete("{id}", Name = "DeleteVaccine")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var response = await _vaccineService.DeleteVaccineAsync(id);
+            return response ? Ok() : NotFound();
+        }
     }
 }
