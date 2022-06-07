@@ -19,27 +19,38 @@ namespace pry20220181_data_layer.Repositories
         }
 
 
-        public async Task<List<Vaccine>> Get()
+        public async Task<List<Vaccine>> GetAsync()
         {
             return await _dbContext.Vaccines.ToListAsync();
         }
 
-        public async Task<Vaccine> GetById(int id)
+        public async Task<Vaccine> GetByIdAsync(int id)
         {
             return await _dbContext.Vaccines.FindAsync(id);
         }
 
-        public Vaccine Create(Vaccine vaccine)
+        public async Task<int> CreateAsync(Vaccine vaccine)
         {
-            return null;
+            var createdVaccine = await _dbContext.Vaccines.AddAsync(vaccine);
+
+            await _dbContext.SaveChangesAsync();
+
+            return createdVaccine.Entity.Id;
         }
 
-        public Vaccine Update(Vaccine vaccine)
+        public async Task<Vaccine> UpdateAsync(Vaccine vaccine)
         {
-            return null;
+            var vaccineInDb = await _dbContext.Vaccines.FindAsync(vaccine.Id);
+
+            vaccineInDb.Name = vaccine.Name;
+            vaccineInDb.Description = vaccine.Description;
+
+            await _dbContext.SaveChangesAsync();
+
+            return vaccineInDb;
         }
 
-        public bool Delete(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
             return false;
         }

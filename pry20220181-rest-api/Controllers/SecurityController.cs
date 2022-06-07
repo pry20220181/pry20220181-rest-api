@@ -55,7 +55,7 @@ namespace pry20220181_rest_api.Controllers
                 issuer: "vnaj.com",//TODO: Traer del AppSettings - builder.Configuration["Jwt:Issuer"],
                 audience: "localhost",//TODO: Traer del AppSettings - builder.Configuration["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(1),
+                expires: DateTime.Now.AddMinutes(120),
                 signingCredentials: credentials);
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);

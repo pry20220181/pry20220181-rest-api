@@ -13,15 +13,28 @@ namespace pry20220181_core_layer.Modules.Vaccination.Repositories
         /// Obtain the list of Vaccines
         /// </summary>
         /// <returns></returns>
-        public Task<List<Vaccine>> Get();
+        public Task<List<Vaccine>> GetAsync();
+        
         /// <summary>
         /// 
         /// </summary>
         /// <param name="id">The id of the vaccine</param>
         /// <returns></returns>
-        public Task<Vaccine> GetById(int id);
-        public Vaccine Create(Vaccine vaccine);
-        public Vaccine Update(Vaccine vaccine);
-        public bool Delete(int id);
+        public Task<Vaccine> GetByIdAsync(int id);
+        
+        /// <summary>
+        /// Create the Vaccine record in the Database
+        /// </summary>
+        /// <param name="vaccine"></param>
+        /// <returns>The id of the new Vaccine</returns>
+        public Task<int> CreateAsync(Vaccine vaccine);
+
+        /// <summary>
+        /// Update the specified Vaccine with the new data
+        /// </summary>
+        /// <param name="vaccine"></param>
+        /// <returns>The Vaccine with its updated data</returns>
+        public Task<Vaccine> UpdateAsync(Vaccine vaccine);
+        public Task<bool> DeleteAsync(int id);
     }
 }
