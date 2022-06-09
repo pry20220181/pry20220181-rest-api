@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace pry20220181_core_layer.Modules.Vaccination.Models
 {
-    public class Vaccine
+    public class VaccinationScheme
     {
-        public int VaccineId { get; set; }
+        public int VaccinationSchemeId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public float MinTemperature { get; set; }
-        public float MaxTemperature { get; set; }
+        public int InitialAge { get; set; }
+        public int FinalAge { get; set; }
     }
 }

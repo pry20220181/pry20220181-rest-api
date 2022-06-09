@@ -36,12 +36,12 @@ namespace pry20220181_data_layer.Repositories
 
             await _dbContext.SaveChangesAsync();
 
-            return createdVaccine.Entity.Id;
+            return createdVaccine.Entity.VaccineId;
         }
 
         public async Task<Vaccine> UpdateAsync(Vaccine vaccine)
         {
-            var vaccineInDb = await _dbContext.Vaccines.FindAsync(vaccine.Id);
+            var vaccineInDb = await _dbContext.Vaccines.FindAsync(vaccine.VaccineId);
 
             vaccineInDb.Name = vaccine.Name;
             vaccineInDb.Description = vaccine.Description;

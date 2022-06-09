@@ -26,7 +26,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
 
             var vaccineToReturn = new VaccineDTO()
             {
-                Id = vaccineFromDb.Id,
+                Id = vaccineFromDb.VaccineId,
                 Name = vaccineFromDb.Name,
                 Description = vaccineFromDb.Description
             };
@@ -43,7 +43,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
             {
                 vaccinesToReturn.Add(new VaccineDTO()
                 {
-                    Id = vaccine.Id,
+                    Id = vaccine.VaccineId,
                     Name = vaccine.Name,
                     Description = vaccine.Description
                 });
@@ -70,7 +70,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
             //TODO: Implement Validation logic
             var vaccineToUpdate = new Vaccine()
             {
-                Id = id,
+                VaccineId = id,
                 Name = vaccineUpdateDTO.Name,
                 Description = vaccineUpdateDTO.Description
             };
@@ -79,7 +79,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
 
             var vaccineToReturn = new VaccineDTO()
             {
-                Id = updatedVaccine.Id,
+                Id = updatedVaccine.VaccineId,
                 Name = updatedVaccine.Name,
                 Description = updatedVaccine.Description
             };
