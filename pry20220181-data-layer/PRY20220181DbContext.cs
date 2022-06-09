@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using pry20220181_core_layer.Modules.Campaigns.Models;
 using pry20220181_core_layer.Modules.Inventory.Models;
 using pry20220181_core_layer.Modules.Vaccination.Models;
 using System;
@@ -61,6 +62,33 @@ namespace pry20220181_data_layer
                 .HasForeignKey(v => v.VaccineId);
             #endregion
 
+            #region Vaccination Appointment
+            //VaccinationAppointment
+            modelBuilder.Entity<VaccinationAppointment>()
+                .Property(v => v.VaccinationAppointmentId)
+                .ValueGeneratedOnAdd();
+            modelBuilder.Entity<VaccinationAppointment>()
+                .HasKey(v => v.VaccinationAppointmentId);
+            #endregion
+
+            #region VaccineForAppointment
+            modelBuilder.Entity<VaccineForAppointment>()
+                .Property(v => v.VaccineForAppointmentId)
+                .ValueGeneratedOnAdd();
+            modelBuilder.Entity<VaccineForAppointment>()
+                .HasKey(v => v.VaccineForAppointmentId);
+
+            modelBuilder.Entity<VaccineForAppointment>()
+                .HasOne(v => v.Vaccine)
+                .WithMany()
+                .HasForeignKey(v => v.VaccineId);
+
+            modelBuilder.Entity<VaccineForAppointment>()
+                .HasOne(v => v.VaccinationAppointment)
+                .WithMany(v=>v.VaccinesForAppointment)
+                .HasForeignKey(v => v.VaccinationAppointmentId);
+            #endregion
+
             #region Health Center
             modelBuilder.Entity<HealthCenter>()
                 .Property(h => h.HealthCenterId)
@@ -80,6 +108,52 @@ namespace pry20220181_data_layer
                 .ValueGeneratedOnAdd();
             modelBuilder.Entity<Ubigeo>()
                 .HasKey(u => u.UbigeoId);
+            #endregion
+            #endregion
+
+            #region Campaigns Module
+            #region VaccinationCampaign
+            modelBuilder.Entity<VaccinationCampaign>()
+                .Property(v => v.VaccinationCampaignId)
+                .ValueGeneratedOnAdd();
+            modelBuilder.Entity<VaccinationCampaign>()
+                .HasKey(v => v.VaccinationCampaignId);
+            #endregion
+
+            #region VaccinationCampaignDetail
+            modelBuilder.Entity<VaccinationCampaignDetail>()
+                .Property(v => v.VaccinationCampaignDetailId)
+                .ValueGeneratedOnAdd();
+            modelBuilder.Entity<VaccinationCampaignDetail>()
+                .HasKey(v => v.VaccinationCampaignDetailId);
+
+            modelBuilder.Entity<VaccinationCampaignDetail>()
+                .HasOne(v => v.Vaccine)
+                .WithMany()
+                .HasForeignKey(v => v.VaccineId);
+
+            modelBuilder.Entity<VaccinationCampaignDetail>()
+                .HasOne(v => v.VaccinationCampaign)
+                .WithMany(c=>c.VaccinationCampaignDetails)
+                .HasForeignKey(v => v.VaccinationCampaignId);
+            #endregion
+
+            #region VaccinationCampaignLocation
+            modelBuilder.Entity<VaccinationCampaignLocation>()
+                .Property(v => v.VaccinationCampaignLocationId)
+                .ValueGeneratedOnAdd();
+            modelBuilder.Entity<VaccinationCampaignLocation>()
+                .HasKey(v => v.VaccinationCampaignLocationId);
+
+            modelBuilder.Entity<VaccinationCampaignLocation>()
+                .HasOne(v => v.VaccinationCampaign)
+                .WithMany(c=>c.VaccinationCampaignLocations)
+                .HasForeignKey(v => v.VaccinationCampaignId);
+
+            modelBuilder.Entity<VaccinationCampaignLocation>()
+                .HasOne(v => v.HealthCenter)
+                .WithMany()
+                .HasForeignKey(v => v.HealthCenterId);
             #endregion
             #endregion
 
