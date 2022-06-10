@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using pry20220181_core_layer.Modules.Campaigns.Models;
 using pry20220181_core_layer.Modules.Inventory.Models;
+using pry20220181_core_layer.Modules.Master.Models;
 using pry20220181_core_layer.Modules.Vaccination.Models;
 using System;
 using System.Collections.Generic;
@@ -73,6 +74,44 @@ namespace pry20220181_data_layer
                 .HasOne(v => v.VaccinationSchemeDetail)
                 .WithMany(v=>v.DosesDetails)
                 .HasForeignKey(v => v.VaccinationSchemeDetailId);
+            #endregion
+
+            #region AdministeredDose
+            modelBuilder.Entity<AdministeredDose>()
+                .Property(a => a.AdministeredDoseId)
+                .ValueGeneratedOnAdd();
+            modelBuilder.Entity<AdministeredDose>()
+                .HasKey(a => a.AdministeredDoseId);
+
+            modelBuilder.Entity<AdministeredDose>()
+                .HasOne(a => a.Child)
+                .WithMany(c=>c.AdministeredDoses)
+                .HasForeignKey(a => a.ChildId);
+
+            modelBuilder.Entity<AdministeredDose>()
+                .HasOne(a => a.DoseDetail)
+                .WithMany()
+                .HasForeignKey(a => a.DoseDetailId);
+
+            modelBuilder.Entity<AdministeredDose>()
+                .HasOne(a => a.HealthCenter)
+                .WithMany()
+                .HasForeignKey(a => a.HealthCenterId);
+
+            modelBuilder.Entity<AdministeredDose>()
+                .HasOne(a => a.HealthPersonnel)
+                .WithMany()
+                .HasForeignKey(a => a.HealthPersonnelId);
+
+            modelBuilder.Entity<AdministeredDose>()
+                .HasOne(a => a.VaccinationCampaign)
+                .WithMany()
+                .HasForeignKey(a => a.VaccinationCampaignId);
+
+            modelBuilder.Entity<AdministeredDose>()
+                .HasOne(a => a.VaccinationAppointment)
+                .WithMany()
+                .HasForeignKey(a => a.VaccinationAppointmentId);
             #endregion
 
             #region Vaccination Appointment
@@ -248,11 +287,57 @@ namespace pry20220181_data_layer
             #endregion
             #endregion
 
+            #region Master Module
+            #region Reminder
+            modelBuilder.Entity<Reminder>()
+                .Property(r => r.ReminderId)
+                .ValueGeneratedOnAdd();
+            modelBuilder.Entity<Reminder>()
+                .HasKey(r => r.ReminderId);
+
+            modelBuilder.Entity<Reminder>()
+                .HasOne(r => r.Parent)
+                .WithMany(p=>p.Reminders)
+                .HasForeignKey(r => r.ParentId);
+
+            modelBuilder.Entity<Reminder>()
+                .HasOne(r => r.VaccinationCampaign)
+                .WithMany()
+                .HasForeignKey(r => r.VaccinationCampaignId);
+
+            modelBuilder.Entity<Reminder>()
+                .HasOne(r => r.VaccinationAppointment)
+                .WithMany()
+                .HasForeignKey(r => r.VaccinationAppointmentId);
+
+            modelBuilder.Entity<Reminder>()
+                .HasOne(r => r.DoseDetail)
+                .WithMany()
+                .HasForeignKey(r => r.DoseDetailId);
+            #endregion
+            #endregion
 
         }
 
         private static bool Initialized = false;
         public DbSet<Vaccine> Vaccines { get; set; }
+        public DbSet<AdministeredDose> AdministeredDoses { get; set; }
+        public DbSet<DoseDetail> DosesDetails { get; set; }
+        public DbSet<VaccinationSchemeDetail> VaccinationSchemeDetails { get; set; }
+        public DbSet<VaccinationScheme> VaccinationSchemes { get; set; }
+        public DbSet<VaccinationAppointment> VaccinationAppointments { get; set; }
+        public DbSet<VaccineForAppointment> VaccinesForAppointments { get; set; }
+        public DbSet<VaccinationCampaign> VaccinationCampaigns { get; set; }
+        public DbSet<VaccinationCampaignDetail> VaccinationCampaignDetails { get; set; }
+        public DbSet<VaccinationCampaignLocation> VaccinationCampaignLocations { get; set; }
+        public DbSet<VaccineInventory> VaccineInventory { get; set; }
+        public DbSet<HealthCenter> HealthCenters { get; set; }
+        public DbSet<Ubigeo> Ubigeo { get; set; }
+        public DbSet<HealthPersonnel> HealthPersonnel { get; set; }
+        public DbSet<Parent> Parents { get; set; }
+        public DbSet<Child> Children { get; set; }
+        public DbSet<ChildParent> ChildrenParents { get; set; }
+        public DbSet<Reminder> Reminders { get; set; }
         private void SeedData()
         {
             if (!Vaccines.Any())

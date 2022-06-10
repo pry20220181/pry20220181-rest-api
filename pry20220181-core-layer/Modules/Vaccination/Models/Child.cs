@@ -17,6 +17,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Models
 
         #region Relations with another tables
         public List<ChildParent> ChildParents { get; set; }
+        public List<AdministeredDose> AdministeredDoses { get; set; }
         #endregion
     }
 }

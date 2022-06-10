@@ -1,4 +1,5 @@
-﻿using System;
+﻿using pry20220181_core_layer.Modules.Master.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Models
         public Ubigeo Ubigeo { get; set; }
         public User User { get; set; }
         public List<ChildParent> ChildParents { get; set; }
+        public List<Reminder> Reminders { get; set; }
         #endregion
     }
 }
