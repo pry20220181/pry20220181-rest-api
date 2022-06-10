@@ -62,6 +62,19 @@ namespace pry20220181_data_layer
                 .HasForeignKey(v => v.VaccineId);
             #endregion
 
+            #region DosesDetail
+            modelBuilder.Entity<DoseDetail>()
+                .Property(v => v.DoseDetailId)
+                .ValueGeneratedOnAdd();
+            modelBuilder.Entity<DoseDetail>()
+                .HasKey(v => v.DoseDetailId);
+
+            modelBuilder.Entity<DoseDetail>()
+                .HasOne(v => v.VaccinationSchemeDetail)
+                .WithMany(v=>v.DosesDetails)
+                .HasForeignKey(v => v.VaccinationSchemeDetailId);
+            #endregion
+
             #region Vaccination Appointment
             //VaccinationAppointment
             modelBuilder.Entity<VaccinationAppointment>()
@@ -109,6 +122,64 @@ namespace pry20220181_data_layer
             modelBuilder.Entity<Ubigeo>()
                 .HasKey(u => u.UbigeoId);
             #endregion
+
+            #region Child
+            modelBuilder.Entity<Child>()
+                .Property(p => p.ChildId)
+                .ValueGeneratedOnAdd();
+            modelBuilder.Entity<Child>()
+                .HasKey(p => p.ChildId);
+            #endregion
+
+            #region Parent
+            modelBuilder.Entity<Parent>()
+                .Property(p => p.ParentId)
+                .ValueGeneratedOnAdd();
+            modelBuilder.Entity<Parent>()
+                .HasKey(p => p.ParentId);
+
+            modelBuilder.Entity<Parent>()
+                .HasOne(p => p.Ubigeo)
+                .WithMany()
+                .HasForeignKey(p => p.UbigeoId);
+
+            modelBuilder.Entity<Parent>()
+                .HasOne(p=>p.User)
+                .WithOne(u => u.Parent)
+                .HasForeignKey<Parent>(p => p.UserId);
+            #endregion
+
+            #region ChildParent
+            modelBuilder.Entity<ChildParent>()
+                .Property(p => p.ChildParentId)
+                .ValueGeneratedOnAdd();
+            modelBuilder.Entity<ChildParent>()
+                .HasKey(p => p.ChildParentId);
+
+            modelBuilder.Entity<ChildParent>()
+                .HasOne(c => c.Child)
+                .WithMany(c=>c.ChildParents)
+                .HasForeignKey(c => c.ChildId);
+
+            modelBuilder.Entity<ChildParent>()
+                .HasOne(c => c.Parent)
+                .WithMany(p => p.ChildParents)
+                .HasForeignKey(c => c.ParentId);
+            #endregion
+
+            #region HealthPersonnel
+            modelBuilder.Entity<HealthPersonnel>()
+                .Property(p => p.HealthPersonnelId)
+                .ValueGeneratedOnAdd();
+            modelBuilder.Entity<HealthPersonnel>()
+                .HasKey(p => p.HealthPersonnelId);
+
+            modelBuilder.Entity<HealthPersonnel>()
+                .HasOne(p => p.User)
+                .WithOne(u => u.HealthPersonnel)
+                .HasForeignKey<HealthPersonnel>(p => p.UserId);
+            #endregion
+
             #endregion
 
             #region Campaigns Module
