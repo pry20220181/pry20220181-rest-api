@@ -17,25 +17,25 @@ builder.Services.AddSwaggerGen();
 
 #region Database Configuration
 #region Configure In Memory DB
-//builder.Services.AddDbContext<PRY20220181DbContext>(options =>
-//{
-//    options.UseInMemoryDatabase("pry20220181db");
-//});
+builder.Services.AddDbContext<PRY20220181DbContext>(options =>
+{
+    options.UseInMemoryDatabase("pry20220181db");
+});
 #endregion
 
 #region Configure MySQL DB
-//TODO: Get from AppSettings.json
-var connectionString = "server=localhost;user=root;password=servidor;database=pry20220181";
+////TODO: Get from AppSettings.json
+//var connectionString = "server=localhost;user=root;password=servidor;database=pry20220181";
 
-// Replace 'YourDbContext' with the name of your own DbContext derived class.
-builder.Services.AddDbContext<PRY20220181DbContext>(dbContextOptions => dbContextOptions
-        .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
-// The following three options help with debugging, but should
-// be changed or removed for production.
-//.LogTo(Console.WriteLine, LogLevel.Information)
-//.EnableSensitiveDataLogging()
-//.EnableDetailedErrors()
-);
+//// Replace 'YourDbContext' with the name of your own DbContext derived class.
+//builder.Services.AddDbContext<PRY20220181DbContext>(dbContextOptions => dbContextOptions
+//        .UseMySql(connectionString, ServerVersion.AutoDetect(connectionString))
+//// The following three options help with debugging, but should
+//// be changed or removed for production.
+////.LogTo(Console.WriteLine, LogLevel.Information)
+////.EnableSensitiveDataLogging()
+////.EnableDetailedErrors()
+//);
 #endregion
 #endregion
 

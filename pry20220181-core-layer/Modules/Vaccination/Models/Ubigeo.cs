@@ -12,6 +12,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Models
         public string UbigeoCode { get; set; }
         public string Region { get; set; }
         public string Province { get; set; }
+        public string District { get; set; }
 
         #region Relations with another tables
         public List<HealthCenter> HealthCenters { get; set; }

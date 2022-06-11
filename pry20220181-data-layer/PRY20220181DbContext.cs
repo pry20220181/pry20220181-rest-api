@@ -54,7 +54,7 @@ namespace pry20220181_data_layer
 
             modelBuilder.Entity<VaccinationSchemeDetail>()
                 .HasOne(v => v.VaccinationScheme)
-                .WithMany(v=>v.VaccinationSchemeDetails)
+                .WithMany(v => v.VaccinationSchemeDetails)
                 .HasForeignKey(v => v.VaccinationSchemeId);
 
             modelBuilder.Entity<VaccinationSchemeDetail>()
@@ -72,7 +72,7 @@ namespace pry20220181_data_layer
 
             modelBuilder.Entity<DoseDetail>()
                 .HasOne(v => v.VaccinationSchemeDetail)
-                .WithMany(v=>v.DosesDetails)
+                .WithMany(v => v.DosesDetails)
                 .HasForeignKey(v => v.VaccinationSchemeDetailId);
             #endregion
 
@@ -85,7 +85,7 @@ namespace pry20220181_data_layer
 
             modelBuilder.Entity<AdministeredDose>()
                 .HasOne(a => a.Child)
-                .WithMany(c=>c.AdministeredDoses)
+                .WithMany(c => c.AdministeredDoses)
                 .HasForeignKey(a => a.ChildId);
 
             modelBuilder.Entity<AdministeredDose>()
@@ -123,8 +123,8 @@ namespace pry20220181_data_layer
                 .HasKey(v => v.VaccinationAppointmentId);
 
             modelBuilder.Entity<VaccinationAppointment>()
-                .HasOne(v=>v.Parent)
-                .WithMany(p=>p.VaccinationAppointments)
+                .HasOne(v => v.Parent)
+                .WithMany(p => p.VaccinationAppointments)
                 .HasForeignKey(v => v.ParentId);
             #endregion
 
@@ -142,7 +142,7 @@ namespace pry20220181_data_layer
 
             modelBuilder.Entity<VaccineForAppointment>()
                 .HasOne(v => v.VaccinationAppointment)
-                .WithMany(v=>v.VaccinesForAppointment)
+                .WithMany(v => v.VaccinesForAppointment)
                 .HasForeignKey(v => v.VaccinationAppointmentId);
             #endregion
 
@@ -155,7 +155,7 @@ namespace pry20220181_data_layer
 
             modelBuilder.Entity<HealthCenter>()
                 .HasOne(h => h.Ubigeo)
-                .WithMany(u=>u.HealthCenters)
+                .WithMany(u => u.HealthCenters)
                 .HasForeignKey(h => h.UbigeoId);
             #endregion
 
@@ -174,7 +174,7 @@ namespace pry20220181_data_layer
             modelBuilder.Entity<Child>()
                 .HasKey(p => p.ChildId);
             modelBuilder.Entity<Child>()
-                .HasIndex(c=>c.DNI)
+                .HasIndex(c => c.DNI)
                 .IsUnique();
             #endregion
 
@@ -191,7 +191,7 @@ namespace pry20220181_data_layer
                 .HasForeignKey(p => p.UbigeoId);
 
             modelBuilder.Entity<Parent>()
-                .HasOne(p=>p.User)
+                .HasOne(p => p.User)
                 .WithOne(u => u.Parent)
                 .HasForeignKey<Parent>(p => p.UserId);
             #endregion
@@ -205,7 +205,7 @@ namespace pry20220181_data_layer
 
             modelBuilder.Entity<ChildParent>()
                 .HasOne(c => c.Child)
-                .WithMany(c=>c.ChildParents)
+                .WithMany(c => c.ChildParents)
                 .HasForeignKey(c => c.ChildId);
 
             modelBuilder.Entity<ChildParent>()
@@ -252,7 +252,7 @@ namespace pry20220181_data_layer
 
             modelBuilder.Entity<VaccinationCampaignDetail>()
                 .HasOne(v => v.VaccinationCampaign)
-                .WithMany(c=>c.VaccinationCampaignDetails)
+                .WithMany(c => c.VaccinationCampaignDetails)
                 .HasForeignKey(v => v.VaccinationCampaignId);
             #endregion
 
@@ -265,12 +265,12 @@ namespace pry20220181_data_layer
 
             modelBuilder.Entity<VaccinationCampaignLocation>()
                 .HasOne(v => v.VaccinationCampaign)
-                .WithMany(c=>c.VaccinationCampaignLocations)
+                .WithMany(c => c.VaccinationCampaignLocations)
                 .HasForeignKey(v => v.VaccinationCampaignId);
 
             modelBuilder.Entity<VaccinationCampaignLocation>()
                 .HasOne(v => v.HealthCenter)
-                .WithMany(h=>h.VaccinationCampaignLocations)
+                .WithMany(h => h.VaccinationCampaignLocations)
                 .HasForeignKey(v => v.HealthCenterId);
             #endregion
             #endregion
@@ -290,7 +290,7 @@ namespace pry20220181_data_layer
 
             modelBuilder.Entity<VaccineInventory>()
                 .HasOne(v => v.HealthCenter)
-                .WithMany(h=>h.VaccineInventories)
+                .WithMany(h => h.VaccineInventories)
                 .HasForeignKey(v => v.HealthCenterId);
             #endregion
             #endregion
@@ -305,7 +305,7 @@ namespace pry20220181_data_layer
 
             modelBuilder.Entity<Reminder>()
                 .HasOne(r => r.Parent)
-                .WithMany(p=>p.Reminders)
+                .WithMany(p => p.Reminders)
                 .HasForeignKey(r => r.ParentId);
 
             modelBuilder.Entity<Reminder>()
@@ -328,6 +328,7 @@ namespace pry20220181_data_layer
         }
 
         private static bool Initialized = false;
+        #region DbSets
         public DbSet<Vaccine> Vaccines { get; set; }
         public DbSet<AdministeredDose> AdministeredDoses { get; set; }
         public DbSet<DoseDetail> DosesDetails { get; set; }
@@ -346,8 +347,40 @@ namespace pry20220181_data_layer
         public DbSet<Child> Children { get; set; }
         public DbSet<ChildParent> ChildrenParents { get; set; }
         public DbSet<Reminder> Reminders { get; set; }
+        #endregion
+
         private void SeedData()
         {
+            #region Ubigeo
+            Ubigeo Tumbes = new Ubigeo { UbigeoCode = "230101", Region = "Tumbes", Province = "Tumbes", District = "Tumbes" };
+            Ubigeo Corrales = new Ubigeo { UbigeoCode = "230102", Region = "Tumbes", Province = "Tumbes", District = "Corrales" };
+            Ubigeo Ate = new Ubigeo { UbigeoCode = "140103", Region = "Lima", Province = "Lima", District = "Ate" };
+            Ubigeo Breña = new Ubigeo { UbigeoCode = "140104", Region = "Lima", Province = "Lima", District = "Breña" };
+            if (!Ubigeo.Any())
+            {//https://www.reniec.gob.pe/Adherentes/jsp/ListaUbigeos.jsp
+                List<Ubigeo> ubigeosToInsert = new List<Ubigeo>()
+                {
+                    Tumbes, Corrales, Ate, Breña
+                };
+                Ubigeo.AddRange(ubigeosToInsert);
+            }
+            #endregion
+
+            #region HealthCenters
+            HealthCenter TumbesCS = new HealthCenter { Name = "CS Tumbes", UbigeoId = Tumbes.UbigeoId, Address = "Av Tumbes 123" };
+            HealthCenter CorralesCS = new HealthCenter { Name = " CS Corrales", UbigeoId = Corrales.UbigeoId, Address = "Av Corrales 123" };
+            HealthCenter AteCS = new HealthCenter { Name = "CS Ate", UbigeoId = Ate.UbigeoId, Address = "Av Ate 123" };
+            HealthCenter BreñaCS = new HealthCenter { Name = "CS Breña", UbigeoId = Breña.UbigeoId, Address = "Av Breña 123" };
+            if (!HealthCenters.Any())
+            {
+                List<HealthCenter> healthCentersToInsert = new List<HealthCenter>()
+                {
+                    TumbesCS, CorralesCS, AteCS, BreñaCS
+                };
+                HealthCenters.AddRange(healthCentersToInsert);
+            }
+            #endregion
+
             if (!Vaccines.Any())
             {
                 Vaccines.AddRange(new List<Vaccine>() {
