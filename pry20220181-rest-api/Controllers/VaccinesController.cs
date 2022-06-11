@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using pry20220181_core_layer.Modules.Vaccination.DTOs.Input;
 using pry20220181_core_layer.Modules.Vaccination.DTOs.Output;
 using pry20220181_core_layer.Modules.Vaccination.Services;
+using pry20220181_core_layer.Utils;
 
 namespace pry20220181_rest_api.Controllers
 {
@@ -22,9 +23,9 @@ namespace pry20220181_rest_api.Controllers
         }
 
         [HttpGet(Name = "GetVaccines")]
-        public async Task<IEnumerable<VaccineDTO>> Get()
+        public async Task<IEnumerable<VaccineDTO>> Get([FromQuery] PaginationParameter paginationParameter)
         {
-            return await _vaccineService.GetVaccinesAsync();
+            return await _vaccineService.GetVaccinesAsync(paginationParameter);
         }
 
         [HttpGet("{id}", Name = "GetVaccineById")]

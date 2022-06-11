@@ -2,6 +2,7 @@
 using pry20220181_core_layer.Modules.Vaccination.DTOs.Output;
 using pry20220181_core_layer.Modules.Vaccination.Models;
 using pry20220181_core_layer.Modules.Vaccination.Repositories;
+using pry20220181_core_layer.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,11 +35,11 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
             return vaccineToReturn;
         }
 
-        public async Task<List<VaccineDTO>> GetVaccinesAsync()
+        public async Task<List<VaccineDTO>> GetVaccinesAsync(PaginationParameter paginationParameter)
         {
             //TODO: Implement Validation and Pagination logic
             var vaccinesToReturn = new List<VaccineDTO>();
-            var vaccinesFromDb = await _vaccineRepository.GetAsync();
+            var vaccinesFromDb = await _vaccineRepository.GetAsync(paginationParameter);
             foreach (var vaccine in vaccinesFromDb)
             {
                 vaccinesToReturn.Add(new VaccineDTO()

@@ -1,6 +1,7 @@
 ﻿using pry20220181_core_layer.Modules.Vaccination.DTOs.Input;
 using pry20220181_core_layer.Modules.Vaccination.DTOs.Output;
 using pry20220181_core_layer.Modules.Vaccination.Models;
+using pry20220181_core_layer.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services
         /// Get the list of Vaccines
         /// </summary>
         /// <returns></returns>
-        public Task<List<VaccineDTO>> GetVaccinesAsync();
+        public Task<List<VaccineDTO>> GetVaccinesAsync(PaginationParameter paginationParameter);
 
         /// <summary>
         /// Get a Vaccine with the id passed as a parameter

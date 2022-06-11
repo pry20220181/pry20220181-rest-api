@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using pry20220181_core_layer.Modules.Vaccination.Models;
 using pry20220181_core_layer.Modules.Vaccination.Repositories;
+using pry20220181_core_layer.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,9 +21,12 @@ namespace pry20220181_data_layer.Repositories
         }
 
 
-        public async Task<List<Vaccine>> GetAsync()
+        public async Task<List<Vaccine>> GetAsync(PaginationParameter paginationParameter)
         {
-            return await _dbContext.Vaccines.ToListAsync();
+            return await _dbContext.Vaccines
+                .Skip(paginationParameter.PageSize*(paginationParameter.Page-1))
+                .Take(paginationParameter.PageSize)
+                .ToListAsync();
         }
 
         public async Task<Vaccine> GetByIdAsync(int id)

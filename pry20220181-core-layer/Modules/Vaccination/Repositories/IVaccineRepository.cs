@@ -1,4 +1,5 @@
 ﻿using pry20220181_core_layer.Modules.Vaccination.Models;
+using pry20220181_core_layer.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Repositories
         /// Obtain the list of Vaccines
         /// </summary>
         /// <returns></returns>
-        public Task<List<Vaccine>> GetAsync();
+        public Task<List<Vaccine>> GetAsync(PaginationParameter paginationParameter);
         
         /// <summary>
         /// 
