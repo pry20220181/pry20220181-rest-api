@@ -18,6 +18,12 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services
         public Task<List<VaccineDTO>> GetVaccinesAsync();
 
         /// <summary>
+        /// Obtain the IQueryable list of Vaccines
+        /// </summary>
+        /// <returns></returns>
+        public IQueryable<VaccineDTO> GetIQueryableVaccines();
+
+        /// <summary>
         /// Get a Vaccine with the id passed as a parameter
         /// </summary>
         /// <param name="id">The id of the vaccine</param>

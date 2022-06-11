@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using pry20220181_core_layer.Modules.Vaccination.Models;
 using pry20220181_data_layer;
+using Sieve.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -65,6 +66,7 @@ builder.Services
     });
 #endregion
 
+builder.Services.AddScoped<SieveProcessor>();
 
 #region Configure my custom classes
 builder.Services.AddPRY20220181Repositories();

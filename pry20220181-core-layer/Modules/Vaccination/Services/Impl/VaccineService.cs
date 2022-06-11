@@ -4,6 +4,7 @@ using pry20220181_core_layer.Modules.Vaccination.Models;
 using pry20220181_core_layer.Modules.Vaccination.Repositories;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -51,6 +52,21 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
             return vaccinesToReturn;
         }
 
+        public IQueryable<VaccineDTO> GetIQueryableVaccines()
+        {
+            var vaccinesToReturn = Enumerable.Empty<VaccineDTO>().AsQueryable();
+            var vaccinesFromDb = _vaccineRepository.GetIQueryable();
+            foreach (var vaccine in vaccinesFromDb)
+            {
+                vaccinesToReturn = vaccinesToReturn.Append(new VaccineDTO {
+                    Id = vaccine.VaccineId,
+                    Name = vaccine.Name,
+                    Description = vaccine.Description
+                });
+            }
+            return vaccinesToReturn;
+        }
+        
         public async Task<int> CreateVaccineAsync(VaccineCreationDTO vaccineCreationDTO)
         {
             //TODO: Implement Validation logic

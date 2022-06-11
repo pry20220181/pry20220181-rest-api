@@ -25,6 +25,11 @@ namespace pry20220181_data_layer.Repositories
             return await _dbContext.Vaccines.ToListAsync();
         }
 
+        public IQueryable<Vaccine> GetIQueryable()
+        {
+            return _dbContext.Vaccines.AsNoTracking();
+        }
+
         public async Task<Vaccine> GetByIdAsync(int id)
         {
             return await _dbContext.Vaccines.FindAsync(id);
@@ -64,5 +69,6 @@ namespace pry20220181_data_layer.Repositories
 
             return true;
         }
+
     }
 }

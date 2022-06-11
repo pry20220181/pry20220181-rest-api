@@ -14,7 +14,13 @@ namespace pry20220181_core_layer.Modules.Vaccination.Repositories
         /// </summary>
         /// <returns></returns>
         public Task<List<Vaccine>> GetAsync();
-        
+
+        /// <summary>
+        /// Obtain the IQueryable list of Vaccines
+        /// </summary>
+        /// <returns></returns>
+        public IQueryable<Vaccine> GetIQueryable();
+
         /// <summary>
         /// 
         /// </summary>
