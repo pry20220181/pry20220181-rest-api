@@ -54,7 +54,7 @@ namespace pry20220181_data_layer
 
             modelBuilder.Entity<VaccinationSchemeDetail>()
                 .HasOne(v => v.VaccinationScheme)
-                .WithMany()
+                .WithMany(v=>v.VaccinationSchemeDetails)
                 .HasForeignKey(v => v.VaccinationSchemeId);
 
             modelBuilder.Entity<VaccinationSchemeDetail>()
@@ -121,6 +121,11 @@ namespace pry20220181_data_layer
                 .ValueGeneratedOnAdd();
             modelBuilder.Entity<VaccinationAppointment>()
                 .HasKey(v => v.VaccinationAppointmentId);
+
+            modelBuilder.Entity<VaccinationAppointment>()
+                .HasOne(v=>v.Parent)
+                .WithMany(p=>p.VaccinationAppointments)
+                .HasForeignKey(v => v.ParentId);
             #endregion
 
             #region VaccineForAppointment
@@ -150,7 +155,7 @@ namespace pry20220181_data_layer
 
             modelBuilder.Entity<HealthCenter>()
                 .HasOne(h => h.Ubigeo)
-                .WithMany()
+                .WithMany(u=>u.HealthCenters)
                 .HasForeignKey(h => h.UbigeoId);
             #endregion
 
@@ -168,6 +173,9 @@ namespace pry20220181_data_layer
                 .ValueGeneratedOnAdd();
             modelBuilder.Entity<Child>()
                 .HasKey(p => p.ChildId);
+            modelBuilder.Entity<Child>()
+                .HasIndex(c=>c.DNI)
+                .IsUnique();
             #endregion
 
             #region Parent
@@ -262,7 +270,7 @@ namespace pry20220181_data_layer
 
             modelBuilder.Entity<VaccinationCampaignLocation>()
                 .HasOne(v => v.HealthCenter)
-                .WithMany()
+                .WithMany(h=>h.VaccinationCampaignLocations)
                 .HasForeignKey(v => v.HealthCenterId);
             #endregion
             #endregion
@@ -282,7 +290,7 @@ namespace pry20220181_data_layer
 
             modelBuilder.Entity<VaccineInventory>()
                 .HasOne(v => v.HealthCenter)
-                .WithMany()
+                .WithMany(h=>h.VaccineInventories)
                 .HasForeignKey(v => v.HealthCenterId);
             #endregion
             #endregion

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using pry20220181_core_layer.Modules.Campaigns.Models;
+using pry20220181_core_layer.Modules.Inventory.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +17,8 @@ namespace pry20220181_core_layer.Modules.Vaccination.Models
         
         #region Relations with another tables
         public Ubigeo Ubigeo { get; set; }
+        public List<VaccinationCampaignLocation> VaccinationCampaignLocations { get; set; }
+        public List<VaccineInventory> VaccineInventories { get; set; }
         #endregion
     }
 }

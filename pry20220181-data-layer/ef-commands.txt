@@ -1,0 +1,3 @@
+dotnet-ef migrations add MigrationName --project pry20220181-data-layer --startup-project pry20220181-rest-api
+
+dotnet-ef database update --project pry20220181-data-layer --startup-project pry20220181-rest-api

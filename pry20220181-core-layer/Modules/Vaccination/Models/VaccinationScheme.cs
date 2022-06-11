@@ -13,5 +13,9 @@ namespace pry20220181_core_layer.Modules.Vaccination.Models
         public string Description { get; set; }
         public int InitialAge { get; set; }
         public int FinalAge { get; set; }
+        
+        #region Relations with another tables
+        public List<VaccinationSchemeDetail> VaccinationSchemeDetails { get; set; }
+        #endregion
     }
 }
