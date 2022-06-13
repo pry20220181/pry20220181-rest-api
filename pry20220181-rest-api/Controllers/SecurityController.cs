@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using pry20220181_core_layer.Modules.Vaccination.Models;
+using pry20220181_core_layer.Modules.Master.Models;
+using pry20220181_core_layer.Modules.Master.Repositories;
 using pry20220181_rest_api.Security.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -16,11 +17,15 @@ namespace pry20220181_rest_api.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IParentRepository _parentRepository;
+        private readonly IHealthPersonnelRepository _healthPersonnelRepository;
 
-        public SecurityController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        public SecurityController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IParentRepository parentRepository, IHealthPersonnelRepository healthPersonnelRepository)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _parentRepository = parentRepository;
+            _healthPersonnelRepository = healthPersonnelRepository;
         }
 
         [HttpPost("authenticate")]
@@ -80,6 +85,14 @@ namespace pry20220181_rest_api.Controllers
                 };
 
                 await _userManager.CreateAsync(newUser, "P@ss.W0rd");
+                var parent1 = new Parent
+                {
+                    DNI = "71222441",
+                    Telephone = "123456789",
+                    UserId = newUser.Id
+                };
+
+                await _parentRepository.CreateAsync(parent1);
                 await _roleManager.CreateAsync(new IdentityRole
                 {
                     Name = "Admin"
@@ -107,55 +120,113 @@ namespace pry20220181_rest_api.Controllers
         [HttpGet("seeddata")]
         public async Task<IResult> SeedData()
         {
-            if (!_userManager.Users.Any())
+            var password = "Abc123+";
+            #region Parent 1
+            var parent1User = new User
             {
-                #region Roles
-                var parentRole = await _roleManager.CreateAsync(new IdentityRole
-                {
-                    Name = "Parent"
-                });
+                Email = "parent1@live.com",
+                FirstName = "Parent",
+                LastName = "One",
+                UserName = "parent1"
+            };
 
-                var healthPersonnelRole = await _roleManager.CreateAsync(new IdentityRole
-                {
-                    Name = "HealthPersonnel"
-                });
-                #endregion
+            await _userManager.CreateAsync(parent1User, password);
 
-
-                #region Parent 1
-
-                #endregion
-                var newUser = new User
-                {
-                    Email = "test@demo.com",
-                    FirstName = "Test",
-                    LastName = "User",
-                    UserName = "test.demo"
-                };
-
-                await _userManager.CreateAsync(newUser, "P@ss.W0rd");
-                await _roleManager.CreateAsync(new IdentityRole
-                {
-                    Name = "Admin"
-                });
-                await _roleManager.CreateAsync(new IdentityRole
-                {
-                    Name = "AnotherRole"
-                });
-                await _userManager.AddToRoleAsync(newUser, "Admin");
-                await _userManager.AddToRoleAsync(newUser, "AnotherRole");
-                return Results.Ok(new
-                {
-                    Response = "Default user created"
-                });
-            }
-            else
+            var parent1 = new Parent
             {
-                return Results.Ok(new
-                {
-                    Response = "Default users already exists"
-                });
-            }
+                DNI = "71222441",
+                Telephone = "123456789",
+                UserId = parent1User.Id
+            };
+
+            await _parentRepository.CreateAsync(parent1);
+            #endregion
+
+            #region Parent 2
+            var parent2User = new User
+            {
+                Email = "parent2@live.com",
+                FirstName = "Parent",
+                LastName = "Two",
+                UserName = "parent2"
+            };
+
+            await _userManager.CreateAsync(parent2User, password);
+
+            var parent2 = new Parent
+            {
+                DNI = "71222442",
+                Telephone = "123456799",
+                UserId = parent2User.Id
+            };
+
+            await _parentRepository.CreateAsync(parent2);
+            #endregion
+
+            #region HealthPersonnel 1
+            var healthPersonnel1User = new User
+            {
+                Email = "personnel1@live.com",
+                FirstName = "Health",
+                LastName = "Personnel1",
+                UserName = "personnel1"
+            };
+
+            await _userManager.CreateAsync(healthPersonnel1User, password);
+
+            var healthPersonnel1 = new HealthPersonnel
+            {
+                UserId = healthPersonnel1User.Id
+            };
+
+            await _healthPersonnelRepository.CreateAsync(healthPersonnel1);
+            #endregion
+
+            #region HealthPersonnel 2
+            var healthPersonnel2User = new User
+            {
+                Email = "personnel2@live.com",
+                FirstName = "Health",
+                LastName = "Personnel2",
+                UserName = "personnel2"
+            };
+
+            await _userManager.CreateAsync(healthPersonnel2User, password);
+
+            var healthPersonnel2 = new HealthPersonnel
+            {
+                UserId = healthPersonnel2User.Id
+            };
+
+            await _healthPersonnelRepository.CreateAsync(healthPersonnel2);
+            #endregion
+
+            #region Roles
+            var parentRole = await _roleManager.CreateAsync(new IdentityRole
+            {
+                Name = "Parent"
+            });
+
+            var healthPersonnelRole = await _roleManager.CreateAsync(new IdentityRole
+            {
+                Name = "HealthPersonnel"
+            });
+
+            await _roleManager.CreateAsync(new IdentityRole
+            {
+                Name = "Admin"
+            });
+
+            await _userManager.AddToRoleAsync(parent1User, "Parent");
+            await _userManager.AddToRoleAsync(parent2User, "Parent");
+            await _userManager.AddToRoleAsync(healthPersonnel1User, "HealthPersonnel");
+            await _userManager.AddToRoleAsync(healthPersonnel2User, "HealthPersonnel");
+            #endregion
+
+            return Results.Ok(new
+            {
+                Response = "Parents and HealtPersonnel user created"
+            });
         }
     }
 }

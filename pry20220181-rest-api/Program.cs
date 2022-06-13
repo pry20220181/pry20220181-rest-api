@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using pry20220181_core_layer.Modules.Vaccination.Models;
+using pry20220181_core_layer.Modules.Master.Models;
 using pry20220181_data_layer;
 using System.Text;
 

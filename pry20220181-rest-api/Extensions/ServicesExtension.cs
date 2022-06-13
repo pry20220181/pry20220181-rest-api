@@ -1,7 +1,9 @@
-﻿using pry20220181_core_layer.Modules.Vaccination.Repositories;
+﻿using pry20220181_core_layer.Modules.Master.Repositories;
+using pry20220181_core_layer.Modules.Vaccination.Repositories;
 using pry20220181_core_layer.Modules.Vaccination.Services;
 using pry20220181_core_layer.Modules.Vaccination.Services.Impl;
 using pry20220181_data_layer.Repositories;
+using pry20220181_data_layer.Repositories.Master;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -15,6 +17,8 @@ namespace Microsoft.Extensions.DependencyInjection
         public static void AddPRY20220181Repositories(this IServiceCollection services)
         {
             services.AddScoped<IVaccineRepository, VaccineRepository>();
+            services.AddScoped<IParentRepository, ParentRepository>();
+            services.AddScoped<IHealthPersonnelRepository, HealthPersonnelRepository>();
         }
 
         /// <summary>

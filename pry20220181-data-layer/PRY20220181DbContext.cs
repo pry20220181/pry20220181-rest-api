@@ -328,7 +328,7 @@ namespace pry20220181_data_layer
 
         }
 
-        private static bool Initialized = false;
+        private static bool Initialized = true;
         #region DbSets
         public DbSet<Vaccine> Vaccines { get; set; }
         public DbSet<AdministeredDose> AdministeredDoses { get; set; }
