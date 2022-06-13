@@ -103,5 +103,59 @@ namespace pry20220181_rest_api.Controllers
                 });
             }
         }
+
+        [HttpGet("seeddata")]
+        public async Task<IResult> SeedData()
+        {
+            if (!_userManager.Users.Any())
+            {
+                #region Roles
+                var parentRole = await _roleManager.CreateAsync(new IdentityRole
+                {
+                    Name = "Parent"
+                });
+
+                var healthPersonnelRole = await _roleManager.CreateAsync(new IdentityRole
+                {
+                    Name = "HealthPersonnel"
+                });
+                #endregion
+
+
+                #region Parent 1
+
+                #endregion
+                var newUser = new User
+                {
+                    Email = "test@demo.com",
+                    FirstName = "Test",
+                    LastName = "User",
+                    UserName = "test.demo"
+                };
+
+                await _userManager.CreateAsync(newUser, "P@ss.W0rd");
+                await _roleManager.CreateAsync(new IdentityRole
+                {
+                    Name = "Admin"
+                });
+                await _roleManager.CreateAsync(new IdentityRole
+                {
+                    Name = "AnotherRole"
+                });
+                await _userManager.AddToRoleAsync(newUser, "Admin");
+                await _userManager.AddToRoleAsync(newUser, "AnotherRole");
+                return Results.Ok(new
+                {
+                    Response = "Default user created"
+                });
+            }
+            else
+            {
+                return Results.Ok(new
+                {
+                    Response = "Default users already exists"
+                });
+            }
+        }
     }
 }

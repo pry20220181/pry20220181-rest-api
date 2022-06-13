@@ -8,6 +8,7 @@ using pry20220181_core_layer.Modules.Master.Models;
 using pry20220181_core_layer.Modules.Vaccination.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -381,13 +382,179 @@ namespace pry20220181_data_layer
             }
             #endregion
 
+
+            #region Vaccines
+            #region Esquema Vacunacion Niño Menor 1 Año
+            Vaccine BCG = new Vaccine { Name = "BCG", MinTemperature = 2, MaxTemperature = 8 };
+            Vaccine HVB = new Vaccine { Name = "HVB", MinTemperature = 2, MaxTemperature = 8 };
+            Vaccine VacunaPentavalente = new Vaccine { Name = "Vacuna Pentavalente", MinTemperature = 2, MaxTemperature = 8 };
+            #endregion
+
+            #region Esquema Vacunación Niño 1 Año
+            Vaccine VacunaAntineumococica = new Vaccine { Name = "Vacuna Antineumococica", MinTemperature = 2, MaxTemperature = 8 };
+            Vaccine VacunaContraLaVaricela = new Vaccine { Name = "Vacuna Contra La Varicela", MinTemperature = 2, MaxTemperature = 8 };
+            #endregion
+
             if (!Vaccines.Any())
             {
                 Vaccines.AddRange(new List<Vaccine>() {
-                    new Vaccine() { Name = "Influenza", Description = "Vacuna para la influenza" },
-                    new Vaccine() { Name = "Neumococo", Description = "Vacuna para la neumococo" }
+                    BCG, HVB, VacunaPentavalente, VacunaAntineumococica, VacunaContraLaVaricela
                 });
             }
+            #endregion
+
+            #region Vaccine Inventory
+            VaccineInventory vaccineInventory1 = new VaccineInventory { HealthCenterId = TumbesCS.HealthCenterId, VaccineId = BCG.VaccineId, Stock = 10 };
+            VaccineInventory vaccineInventory2 = new VaccineInventory { HealthCenterId = TumbesCS.HealthCenterId, VaccineId = VacunaPentavalente.VaccineId, Stock = 10 };
+            VaccineInventory vaccineInventory3 = new VaccineInventory { HealthCenterId = TumbesCS.HealthCenterId, VaccineId = VacunaAntineumococica.VaccineId, Stock = 10 };
+            VaccineInventory vaccineInventory4 = new VaccineInventory { HealthCenterId = TumbesCS.HealthCenterId, VaccineId = VacunaContraLaVaricela.VaccineId, Stock = 10 };
+            if (!VaccineInventory.Any())
+            {
+                VaccineInventory.AddRange(new List<VaccineInventory>() {
+                    vaccineInventory1, vaccineInventory2, vaccineInventory3, vaccineInventory4
+                });
+            }
+            #endregion
+
+            #region VaccinationSchemes
+            VaccinationScheme vaccinationScheme1 = new VaccinationScheme
+            {
+                Name = "Esquema Vacunacion Niño Menor 1 Año",
+                InitialAge = 0,
+                FinalAge = 1,
+            };
+
+            VaccinationScheme vaccinationScheme2 = new VaccinationScheme
+            {
+                Name = "Esquema Vacunación Niño 1 Año",
+                InitialAge = 1,
+                FinalAge = 1,
+            };
+            
+            if (!VaccinationSchemes.Any())
+            {
+                VaccinationSchemes.AddRange(new List<VaccinationScheme>() {
+                    vaccinationScheme1, vaccinationScheme2
+                });
+            }
+            #endregion
+
+            #region VaccinationSchemeDetails
+            #region Esquema 1
+            VaccinationSchemeDetail vaccinationSchemeDetail1A = new VaccinationSchemeDetail
+            {
+                VaccinationSchemeId = vaccinationScheme1.VaccinationSchemeId,
+                VaccineId = BCG.VaccineId,
+                NumberOfDosesToAdminister = 1,
+                PossibleEffectsPostVaccine = "Nódulo de induración, puede durar semanas o ulcerarse"
+            };
+
+            VaccinationSchemeDetail vaccinationSchemeDetail1B = new VaccinationSchemeDetail
+            {
+                VaccinationSchemeId = vaccinationScheme1.VaccinationSchemeId,
+                VaccineId = HVB.VaccineId,
+                NumberOfDosesToAdminister = 1,
+                PossibleEffectsPostVaccine = "Local: dolor, eritema, edema e induración. Sistémico malestar general, cefalea, fatiga o irritabilidad"
+            };
+
+            VaccinationSchemeDetail vaccinationSchemeDetail1C = new VaccinationSchemeDetail
+            {
+                VaccinationSchemeId = vaccinationScheme1.VaccinationSchemeId,
+                VaccineId = VacunaPentavalente.VaccineId,
+                NumberOfDosesToAdminister = 3,
+                PossibleEffectsPostVaccine = "Enrojecimiento, edema e induración en sitio de vacunación, llanto persistente, irritabilidad, fiebre, en raras ocasiones convulsiones"
+            };
+            #endregion
+
+            #region Esquema 2
+            VaccinationSchemeDetail vaccinationSchemeDetail2A = new VaccinationSchemeDetail
+            {
+                VaccinationSchemeId = vaccinationScheme2.VaccinationSchemeId,
+                VaccineId = VacunaAntineumococica.VaccineId,
+                NumberOfDosesToAdminister = 1,
+                PossibleEffectsPostVaccine = "Local: dolor, eritema, edema e induración. Sistémico alza térmica, irritabilidad reacción cutánea"
+            };
+
+            VaccinationSchemeDetail vaccinationSchemeDetail2B = new VaccinationSchemeDetail
+            {
+                VaccinationSchemeId = vaccinationScheme2.VaccinationSchemeId,
+                VaccineId = VacunaContraLaVaricela.VaccineId,
+                NumberOfDosesToAdminister = 1,
+                PossibleEffectsPostVaccine = "Dolor en la zona. A partir 5to día: irritabilidad, alza térmica, reacción cutánea, somnolencia, pérdida de apetito"
+            };
+            #endregion
+
+            if (!VaccinationSchemeDetails.Any()) {
+                VaccinationSchemeDetails.AddRange(new List<VaccinationSchemeDetail>() {
+                    vaccinationSchemeDetail1A, vaccinationSchemeDetail1B, vaccinationSchemeDetail1C, vaccinationSchemeDetail2A, vaccinationSchemeDetail2B
+                });
+            }
+            #endregion
+
+            #region DosesDetails
+            #region Esquema 1
+            DoseDetail dosis1VacunaBCG = new DoseDetail()
+            {
+                VaccinationSchemeDetailId = vaccinationSchemeDetail1A.VaccinationSchemeDetailId,
+                DoseNumber = 1,
+                PutWhenNewBorn = true,
+            };
+
+            DoseDetail dosis1VacunaHVB = new DoseDetail()
+            {
+                VaccinationSchemeDetailId = vaccinationSchemeDetail1B.VaccinationSchemeDetailId,
+                DoseNumber = 1,
+                PutWhenNewBorn = true,
+            };
+
+            DoseDetail dosis1VacunaPentavalente = new DoseDetail()
+            {
+                VaccinationSchemeDetailId = vaccinationSchemeDetail1C.VaccinationSchemeDetailId,
+                DoseNumber = 1,
+                PutWhenHasMonths = 2,
+            };
+
+            DoseDetail dosis2VacunaPentavalente = new DoseDetail()
+            {
+                VaccinationSchemeDetailId = vaccinationSchemeDetail1C.VaccinationSchemeDetailId,
+                DoseNumber = 2,
+                PutWhenHasMonths = 4,
+            };
+
+            DoseDetail dosis3VacunaPentavalente = new DoseDetail()
+            {
+                VaccinationSchemeDetailId = vaccinationSchemeDetail1C.VaccinationSchemeDetailId,
+                DoseNumber = 3,
+                PutWhenHasMonths = 6,
+            };
+            #endregion
+
+            #region Esquema 2
+            DoseDetail dosis1VacunaAntineumococica = new DoseDetail()
+            {
+                VaccinationSchemeDetailId = vaccinationSchemeDetail2A.VaccinationSchemeDetailId,
+                DoseNumber = 1,
+                PutWhenHasMonths = 12,
+            };
+
+            DoseDetail dosis1VacunaContraVaricela = new DoseDetail()
+            {
+                VaccinationSchemeDetailId = vaccinationSchemeDetail2B.VaccinationSchemeDetailId,
+                DoseNumber = 1,
+                PutWhenHasMonths = 12,
+            };
+            #endregion
+
+            if (!DosesDetails.Any())
+            {
+                DosesDetails.AddRange(new List<DoseDetail>()
+                {
+                    dosis1VacunaBCG, dosis1VacunaHVB, dosis1VacunaPentavalente, dosis2VacunaPentavalente, dosis3VacunaPentavalente,
+                    dosis1VacunaAntineumococica, dosis1VacunaContraVaricela
+                });
+            }
+            #endregion
+
 
             SaveChanges();
         }
