@@ -16,7 +16,6 @@
     <Folder Include="Modules\Inventory\Models\" />
     <Folder Include="Modules\Inventory\Repositories\" />
     <Folder Include="Modules\Inventory\Services\" />
-    <Folder Include="Utils\" />
   </ItemGroup>
 
   <ItemGroup>

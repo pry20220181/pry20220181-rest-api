@@ -10,6 +10,9 @@ namespace pry20220181_core_layer.Modules.Vaccination.DTOs.Output
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
+        public float? MinTemperature { get; set; }
+        public float? MaxTemperature { get; set; }
+        public List<VaccinationSchemeDTO> VaccinationSchemes { get; set; } = new List<VaccinationSchemeDTO>();
     }
 }

@@ -15,8 +15,16 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services
         /// <summary>
         /// Get the list of Vaccines
         /// </summary>
+        /// <param name="fields">The fields that the method will return (minimal: return only the Vaccine's id and name, all: return all the fields of the Vaccine )</param>
         /// <returns></returns>
-        public Task<List<VaccineDTO>> GetVaccinesAsync(PaginationParameter paginationParameter);
+        public Task<List<VaccineDTO>> GetVaccinesAsync(PaginationParameter paginationParameter, string fields);
+
+        /// <summary>
+        /// Get the list of Vaccines with its complete info (schemes and doses)
+        /// </summary>
+        /// <param name="fields">The fields that the method will return (minimal: return only the Vaccine's id and name, all: return all the fields of the Vaccine )</param>
+        /// <returns></returns>        
+        public Task<List<VaccineDTO>> GetVaccinesCompleteInfoAsync(PaginationParameter paginationParameter, string fields);
 
         /// <summary>
         /// Get a Vaccine with the id passed as a parameter

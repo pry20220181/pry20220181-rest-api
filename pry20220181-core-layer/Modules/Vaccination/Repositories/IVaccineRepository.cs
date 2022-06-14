@@ -14,8 +14,14 @@ namespace pry20220181_core_layer.Modules.Vaccination.Repositories
         /// Obtain the list of Vaccines
         /// </summary>
         /// <returns></returns>
-        public Task<List<Vaccine>> GetAsync(PaginationParameter paginationParameter);
-        
+        public Task<List<Vaccine>> GetAsync(PaginationParameter paginationParameter, string fields);
+
+        /// <summary>
+        /// Obtain the list of Vaccines with its Schemes and Doses
+        /// </summary>
+        /// <returns></returns>
+        public Task<List<Vaccine>> GetWithSchemesAndDosesAsync(PaginationParameter paginationParameter, string fields);
+
         /// <summary>
         /// 
         /// </summary>

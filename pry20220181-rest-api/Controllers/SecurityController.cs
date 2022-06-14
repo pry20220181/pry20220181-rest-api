@@ -85,14 +85,7 @@ namespace pry20220181_rest_api.Controllers
                 };
 
                 await _userManager.CreateAsync(newUser, "P@ss.W0rd");
-                var parent1 = new Parent
-                {
-                    DNI = "71222441",
-                    Telephone = "123456789",
-                    UserId = newUser.Id
-                };
 
-                await _parentRepository.CreateAsync(parent1);
                 await _roleManager.CreateAsync(new IdentityRole
                 {
                     Name = "Admin"

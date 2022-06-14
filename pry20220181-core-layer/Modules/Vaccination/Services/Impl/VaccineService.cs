@@ -29,25 +29,35 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
             {
                 Id = vaccineFromDb.VaccineId,
                 Name = vaccineFromDb.Name,
-                Description = vaccineFromDb.Description
+                Description = vaccineFromDb.Description,
+                MinTemperature = vaccineFromDb.MinTemperature,
+                MaxTemperature = vaccineFromDb.MaxTemperature,
             };
 
             return vaccineToReturn;
         }
 
-        public async Task<List<VaccineDTO>> GetVaccinesAsync(PaginationParameter paginationParameter)
+        public async Task<List<VaccineDTO>> GetVaccinesAsync(PaginationParameter paginationParameter, string fields = "all")
         {
-            //TODO: Implement Validation and Pagination logic
+            //TODO: Implement Validation logic
             var vaccinesToReturn = new List<VaccineDTO>();
-            var vaccinesFromDb = await _vaccineRepository.GetAsync(paginationParameter);
+            var vaccinesFromDb = await _vaccineRepository.GetAsync(paginationParameter, fields);
             foreach (var vaccine in vaccinesFromDb)
             {
-                vaccinesToReturn.Add(new VaccineDTO()
+                var vaccineToReturn = new VaccineDTO()
                 {
                     Id = vaccine.VaccineId,
-                    Name = vaccine.Name,
-                    Description = vaccine.Description
-                });
+                    Name = vaccine.Name
+                };
+                
+                if (fields == "all")
+                {
+                    vaccineToReturn.Description = vaccine.Description;
+                    vaccineToReturn.MinTemperature = vaccine.MinTemperature;
+                    vaccineToReturn.MaxTemperature = vaccine.MaxTemperature;
+                }
+                
+                vaccinesToReturn.Add(vaccineToReturn);
             }
             return vaccinesToReturn;
         }
@@ -58,7 +68,9 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
             var vaccineToCreate = new Vaccine()
             {
                 Name = vaccineCreationDTO.Name,
-                Description = vaccineCreationDTO.Description
+                Description = vaccineCreationDTO.Description,
+                MinTemperature = vaccineCreationDTO.MinTemperature,
+                MaxTemperature = vaccineCreationDTO.MaxTemperature,
             };
 
             var vaccineId = await _vaccineRepository.CreateAsync(vaccineToCreate);
@@ -73,7 +85,9 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
             {
                 VaccineId = id,
                 Name = vaccineUpdateDTO.Name,
-                Description = vaccineUpdateDTO.Description
+                Description = vaccineUpdateDTO.Description,
+                MinTemperature = vaccineUpdateDTO.MinTemperature,
+                MaxTemperature = vaccineUpdateDTO.MaxTemperature
             };
 
             var updatedVaccine = await _vaccineRepository.UpdateAsync(vaccineToUpdate);
@@ -82,7 +96,9 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
             {
                 Id = updatedVaccine.VaccineId,
                 Name = updatedVaccine.Name,
-                Description = updatedVaccine.Description
+                Description = updatedVaccine.Description,
+                MinTemperature = updatedVaccine.MinTemperature,
+                MaxTemperature = updatedVaccine.MaxTemperature
             };
 
             return vaccineToReturn;
@@ -93,6 +109,57 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
             var result = await _vaccineRepository.DeleteAsync(id);
 
             return result;
+        }
+
+        public async Task<List<VaccineDTO>> GetVaccinesCompleteInfoAsync(PaginationParameter paginationParameter, string fields)
+        {
+            var vaccinesToReturn = new List<VaccineDTO>();
+            var vaccinesFromDb = await _vaccineRepository.GetWithSchemesAndDosesAsync(paginationParameter, fields);
+            foreach (var vaccine in vaccinesFromDb)
+            {
+                var vaccineToReturn = new VaccineDTO()
+                {
+                    Id = vaccine.VaccineId,
+                    Name = vaccine.Name
+                };
+
+                if (fields == "all")
+                {
+                    vaccineToReturn.Description = vaccine.Description;
+                    vaccineToReturn.MinTemperature = vaccine.MinTemperature;
+                    vaccineToReturn.MaxTemperature = vaccine.MaxTemperature;
+
+                    foreach (var vaccinationScheme in vaccine.VaccinationSchemeDetails)
+                    {
+                        var vaccinationSchemeToReturn = new VaccinationSchemeDTO()
+                        {
+                            VaccinationSchemeId = vaccinationScheme.VaccinationSchemeId,
+                            Name = vaccinationScheme.VaccinationScheme.Name,
+                            InitialAge = vaccinationScheme.VaccinationScheme.InitialAge,
+                            FinalAge = vaccinationScheme.VaccinationScheme.FinalAge,
+                            NumberOfDoses = vaccinationScheme.NumberOfDosesToAdminister,
+                            PossibleEffectsPostVaccine = vaccinationScheme.PossibleEffectsPostVaccine
+                        };
+
+                        foreach (var dose in vaccinationScheme.DosesDetails)
+                        {
+                            var vaccineDose = new VaccineDoseDTO()
+                            {
+                                VaccineDoseId = dose.DoseDetailId,
+                                DoseNumber = dose.DoseNumber,
+                                PutWhen = WhenPutVaccine.ToString(dose),
+                            };
+                            
+                            vaccinationSchemeToReturn.VaccineDoses.Add(vaccineDose);
+                        }
+
+                        vaccineToReturn.VaccinationSchemes.Add(vaccinationSchemeToReturn);
+                    };
+                }
+
+                vaccinesToReturn.Add(vaccineToReturn);
+            }
+            return vaccinesToReturn;
         }
     }
 }

@@ -10,5 +10,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.DTOs.Input
     {
         public string Name { get; set; }
         public string Description { get; set; }
+        public float MinTemperature { get; set; }
+        public float MaxTemperature { get; set; }
     }
 }

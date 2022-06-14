@@ -23,9 +23,10 @@ namespace pry20220181_rest_api.Controllers
         }
 
         [HttpGet(Name = "GetVaccines")]
-        public async Task<IEnumerable<VaccineDTO>> Get([FromQuery] PaginationParameter paginationParameter)
+        public async Task<IEnumerable<VaccineDTO>> Get([FromQuery] PaginationParameter paginationParameter, [FromQuery] string? fields = "all")
         {
-            return await _vaccineService.GetVaccinesAsync(paginationParameter);
+            //return await _vaccineService.GetVaccinesAsync(paginationParameter, fields);
+            return await _vaccineService.GetVaccinesCompleteInfoAsync(paginationParameter, fields);
         }
 
         [HttpGet("{id}", Name = "GetVaccineById")]

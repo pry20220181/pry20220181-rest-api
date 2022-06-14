@@ -60,7 +60,7 @@ namespace pry20220181_data_layer
 
             modelBuilder.Entity<VaccinationSchemeDetail>()
                 .HasOne(v => v.Vaccine)
-                .WithMany()
+                .WithMany(v=>v.VaccinationSchemeDetails)
                 .HasForeignKey(v => v.VaccineId);
             #endregion
 
@@ -328,7 +328,7 @@ namespace pry20220181_data_layer
 
         }
 
-        private static bool Initialized = true;
+        private static bool Initialized = false;
         #region DbSets
         public DbSet<Vaccine> Vaccines { get; set; }
         public DbSet<AdministeredDose> AdministeredDoses { get; set; }
@@ -385,14 +385,14 @@ namespace pry20220181_data_layer
 
             #region Vaccines
             #region Esquema Vacunacion Niño Menor 1 Año
-            Vaccine BCG = new Vaccine { Name = "BCG", MinTemperature = 2, MaxTemperature = 8 };
-            Vaccine HVB = new Vaccine { Name = "HVB", MinTemperature = 2, MaxTemperature = 8 };
-            Vaccine VacunaPentavalente = new Vaccine { Name = "Vacuna Pentavalente", MinTemperature = 2, MaxTemperature = 8 };
+            Vaccine BCG = new Vaccine { Name = "BCG", MinTemperature = 2, MaxTemperature = 8, Description = "Vacuna para la BCG" };
+            Vaccine HVB = new Vaccine { Name = "HVB", MinTemperature = 2, MaxTemperature = 8, Description = "Vacuna para la HVB" };
+            Vaccine VacunaPentavalente = new Vaccine { Name = "Vacuna Pentavalente", MinTemperature = 2, MaxTemperature = 8, Description = "Vacuna para la Pentavalente" };
             #endregion
 
             #region Esquema Vacunación Niño 1 Año
-            Vaccine VacunaAntineumococica = new Vaccine { Name = "Vacuna Antineumococica", MinTemperature = 2, MaxTemperature = 8 };
-            Vaccine VacunaContraLaVaricela = new Vaccine { Name = "Vacuna Contra La Varicela", MinTemperature = 2, MaxTemperature = 8 };
+            Vaccine VacunaAntineumococica = new Vaccine { Name = "Vacuna Antineumococica", MinTemperature = 2, MaxTemperature = 8, Description = "Vacuna Antineumococica" };
+            Vaccine VacunaContraLaVaricela = new Vaccine { Name = "Vacuna Contra La Varicela", MinTemperature = 2, MaxTemperature = 8, Description = "Vacuna Contra La Varicela" };
             #endregion
 
             if (!Vaccines.Any())
