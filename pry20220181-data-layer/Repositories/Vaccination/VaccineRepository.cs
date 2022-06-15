@@ -9,7 +9,7 @@ using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace pry20220181_data_layer.Repositories
+namespace pry20220181_data_layer.Repositories.Vaccination
 {
     public class VaccineRepository : IVaccineRepository
     {
@@ -17,7 +17,7 @@ namespace pry20220181_data_layer.Repositories
 
         public VaccineRepository(PRY20220181DbContext dbContext)
         {
-            this._dbContext = dbContext;
+            _dbContext = dbContext;
         }
 
 
@@ -52,7 +52,6 @@ namespace pry20220181_data_layer.Repositories
         public async Task<int> CreateAsync(Vaccine vaccine)
         {
             var createdVaccine = await _dbContext.Vaccines.AddAsync(vaccine);
-
             await _dbContext.SaveChangesAsync();
 
             return createdVaccine.Entity.VaccineId;
@@ -93,7 +92,7 @@ namespace pry20220181_data_layer.Repositories
                 .Take(paginationParameter.PageSize)
                 .Include(v => v.VaccinationSchemeDetails)
                     .ThenInclude(v => v.VaccinationScheme)
-                .Include(v=>v.VaccinationSchemeDetails)
+                .Include(v => v.VaccinationSchemeDetails)
                     .ThenInclude(v => v.DosesDetails)
                 .ToListAsync();
         }
