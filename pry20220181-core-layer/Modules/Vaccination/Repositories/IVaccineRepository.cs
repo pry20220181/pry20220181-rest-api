@@ -28,7 +28,14 @@ namespace pry20220181_core_layer.Modules.Vaccination.Repositories
         /// <param name="id">The id of the vaccine</param>
         /// <returns></returns>
         public Task<Vaccine> GetByIdAsync(int id);
-        
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="id">The id of the vaccine</param>
+        /// <returns></returns>
+        public Task<Vaccine> GetByIdWithSchemesAndDosesAsync(int id);
+
         /// <summary>
         /// Create the Vaccine record in the Database
         /// </summary>

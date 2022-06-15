@@ -55,14 +55,14 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
                     Id = vaccine.VaccineId,
                     Name = vaccine.Name
                 };
-                
+
                 if (fields == "all")
                 {
                     vaccineToReturn.Description = vaccine.Description;
                     vaccineToReturn.MinTemperature = vaccine.MinTemperature;
                     vaccineToReturn.MaxTemperature = vaccine.MaxTemperature;
                 }
-                
+
                 vaccinesToReturn.Add(vaccineToReturn);
             }
             return vaccinesToReturn;
@@ -206,7 +206,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
                                 DoseNumber = dose.DoseNumber,
                                 PutWhen = WhenPutVaccine.ToString(dose),
                             };
-                            
+
                             vaccinationSchemeToReturn.VaccineDoses.Add(vaccineDose);
                         }
 
@@ -217,6 +217,48 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
                 vaccinesToReturn.Add(vaccineToReturn);
             }
             return vaccinesToReturn;
+        }
+
+        public async Task<VaccineDTO> GetVaccineCompleteInfoByIdAsync(int id)
+        {
+            var vaccineFromDb = await _vaccineRepository.GetByIdWithSchemesAndDosesAsync(id);
+            var vaccineToReturn = new VaccineDTO()
+            {
+                Id = vaccineFromDb.VaccineId,
+                Name = vaccineFromDb.Name,
+                Description = vaccineFromDb.Description,
+                MinTemperature = vaccineFromDb.MinTemperature,
+                MaxTemperature = vaccineFromDb.MaxTemperature
+            };
+
+            foreach (var vaccinationScheme in vaccineFromDb.VaccinationSchemeDetails)
+            {
+                var vaccinationSchemeToReturn = new VaccinationSchemeDTO()
+                {
+                    VaccinationSchemeId = vaccinationScheme.VaccinationSchemeId,
+                    Name = vaccinationScheme.VaccinationScheme.Name,
+                    InitialAge = vaccinationScheme.VaccinationScheme.InitialAge,
+                    FinalAge = vaccinationScheme.VaccinationScheme.FinalAge,
+                    NumberOfDoses = vaccinationScheme.NumberOfDosesToAdminister,
+                    PossibleEffectsPostVaccine = vaccinationScheme.PossibleEffectsPostVaccine
+                };
+
+                foreach (var dose in vaccinationScheme.DosesDetails)
+                {
+                    var vaccineDose = new VaccineDoseDTO()
+                    {
+                        VaccineDoseId = dose.DoseDetailId,
+                        DoseNumber = dose.DoseNumber,
+                        PutWhen = WhenPutVaccine.ToString(dose),
+                    };
+
+                    vaccinationSchemeToReturn.VaccineDoses.Add(vaccineDose);
+                }
+
+                vaccineToReturn.VaccinationSchemes.Add(vaccinationSchemeToReturn);
+            };
+
+            return vaccineToReturn;
         }
     }
 }

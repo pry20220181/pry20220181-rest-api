@@ -32,7 +32,8 @@ namespace pry20220181_rest_api.Controllers
         [HttpGet("{id}", Name = "GetVaccineById")]
         public async Task<VaccineDTO> GetById(int id)
         {
-            var vaccine = await _vaccineService.GetVaccineByIdAsync(id);
+            //var vaccine = await _vaccineService.GetVaccineByIdAsync(id);
+            var vaccine = await _vaccineService.GetVaccineCompleteInfoByIdAsync(id);
             return vaccine;
         }
 

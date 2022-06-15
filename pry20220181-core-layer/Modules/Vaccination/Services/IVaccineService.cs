@@ -34,6 +34,13 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services
         public Task<VaccineDTO> GetVaccineByIdAsync(int id);
 
         /// <summary>
+        /// Get a Vaccine with its complete info (schemes and doses) by the id passed as a parameter
+        /// </summary>
+        /// <param name="id">The id of the vaccine</param>
+        /// <returns></returns>
+        public Task<VaccineDTO> GetVaccineCompleteInfoByIdAsync(int id);
+
+        /// <summary>
         /// Create a Vaccine with the specified data        
         /// </summary>
         /// <param name="vaccineCreationDTO">The vaccine to create</param>
