@@ -1,4 +1,5 @@
-﻿using pry20220181_core_layer.Modules.Vaccination.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using pry20220181_core_layer.Modules.Vaccination.Models;
 using pry20220181_core_layer.Modules.Vaccination.Repositories;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,11 @@ namespace pry20220181_data_layer.Repositories.Vaccination
             _dbContext.VaccinationSchemeDetails.AddRange(vaccinationSchemeDetails);
             await _dbContext.SaveChangesAsync();
             return vaccinationSchemeDetails;
+        }
+
+        public async Task<List<VaccinationSchemeDetail>> GetByVaccineIdAsync(int vaccineId)
+        {
+            return await _dbContext.VaccinationSchemeDetails.Where(v => v.VaccineId == vaccineId).ToListAsync();
         }
     }
 }

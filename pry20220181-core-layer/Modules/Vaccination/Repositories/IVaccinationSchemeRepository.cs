@@ -10,5 +10,6 @@ namespace pry20220181_core_layer.Modules.Vaccination.Repositories
     public interface IVaccinationSchemeRepository
     {
         public Task<List<VaccinationScheme>> CreateRangeAsync(List<VaccinationScheme> vaccinationSchemes);
+        public Task<List<VaccinationScheme>> GetAllAsync();
     }
 }

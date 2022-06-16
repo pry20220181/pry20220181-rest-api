@@ -82,32 +82,70 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
             var vaccineId = await _vaccineRepository.CreateAsync(vaccineToCreate);
             #endregion
 
-            //TODO: Obtener las listas de la DB y revisar cuales agregar a la lista INsert y tomar los ID en caso
+            var registeredVaccinationSchemes = await _vaccinationSchemeRepository.GetAllAsync();
+
 
             #region Map Objects from DTO to Model
+            var vaccinationSchemes = new List<VaccinationScheme>();
             var vaccinationSchemesToCreate = new List<VaccinationScheme>();
             var vaccinatioSchemeDetailToCreate = new List<VaccinationSchemeDetail>();
             var vaccineDosesToCreate = new List<DoseDetail>();
-            foreach (var vaccinationScheme in vaccineCreationDTO.VaccinationSchemes)
+            foreach (var vaccinationSchemeItem in vaccineCreationDTO.VaccinationSchemes)
             {
-                VaccinationScheme vaccinationSchemeToCreate = new VaccinationScheme()
+                int vaccinationSchemeId = 0;
+                if (registeredVaccinationSchemes.Exists(v => v.Name == vaccinationSchemeItem.Name))
                 {
-                    Name = vaccinationScheme.Name,
-                    InitialAge = vaccinationScheme.InitialAge,
-                    FinalAge = vaccinationScheme.FinalAge
-                };
-                vaccinationSchemesToCreate.Add(vaccinationSchemeToCreate);
+                    vaccinationSchemeId = registeredVaccinationSchemes.First(v => v.Name == vaccinationSchemeItem.Name).VaccinationSchemeId;
+                }
 
+                VaccinationScheme vaccinationScheme = new VaccinationScheme()
+                {
+                    VaccinationSchemeId = vaccinationSchemeId,
+                    Name = vaccinationSchemeItem.Name,
+                    InitialAge = vaccinationSchemeItem.InitialAge,
+                    FinalAge = vaccinationSchemeItem.FinalAge
+                };
+
+                vaccinationSchemes.Add(vaccinationScheme);
+
+                //if(!registeredVaccinationSchemeDetails.Exists(v=>v.VaccinationSchemeId == vaccinationSchemeId))
+                //{
+                //    VaccinationSchemeDetail vaccinationSchemeDetailToCreate = new VaccinationSchemeDetail()
+                //    {
+                //        NumberOfDosesToAdminister = vaccinationSchemeItem.NumberOfDoses,
+                //        PossibleEffectsPostVaccine = vaccinationSchemeItem.PossibleEffectsPostVaccine,
+                //        VaccineId = vaccineId,
+                //        VaccinationSchemeId = vaccinationSchemeId
+                //    };
+                //    vaccinatioSchemeDetailToCreate.Add(vaccinationSchemeDetailToCreate);
+                //}
+
+
+            }
+            #endregion
+
+            vaccinationSchemesToCreate = vaccinationSchemes.Where(v => v.VaccinationSchemeId == 0).ToList();
+            var createdVaccineSchemes = await _vaccinationSchemeRepository.CreateRangeAsync(vaccinationSchemesToCreate);
+
+            foreach (var vaccinationSchemeItem in vaccineCreationDTO.VaccinationSchemes)
+            {
                 VaccinationSchemeDetail vaccinationSchemeDetailToCreate = new VaccinationSchemeDetail()
                 {
-                    NumberOfDosesToAdminister = vaccinationScheme.NumberOfDoses,
-                    PossibleEffectsPostVaccine = vaccinationScheme.PossibleEffectsPostVaccine,
+                    NumberOfDosesToAdminister = vaccinationSchemeItem.NumberOfDoses,
+                    PossibleEffectsPostVaccine = vaccinationSchemeItem.PossibleEffectsPostVaccine,
                     VaccineId = vaccineId,
-                    VaccinationSchemeId = vaccinationSchemeToCreate.VaccinationSchemeId
+                    VaccinationSchemeId = vaccinationSchemes.FirstOrDefault(v => v.Name == vaccinationSchemeItem.Name).VaccinationSchemeId
                 };
                 vaccinatioSchemeDetailToCreate.Add(vaccinationSchemeDetailToCreate);
+            }
+            var createdVaccinationSchemeDetails = await _vaccinationSchemeDetailRepository.CreateRangeAsync(vaccinatioSchemeDetailToCreate);
 
-                foreach (var vaccineDose in vaccinationScheme.VaccineDoses)
+
+            foreach (var vaccinationSchemeItem in vaccineCreationDTO.VaccinationSchemes)
+            {
+                var vaccinationSchemeId = vaccinationSchemes.FirstOrDefault(v => v.Name == vaccinationSchemeItem.Name).VaccinationSchemeId;
+                var vaccinationSchemeDetailId = createdVaccinationSchemeDetails.FirstOrDefault(v => v.VaccinationSchemeId == vaccinationSchemeId).VaccinationSchemeDetailId;
+                foreach (var vaccineDose in vaccinationSchemeItem.VaccineDoses)
                 {
                     DoseDetail doseDetailToCreate = new DoseDetail()
                     {
@@ -118,20 +156,14 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
                         PutBetweenStartMonth = vaccineDose.PutBetweenStartMonth,
                         PutBetweenEndMonth = vaccineDose.PutBetweenEndMonth,
                         PutEveryYear = vaccineDose.PutEveryYear,
-                        VaccinationSchemeDetailId = vaccinationSchemeDetailToCreate.VaccinationSchemeDetailId
+                        VaccinationSchemeDetailId = vaccinationSchemeDetailId
                     };
                     vaccineDosesToCreate.Add(doseDetailToCreate);
                 }
             }
-            #endregion
 
-            #region Register VaccinationScheme, VaccinationSchemeDetail and DoseDetail
-            //TODO: Revisar el mapeo de IDs, porque se asignan cuando se insertan, pero no se mapean en sus relaciones, una opci[on es recorrerlos y asignar,
-            //pero no hay forma e relacionarlos creo, el 15/6/22 se vera con mas detalle
-            var createdVaccineSchemes = await _vaccinationSchemeRepository.CreateRangeAsync(vaccinationSchemesToCreate);
-            var createdVaccinationSchemeDetails = await _vaccinationSchemeDetailRepository.CreateRangeAsync(vaccinatioSchemeDetailToCreate);
             var createdDoseDetails = await _doseDetailRepository.CreateRangeAsync(vaccineDosesToCreate);
-            #endregion
+
             return vaccineId;
         }
 
