@@ -83,13 +83,13 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
             #endregion
 
             var registeredVaccinationSchemes = await _vaccinationSchemeRepository.GetAllAsync();
-
-
-            #region Map Objects from DTO to Model
             var vaccinationSchemes = new List<VaccinationScheme>();
             var vaccinationSchemesToCreate = new List<VaccinationScheme>();
             var vaccinatioSchemeDetailToCreate = new List<VaccinationSchemeDetail>();
             var vaccineDosesToCreate = new List<DoseDetail>();
+
+            #region Create the VaccinationScheme if does not exist, and if exists, get its ID
+            //After saving in the DB, all the VaccinationSchemes has its Id.
             foreach (var vaccinationSchemeItem in vaccineCreationDTO.VaccinationSchemes)
             {
                 int vaccinationSchemeId = 0;
@@ -107,26 +107,15 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
                 };
 
                 vaccinationSchemes.Add(vaccinationScheme);
-
-                //if(!registeredVaccinationSchemeDetails.Exists(v=>v.VaccinationSchemeId == vaccinationSchemeId))
-                //{
-                //    VaccinationSchemeDetail vaccinationSchemeDetailToCreate = new VaccinationSchemeDetail()
-                //    {
-                //        NumberOfDosesToAdminister = vaccinationSchemeItem.NumberOfDoses,
-                //        PossibleEffectsPostVaccine = vaccinationSchemeItem.PossibleEffectsPostVaccine,
-                //        VaccineId = vaccineId,
-                //        VaccinationSchemeId = vaccinationSchemeId
-                //    };
-                //    vaccinatioSchemeDetailToCreate.Add(vaccinationSchemeDetailToCreate);
-                //}
-
-
             }
+            vaccinationSchemesToCreate = vaccinationSchemes.Where(v => v.VaccinationSchemeId == 0).ToList();
+            //Here the all the items of vaccinationSchemes has its Id.
+            var createdVaccineSchemes = await _vaccinationSchemeRepository.CreateRangeAsync(vaccinationSchemesToCreate);
             #endregion
 
-            vaccinationSchemesToCreate = vaccinationSchemes.Where(v => v.VaccinationSchemeId == 0).ToList();
-            var createdVaccineSchemes = await _vaccinationSchemeRepository.CreateRangeAsync(vaccinationSchemesToCreate);
-
+            #region Assign the new Vaccine to its VaccinationScheme
+            //As this table is the Intermediate table between Vaccine and VaccinationScheme, we create all the VaccinationSchemeDetail
+            //That arrives, because it indicate that "this vaccine is available in this VaccinationScheme".
             foreach (var vaccinationSchemeItem in vaccineCreationDTO.VaccinationSchemes)
             {
                 VaccinationSchemeDetail vaccinationSchemeDetailToCreate = new VaccinationSchemeDetail()
@@ -140,7 +129,9 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
             }
             var createdVaccinationSchemeDetails = await _vaccinationSchemeDetailRepository.CreateRangeAsync(vaccinatioSchemeDetailToCreate);
 
+            #endregion
 
+            #region We register all the Details (Doses) about the vaccinationSchemeDetail of this Vaccine
             foreach (var vaccinationSchemeItem in vaccineCreationDTO.VaccinationSchemes)
             {
                 var vaccinationSchemeId = vaccinationSchemes.FirstOrDefault(v => v.Name == vaccinationSchemeItem.Name).VaccinationSchemeId;
@@ -163,6 +154,8 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
             }
 
             var createdDoseDetails = await _doseDetailRepository.CreateRangeAsync(vaccineDosesToCreate);
+            #endregion
+
 
             return vaccineId;
         }

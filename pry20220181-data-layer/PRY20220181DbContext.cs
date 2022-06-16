@@ -555,6 +555,40 @@ namespace pry20220181_data_layer
             }
             #endregion
 
+            #region Childs
+            Child child1 = new Child()
+            {
+                DNI = "12345678",
+                Firstname = "Arthur",
+                Lastname = "Nole",
+                Birthdate = new DateTime(2000, 01, 01),
+                Gender = 'M'
+            };
+
+            if (!Children.Any())
+            {
+                Children.AddRange(new List<Child>()
+                {
+                    child1
+                });
+            }
+            #endregion
+
+            #region ChildParents
+            ChildParent childParent1 = new ChildParent()
+            {
+                ChildId = child1.ChildId,
+                ParentId = 1,
+                Relationship = 'P'
+            };
+            if (!ChildrenParents.Any())
+            {
+                ChildrenParents.AddRange(new List<ChildParent>()
+                {
+                    childParent1
+                });
+            }
+            #endregion
 
             SaveChanges();
         }
