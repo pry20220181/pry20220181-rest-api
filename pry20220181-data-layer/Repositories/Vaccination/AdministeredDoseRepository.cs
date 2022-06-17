@@ -1,4 +1,5 @@
-﻿using pry20220181_core_layer.Modules.Vaccination.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using pry20220181_core_layer.Modules.Vaccination.Models;
 using pry20220181_core_layer.Modules.Vaccination.Repositories;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,18 @@ namespace pry20220181_data_layer.Repositories.Vaccination
 {
     public class AdministeredDoseRepository : IAdministeredDoseRepository
     {
-        public Task<List<AdministeredDose>> GetByChild(int childId)
+        PRY20220181DbContext _dbContext { get; set; }
+
+        public AdministeredDoseRepository(PRY20220181DbContext dbContext)
         {
-            throw new NotImplementedException();
+            _dbContext = dbContext;
+        }
+
+        public async Task<List<AdministeredDose>> GetByChildIdAsync(int childId)
+        {
+            return await _dbContext.AdministeredDoses
+                .Where(x => x.ChildId == childId)
+                .ToListAsync();
         }
     }
 }

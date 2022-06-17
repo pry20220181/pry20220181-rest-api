@@ -18,6 +18,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="services"></param>
         public static void AddPRY20220181Repositories(this IServiceCollection services)
         {
+            services.AddScoped<IAdministeredDoseRepository, AdministeredDoseRepository>();
             services.AddScoped<IChildRepository, ChildRepository>();
             services.AddScoped<IDoseDetailRepository, DoseDetailRepository>();
             services.AddScoped<IHealthPersonnelRepository, HealthPersonnelRepository>();
@@ -34,7 +35,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="services"></param>
         public static void AddPRY20220181Services(this IServiceCollection services)
         {
-            services.AddScoped<IChildService, ChildService>();            
+            services.AddScoped<IChildService, ChildService>();
+            services.AddScoped<IDosesService, DosesService>();
             services.AddScoped<IVaccineService, VaccineService>();
         }
     }
