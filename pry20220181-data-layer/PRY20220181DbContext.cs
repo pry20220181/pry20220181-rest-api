@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.VisualBasic;
 using pry20220181_core_layer.Modules.Campaigns.Models;
 using pry20220181_core_layer.Modules.Inventory.Models;
 using pry20220181_core_layer.Modules.Master.Models;
@@ -561,7 +562,7 @@ namespace pry20220181_data_layer
                 DNI = "12345678",
                 Firstname = "Arthur",
                 Lastname = "Nole",
-                Birthdate = new DateTime(2000, 01, 01),
+                Birthdate = new DateTime(2022, 01, 01),
                 Gender = 'M'
             };
 
@@ -586,6 +587,25 @@ namespace pry20220181_data_layer
                 ChildrenParents.AddRange(new List<ChildParent>()
                 {
                     childParent1
+                });
+            }
+            #endregion
+
+            #region AdministeredDoses
+            AdministeredDose administeredDose1 = new AdministeredDose()
+            {
+                DoseDetailId = dosis1VacunaBCG.DoseDetailId,
+                ChildId = child1.ChildId,
+                HealthCenterId = TumbesCS.HealthCenterId,
+                HealthPersonnelId = 1,
+                DoseDate = DateTime.UtcNow.AddHours(-5)
+            };
+
+            if (!AdministeredDoses.Any())
+            {
+                AdministeredDoses.AddRange(new List<AdministeredDose>()
+                {
+                    administeredDose1
                 });
             }
             #endregion

@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace pry20220181_core_layer.Modules.Vaccination.Repositories
 {
-    public interface IDoseDetailRepository
+    public interface IAdministeredDoseRepository
     {
-        public Task<List<DoseDetail>> CreateRangeAsync(List<DoseDetail> dosesDetails);
-        public Task<List<DoseDetail>> GetAllWithSchemesAndVaccinesAsync();
-        
+        public Task<List<AdministeredDose>> GetByChild(int childId);
     }
 }
