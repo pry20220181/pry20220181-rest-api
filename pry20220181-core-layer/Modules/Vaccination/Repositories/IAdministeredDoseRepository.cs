@@ -10,5 +10,6 @@ namespace pry20220181_core_layer.Modules.Vaccination.Repositories
     public interface IAdministeredDoseRepository
     {
         public Task<List<AdministeredDose>> GetByChildIdAsync(int childId);
+        public Task<int> CreateAsync(AdministeredDose administeredDose);
     }
 }

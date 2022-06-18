@@ -24,5 +24,12 @@ namespace pry20220181_data_layer.Repositories.Vaccination
                 .Where(x => x.ChildId == childId)
                 .ToListAsync();
         }
+
+        public async Task<int> CreateAsync(AdministeredDose administeredDose)
+        {
+            var registeredAdministeredDose = await _dbContext.AdministeredDoses.AddAsync(administeredDose);
+            await _dbContext.SaveChangesAsync();
+            return registeredAdministeredDose.Entity.AdministeredDoseId;
+        }
     }
 }
