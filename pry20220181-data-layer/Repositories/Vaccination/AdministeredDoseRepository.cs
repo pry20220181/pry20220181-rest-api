@@ -32,5 +32,19 @@ namespace pry20220181_data_layer.Repositories.Vaccination
             await _dbContext.SaveChangesAsync();
             return registeredAdministeredDose.Entity.AdministeredDoseId;
         }
+
+        public async Task<List<AdministeredDose>> GetByChildIdWithAllRelatedInfoAsync(int childId)
+        {
+            return await _dbContext.AdministeredDoses   
+                .Include(a=>a.DoseDetail)
+                    .ThenInclude(d=>d.VaccinationSchemeDetail.VaccinationScheme)
+                .Include(a => a.DoseDetail)
+                    .ThenInclude(d => d.VaccinationSchemeDetail.Vaccine)
+                .Include(a=>a.HealthCenter)
+                .Include(a=>a.HealthPersonnel)
+                    .ThenInclude(h => h.User)
+                .Where(x => x.ChildId == childId)
+                .ToListAsync();
+        }
     }
 }
