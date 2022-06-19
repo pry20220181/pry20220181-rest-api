@@ -10,5 +10,6 @@ namespace pry20220181_core_layer.Modules.Master.Repositories
     public interface IChildRepository
     {
         public Task<Child> GetByDniAsync(string DNI);
+        public Task<Child> GetByIdAsync(int childId);
     }
 }

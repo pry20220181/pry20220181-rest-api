@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using pry20220181_core_layer.Modules.Master.DTOs.Output;
 using pry20220181_core_layer.Modules.Master.Services;
+using pry20220181_core_layer.Modules.Vaccination.Models;
 
 namespace pry20220181_rest_api.Controllers
 {
@@ -17,11 +18,20 @@ namespace pry20220181_rest_api.Controllers
             _childService = childService;
         }
 
-        [HttpGet(Name ="GetChildByDni")]
+        [HttpGet(Name = "GetChildByDni")]
         public async Task<ChildDTO> GetByDni([FromQuery] string dni)
         {
             var child = await _childService.GetChildByDniAsync(dni);
             return child;
+        }
+        [HttpGet("{childId}/vaccination-card")]
+        public async Task<IResult> GetVaccinationCard([FromRoute] int childId)
+        {
+            var vaccinationCard = await _childService.GetVaccinationCardAsync(childId);
+            return Results.Ok(new
+            {
+                VaccinationCard = vaccinationCard
+            });
         }
     }
 }
