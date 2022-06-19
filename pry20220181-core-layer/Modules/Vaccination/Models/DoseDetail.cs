@@ -17,7 +17,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Models
         public int PutBetweenStartMonth { get; set; }
         public int PutBetweenEndMonth { get; set; }
         public int PutEveryYear { get; set; }
-
+        public bool CanBePut { get; set; } = false;
         #region Relations with another tables
         public VaccinationSchemeDetail VaccinationSchemeDetail { get; set; }
         #endregion

@@ -21,6 +21,7 @@ namespace pry20220181_data_layer.Repositories.Vaccination
         public async Task<List<AdministeredDose>> GetByChildIdAsync(int childId)
         {
             return await _dbContext.AdministeredDoses
+                .Include(x => x.Child)
                 .Where(x => x.ChildId == childId)
                 .ToListAsync();
         }

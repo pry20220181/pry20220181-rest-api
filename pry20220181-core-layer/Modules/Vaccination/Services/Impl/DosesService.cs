@@ -26,10 +26,13 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
         {
             var allDosesFromDb = await _doseDetailRepository.GetAllWithSchemesAndVaccinesAsync();
             var administeredDosesToChild = await _administeredDoseRepository.GetByChildIdAsync(childId);
+            var child = administeredDosesToChild.FirstOrDefault().Child;
             var remainingDosesToAdminister = allDosesFromDb
                 .Where(d => administeredDosesToChild
                 .Exists(ad => ad.DoseDetailId == d.DoseDetailId) == false)
                 .ToList();
+
+            remainingDosesToAdminister = DosesAnalyzer.EvaluateIfTheDosesCanBePut(child, administeredDosesToChild, remainingDosesToAdminister);
 
             var remainingDosesToAdministerToReturn = new List<RemainingDoseDTO>();
             foreach (var remainingDose in remainingDosesToAdminister)
@@ -38,12 +41,19 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
                 {
                     RemainingDoseId = remainingDose.DoseDetailId,
                     VaccinationSchemeDetailId = remainingDose.VaccinationSchemeDetailId,
+                    VaccinationSchemeId = remainingDose.VaccinationSchemeDetail.VaccinationSchemeId,
                     DoseNumber = remainingDose.DoseNumber,
                     PutWhen = WhenPutVaccine.ToString(remainingDose),
-                    //TODO: Agregar mas detalle del esquema y de la vacuna
+                    PossibleEffectsPostVaccine = remainingDose.VaccinationSchemeDetail.PossibleEffectsPostVaccine,
+                    VaccinationSchemeName = remainingDose.VaccinationSchemeDetail.VaccinationScheme.Name,
+                    VaccinationSchemeInitialAge = remainingDose.VaccinationSchemeDetail.VaccinationScheme.InitialAge,
+                    VaccinationSchemeFinalAge = remainingDose.VaccinationSchemeDetail.VaccinationScheme.FinalAge,
+                    VaccineName = remainingDose.VaccinationSchemeDetail.Vaccine.Name,
+                    CanBePut = remainingDose.CanBePut
                 };
                 remainingDosesToAdministerToReturn.Add(remainingDoseDTO);
             }
+            
             return remainingDosesToAdministerToReturn;
         }
 

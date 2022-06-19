@@ -71,6 +71,8 @@ namespace pry20220181_data_layer
                 .ValueGeneratedOnAdd();
             modelBuilder.Entity<DoseDetail>()
                 .HasKey(v => v.DoseDetailId);
+            modelBuilder.Entity<DoseDetail>()
+                .Ignore(v => v.CanBePut);
 
             modelBuilder.Entity<DoseDetail>()
                 .HasOne(v => v.VaccinationSchemeDetail)

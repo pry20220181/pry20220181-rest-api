@@ -19,15 +19,19 @@ namespace pry20220181_rest_api.Controllers
             _dosesService = dosesService;
         }
 
-        [HttpGet("{childId}/remaining-doses", Name = "GetChildsRemainingDoses")]
-        public async Task<List<RemainingDoseDTO>> GetChildsRemainingDoses(int childId)
+        [HttpGet("remaining-doses", Name = "GetChildsRemainingDoses")]
+        public async Task<List<RemainingDoseDTO>> GetChildsRemainingDoses([FromQuery]int childId = 0)
         {
+            if (childId == 0)
+            {
+                return null;
+            }
             var remainingDoses = await _dosesService.GetRemainingDosesByChild(childId);
             return remainingDoses;
         }
 
-        [HttpPost("{childId}/doses", Name = "RegisterAdministeredDose")]
-        public async Task<int> RegisterAdministeredDose(int childId, [FromBody] AdministeredDoseCreationDTO administeredDoseCreationDTO)
+        [HttpPost("doses", Name = "RegisterAdministeredDose")]
+        public async Task<int> RegisterAdministeredDose([FromBody] AdministeredDoseCreationDTO administeredDoseCreationDTO)
         {
             var registeredAdministeredDoseId = await _dosesService.CreateAdministeredDose(administeredDoseCreationDTO);
             return registeredAdministeredDoseId;
