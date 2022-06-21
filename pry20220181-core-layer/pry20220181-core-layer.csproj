@@ -9,9 +9,7 @@
 
   <ItemGroup>
     <Folder Include="Extensions\" />
-    <Folder Include="Modules\Campaigns\DTOs\" />
     <Folder Include="Modules\Campaigns\Repositories\" />
-    <Folder Include="Modules\Campaigns\Services\" />
     <Folder Include="Modules\Inventory\DTOs\" />
     <Folder Include="Modules\Inventory\Models\" />
     <Folder Include="Modules\Inventory\Repositories\" />

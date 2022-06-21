@@ -9,8 +9,8 @@ namespace pry20220181_core_layer.Modules.Campaigns.DTOs.Output
     public class VaccinationCampaignDetailDTO
     {
         public VaccinationCampaignDTO VaccinationCampaign { get; set; }
-        public List<Vaccine> Vaccines { get; set; }
-        public List<HealthCenter> HealthCenters { get; set; }
+        public List<Vaccine> Vaccines { get; set; } = new List<Vaccine>();
+        public List<HealthCenter> HealthCenters { get; set; } = new List<HealthCenter>();
         public class Vaccine
         {
             public int VaccineId { get; set; }

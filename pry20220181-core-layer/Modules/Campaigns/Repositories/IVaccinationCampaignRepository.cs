@@ -9,7 +9,7 @@ namespace pry20220181_core_layer.Modules.Campaigns.Repositories
 {
     public interface IVaccinationCampaignRepository
     {
-        public Task<VaccinationCampaign> GetByIdWithLocationsAndVaccines(int campaignId);
-        public Task<List<VaccinationCampaign>> GetByHealthCenterId(int healthCenterId);
+        public Task<VaccinationCampaign> GetByIdWithLocationsAndVaccinesAsync(int campaignId);
+        public Task<List<VaccinationCampaign>> GetByHealthCenterIdAsync(int healthCenterId);
     }
 }
