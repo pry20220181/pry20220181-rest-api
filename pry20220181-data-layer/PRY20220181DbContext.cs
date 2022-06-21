@@ -643,6 +643,114 @@ namespace pry20220181_data_layer
             }
             #endregion
 
+            #region VaccinationCampaign
+            VaccinationCampaign vaccinationCampaign1 = new VaccinationCampaign()
+            {
+                Name = "Campaña Vacunación Infantes Norte",
+                StartDateTime = DateTime.UtcNow.AddDays(3),
+                EndDateTime = DateTime.UtcNow.AddDays(10),
+                Description = "Campaña de vacunación para los niños de los CS del Norte"
+                //Image = "https://www.tumbes.gob.pe/wp-content/uploads/2019/01/campaña-vacunacion-infantes.jpg",
+            };
+
+            VaccinationCampaign vaccinationCampaign2 = new VaccinationCampaign()
+            {
+                Name = "Campaña Vacunación Niños Lima",
+                StartDateTime = DateTime.UtcNow.AddDays(8),
+                EndDateTime = DateTime.UtcNow.AddDays(15),
+                Description = "Campaña de vacunación para los niños de los CS de Lima"
+                //Image = "https://www.tumbes.gob.pe/wp-content/uploads/2019/01/campaña-vacunacion-infantes.jpg",
+            };
+
+            if (!VaccinationCampaigns.Any())
+            {
+                VaccinationCampaigns.AddRange(new List<VaccinationCampaign>()
+                {
+                    vaccinationCampaign1, vaccinationCampaign2
+                });
+            }
+            #endregion
+
+            #region VaccinationCampaignLocations
+            VaccinationCampaignLocation vaccinationCampaignLocation1 = new VaccinationCampaignLocation()
+            {
+                VaccinationCampaignId = 1,
+                HealthCenterId = 1
+            };
+
+            VaccinationCampaignLocation vaccinationCampaignLocation2 = new VaccinationCampaignLocation()
+            {
+                VaccinationCampaignId = 1,
+                HealthCenterId = 2
+            };
+
+            VaccinationCampaignLocation vaccinationCampaignLocation3 = new VaccinationCampaignLocation()
+            {
+                VaccinationCampaignId = 2,
+                HealthCenterId = 3
+            };
+
+            VaccinationCampaignLocation vaccinationCampaignLocation4 = new VaccinationCampaignLocation()
+            {
+                VaccinationCampaignId = 2,
+                HealthCenterId = 4
+            };
+
+            if (!VaccinationCampaignLocations.Any())
+            {
+                VaccinationCampaignLocations.AddRange(new List<VaccinationCampaignLocation>()
+                {
+                    vaccinationCampaignLocation1, vaccinationCampaignLocation2, vaccinationCampaignLocation3, vaccinationCampaignLocation4
+                });
+            }
+            #endregion
+
+            #region VaccinationCampaignDetails
+            VaccinationCampaignDetail vaccinationCampaignDetail1 = new VaccinationCampaignDetail()
+            {
+                VaccinationCampaignId = 1,
+                VaccineId = 1
+            };
+
+            VaccinationCampaignDetail vaccinationCampaignDetail2 = new VaccinationCampaignDetail()
+            {
+                VaccinationCampaignId = 1,
+                VaccineId = 2
+            };
+
+            VaccinationCampaignDetail vaccinationCampaignDetail3 = new VaccinationCampaignDetail()
+            {
+                VaccinationCampaignId = 1,
+                VaccineId = 3
+            };
+
+            VaccinationCampaignDetail vaccinationCampaignDetail4 = new VaccinationCampaignDetail()
+            {
+                VaccinationCampaignId = 2,
+                VaccineId = 3
+            };
+
+            VaccinationCampaignDetail vaccinationCampaignDetail5 = new VaccinationCampaignDetail()
+            {
+                VaccinationCampaignId = 2,
+                VaccineId = 4
+            };
+
+            VaccinationCampaignDetail vaccinationCampaignDetail6 = new VaccinationCampaignDetail()
+            {
+                VaccinationCampaignId = 2,
+                VaccineId = 5
+            };
+
+            if (!VaccinationCampaignDetails.Any())
+            {
+                VaccinationCampaignDetails.AddRange(new List<VaccinationCampaignDetail>()
+                {
+                    vaccinationCampaignDetail1, vaccinationCampaignDetail2, vaccinationCampaignDetail3, vaccinationCampaignDetail4, vaccinationCampaignDetail5, vaccinationCampaignDetail6
+                });
+            }
+            #endregion
+
             SaveChanges();
         }
     }

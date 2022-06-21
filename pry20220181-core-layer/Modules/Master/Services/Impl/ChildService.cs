@@ -45,7 +45,8 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
         {
             var childFromDb = await _childRepository.GetByIdAsync(childId);
             var allVaccinationSchemesFromDb = await _vaccinationSchemeDetailRepository.GetAllWithVaccinesAndDosesAsync();
-            var administeredDosesToChildFromDb = await _administeredDoseRepository.GetByChildIdWithAllRelatedInfoAsync(childId);//TODO: Analizar si basta con solo traer los datos de sus tablas, sin data relacionada
+            //var administeredDosesToChildFromDb = await _administeredDoseRepository.GetByChildIdWithAllRelatedInfoAsync(childId);//TODO: Analizar si basta con solo traer los datos de sus tablas, sin data relacionada
+            var administeredDosesToChildFromDb = await _administeredDoseRepository.GetByChildIdAsync(childId);
 
             var vaccinationSchemesToReturn = new List<VaccinationCardDTO.VaccinationScheme>();
 
