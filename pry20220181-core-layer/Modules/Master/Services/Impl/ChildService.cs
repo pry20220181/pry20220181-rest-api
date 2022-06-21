@@ -45,10 +45,12 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
         {
             var childFromDb = await _childRepository.GetByIdAsync(childId);
             var allVaccinationSchemesFromDb = await _vaccinationSchemeDetailRepository.GetAllWithVaccinesAndDosesAsync();
-            var administeredDosesToChildFromDb = await _administeredDoseRepository.GetByChildIdWithAllRelatedInfoAsync(childId);
+            var administeredDosesToChildFromDb = await _administeredDoseRepository.GetByChildIdWithAllRelatedInfoAsync(childId);//TODO: Analizar si basta con solo traer los datos de sus tablas, sin data relacionada
 
             var vaccinationSchemesToReturn = new List<VaccinationCardDTO.VaccinationScheme>();
 
+            //As I iterate trough the vaccinationSchemeDetails and a VaccinationScheme has several details
+            //I add the vaccinationScheme id in this list to avoid duplicates, in the Loop with get all the vaccinationSchemeDetails of this vaccinationScheme
             List<int> alreadyRegisteredVaccinationSchemes = new List<int>();
             foreach (var vaccinationScheme in allVaccinationSchemesFromDb)
             {
@@ -56,19 +58,54 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
                 {
                     var vaccinationSchemeToReturn = new VaccinationCardDTO.VaccinationScheme()
                     {
-                        Name = vaccinationScheme.VaccinationScheme.Name
+                        VaccinationSchemeId = vaccinationScheme.VaccinationSchemeId,
+                        Name = vaccinationScheme.VaccinationScheme.Name,
+                        InitialAge = vaccinationScheme.VaccinationScheme.InitialAge,
+                        FinalAge = vaccinationScheme.VaccinationScheme.FinalAge,
                     };
                     //These are the details of the present vaccination scheme, each detail has the vaccines of this scheme
                     var vaccinationSchemeDetails = allVaccinationSchemesFromDb
                         .Where(v => v.VaccinationSchemeId == vaccinationScheme.VaccinationSchemeId).ToList();
+
                     foreach (var vaccinationSchemeDetail in vaccinationSchemeDetails)
                     {
-                        vaccinationSchemeToReturn.Vaccines.Add(new VaccinationCardDTO.VaccinationScheme.Vaccine()
+                        var vaccineToReturn = new VaccinationCardDTO.VaccinationScheme.Vaccine()
                         {
+                            VaccineId = vaccinationSchemeDetail.Vaccine.VaccineId,
                             Name = vaccinationSchemeDetail.Vaccine.Name,
-                            NumberOfDosesToAdminister = vaccinationSchemeDetail.NumberOfDosesToAdminister
-                        });
+                            NumberOfDosesToAdminister = vaccinationSchemeDetail.NumberOfDosesToAdminister,
+                            NumberOfDosesAdministered = 0
+                        };
+                        
+                        var vaccineDosesToReturn = vaccinationSchemeDetail.DosesDetails
+                            .Where(d => d.VaccinationSchemeDetailId == vaccinationSchemeDetail.VaccinationSchemeDetailId)
+                            .ToList();
+                        foreach (var vaccineDose in vaccineDosesToReturn)
+                        {
+                            var vaccineDoseToReturn = new VaccinationCardDTO.VaccinationScheme.Vaccine.Dose()
+                            {
+                                DoseId = vaccineDose.DoseDetailId,
+                                DoseNumber = vaccineDose.DoseNumber,
+                                Administered = false,
+                                PutWhen = WhenPutVaccine.ToString(vaccineDose)
+                            };
+                            
+                            if (administeredDosesToChildFromDb.Exists(ad=>ad.DoseDetailId == vaccineDose.DoseDetailId))
+                            {
+                                var administeredDose = administeredDosesToChildFromDb
+                                    .FirstOrDefault(ad => ad.DoseDetailId == vaccineDose.DoseDetailId);
+                                vaccineDoseToReturn.Administered = true;
+                                vaccineDoseToReturn.AdministeredDoseId = administeredDose.AdministeredDoseId;
+                                vaccineDoseToReturn.AdministrationDate = administeredDose.DoseDate;
+                                vaccineToReturn.NumberOfDosesAdministered++;
+                            }
+                            
+                            vaccineToReturn.Doses.Add(vaccineDoseToReturn); 
+                        }
+                        vaccinationSchemeToReturn.Vaccines.Add(vaccineToReturn);
                     }
+
+                    vaccinationSchemeToReturn.Complete = vaccinationSchemeToReturn.Vaccines.All(v => v.Complete);
 
                     vaccinationSchemesToReturn.Add(vaccinationSchemeToReturn);
                     alreadyRegisteredVaccinationSchemes.Add(vaccinationScheme.VaccinationSchemeId);
