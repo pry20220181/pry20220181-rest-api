@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using pry20220181_core_layer.Modules.Master.Models;
 using pry20220181_data_layer;
+using pry20220181_rest_api.Controllers;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -82,8 +83,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication();
-app.UseAuthorization();
+//app.UseAuthentication();
+//app.UseAuthorization();
 
 app.MapControllers();
 

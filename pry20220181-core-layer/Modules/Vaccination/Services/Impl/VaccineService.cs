@@ -113,7 +113,8 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
             var createdVaccineSchemes = await _vaccinationSchemeRepository.CreateRangeAsync(vaccinationSchemesToCreate);
             #endregion
 
-            #region Assign the new Vaccine to its VaccinationScheme
+            #region Assign the new Vaccine to its VaccinationScheme (The Table VaccinationSchemeDetail is the M:M table of the relationship between Vaccine and VaccinationScheme)
+            //One Vaccine can have many VaccinationSchemes and one VaccinationScheme can have many Vaccines.
             //As this table is the Intermediate table between Vaccine and VaccinationScheme, we create all the VaccinationSchemeDetail
             //That arrives, because it indicate that "this vaccine is available in this VaccinationScheme".
             foreach (var vaccinationSchemeItem in vaccineCreationDTO.VaccinationSchemes)

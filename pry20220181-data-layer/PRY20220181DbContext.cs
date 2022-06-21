@@ -576,7 +576,7 @@ namespace pry20220181_data_layer
                 });
             }
             #endregion
-
+            
             #region ChildParents
             ChildParent childParent1 = new ChildParent()
             {
@@ -592,6 +592,37 @@ namespace pry20220181_data_layer
                 });
             }
             #endregion
+
+            //#region Parents
+            //Parent parent1 = new Parent()
+            //{
+            //    DNI = "12345678",
+            //    Telephone = "953265685",
+            //    UbigeoId = 1
+            //};
+
+            //if (!Parents.Any())
+            //{
+            //    Parents.AddRange(new List<Parent>()
+            //    {
+            //        parent1
+            //    });
+            //}
+            //#endregion
+
+            //#region Health Personnel
+            //HealthPersonnel healthPersonnel1 = new HealthPersonnel()
+            //{
+            //};
+
+            //if (!HealthPersonnel.Any())
+            //{
+            //    HealthPersonnel.AddRange(new List<HealthPersonnel>()
+            //    {
+            //        healthPersonnel1
+            //    });
+            //}
+            //#endregion
 
             #region AdministeredDoses
             AdministeredDose administeredDose1 = new AdministeredDose()

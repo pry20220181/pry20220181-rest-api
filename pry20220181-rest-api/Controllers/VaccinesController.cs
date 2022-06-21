@@ -8,7 +8,7 @@ using pry20220181_core_layer.Utils;
 
 namespace pry20220181_rest_api.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("vaccines")]
     public class VaccinesController : ControllerBase

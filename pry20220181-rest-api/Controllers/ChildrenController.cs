@@ -6,7 +6,7 @@ using pry20220181_core_layer.Modules.Vaccination.Models;
 
 namespace pry20220181_rest_api.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("children")]
     public class ChildrenController : ControllerBase
