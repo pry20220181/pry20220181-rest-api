@@ -12,5 +12,6 @@ namespace pry20220181_core_layer.Modules.Inventory.Repositories
         public Task<List<VaccineInventory>> GetAllByHealthCenterAsync(int healthCenterId);
         public Task<VaccineInventory> GetByIdAsync(int inventoryId);
         public Task<VaccineInventory> GetByHealthCenterAndVaccineAsync(int healthCenterId, int vaccineId);
+        public Task<VaccineInventory> AddStock(VaccineInventory vaccineInventory);
     }
 }

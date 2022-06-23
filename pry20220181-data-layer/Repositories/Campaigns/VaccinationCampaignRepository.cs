@@ -21,20 +21,20 @@ namespace pry20220181_data_layer.Repositories.Campaigns
         public async Task<List<VaccinationCampaign>> GetByHealthCenterIdAsync(int healthCenterId)
         {
             var locations = await _dbContext.VaccinationCampaignLocations
-                .Include(l=>l.VaccinationCampaign)
+                .Include(l => l.VaccinationCampaign)
                 .Where(x => x.HealthCenterId == healthCenterId)
                 .ToListAsync();
             return locations.Select(l => l.VaccinationCampaign).ToList();
         }
-        
+
         public async Task<VaccinationCampaign> GetByIdWithLocationsAndVaccinesAsync(int campaignId)
         {
             return await _dbContext.VaccinationCampaigns
-                .Include(c=>c.VaccinationCampaignLocations)
-                    .ThenInclude(l=>l.HealthCenter)
-                .Include(c=>c.VaccinationCampaignDetails)
-                    .ThenInclude(d=>d.Vaccine)
-                .Where(c =>  c.VaccinationCampaignId== campaignId)
+                .Include(c => c.VaccinationCampaignLocations)
+                    .ThenInclude(l => l.HealthCenter)
+                .Include(c => c.VaccinationCampaignDetails)
+                    .ThenInclude(d => d.Vaccine)
+                .Where(c => c.VaccinationCampaignId == campaignId)
                 .FirstOrDefaultAsync();
         }
     }

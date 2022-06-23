@@ -43,5 +43,20 @@ namespace pry20220181_data_layer.Repositories.Inventory
                     .Include(i => i.HealthCenter)
                     .FirstOrDefaultAsync(i=>i.VaccineInventoryId == inventoryId);
         }
+
+        public async Task<VaccineInventory> AddStock(VaccineInventory vaccineInventory)
+        {
+            var inventory = await _dbContext.VaccineInventory.FindAsync(vaccineInventory.VaccineInventoryId);
+            if(inventory is null)
+            {
+                //TODO> Handle it
+            }
+            inventory.Stock += vaccineInventory.Stock;
+
+            _dbContext.VaccineInventory.Update(inventory);
+            await _dbContext.SaveChangesAsync();
+            
+            return inventory;
+        }
     }
 }

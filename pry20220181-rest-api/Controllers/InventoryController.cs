@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using pry20220181_core_layer.Modules.Inventory.DTOs.Input;
 using pry20220181_core_layer.Modules.Inventory.Services;
 
 namespace pry20220181_rest_api.Controllers
@@ -50,5 +51,14 @@ namespace pry20220181_rest_api.Controllers
             });
         }
 
+        [HttpPost(Name = "AddVaccineStock")]
+        public async Task<IResult> AddVaccineStock([FromBody]AddVaccineStockDTO inventoryUpdateDTO)
+        {
+            var updatedInventory = await _inventoryService.AddVaccineStock(inventoryUpdateDTO);
+            return Results.Ok(new
+            {
+                Inventory = updatedInventory
+            });
+        }
     }
 }
