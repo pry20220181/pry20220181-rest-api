@@ -37,5 +37,12 @@ namespace pry20220181_data_layer.Repositories.Campaigns
                 .Where(c => c.VaccinationCampaignId == campaignId)
                 .FirstOrDefaultAsync();
         }
+
+        public async Task<int> CreateVaccinationCampaign(VaccinationCampaign vaccinationCampaign)
+        {
+            var createdCampaign = await _dbContext.VaccinationCampaigns.AddAsync(vaccinationCampaign);
+            await _dbContext.SaveChangesAsync();
+            return createdCampaign.Entity.VaccinationCampaignId;
+        }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using pry20220181_core_layer.Modules.Campaigns.DTOs.Input;
+using pry20220181_core_layer.Modules.Campaigns.Models;
 using pry20220181_core_layer.Modules.Campaigns.Services;
 using pry20220181_core_layer.Modules.Vaccination.Services;
 
@@ -18,7 +20,7 @@ namespace pry20220181_rest_api.Controllers
             _logger = logger;
         }
 
-        [HttpGet(Name ="GetCampaignsByHealthCenter")]
+        [HttpGet(Name = "GetCampaignsByHealthCenter")]
         public async Task<IResult> GetByHealthCenterId([FromQuery] int healthCenterId = 0)
         {
             if (healthCenterId == 0)
@@ -26,12 +28,13 @@ namespace pry20220181_rest_api.Controllers
                 return Results.BadRequest("HealthCenterId is required");
             }
             var vaccinationCampaigns = await _vaccinationCampaignsService.GetVaccinationCampaignsByHealthCenter(healthCenterId);
-            return Results.Ok(new {
+            return Results.Ok(new
+            {
                 VaccinationCampaigns = vaccinationCampaigns
             });
         }
 
-        [HttpGet("{campaignId}",Name = "GetCampaignById")]
+        [HttpGet("{campaignId}", Name = "GetCampaignById")]
         public async Task<IResult> GetById([FromRoute] int campaignId)
         {
             var vaccinationCampaign = await _vaccinationCampaignsService.GetVaccinationCampaignById(campaignId);
@@ -39,6 +42,13 @@ namespace pry20220181_rest_api.Controllers
             {
                 VaccinationCampaign = vaccinationCampaign
             });
+        }
+
+        [HttpPost(Name = "CreateVaccinationCampaign")]
+        public async Task<IResult> CreateVaccinationCampaign([FromBody] VaccinationCampaignCreateDTO vaccinationCampaignCreateDTO)
+        {
+            var createdCampaignId = await _vaccinationCampaignsService.CreateVaccinationCampaign(vaccinationCampaignCreateDTO);
+            return Results.Ok(createdCampaignId);
         }
     }
 }

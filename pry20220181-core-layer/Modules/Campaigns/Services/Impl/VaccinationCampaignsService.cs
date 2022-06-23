@@ -1,4 +1,5 @@
-﻿using pry20220181_core_layer.Modules.Campaigns.DTOs.Output;
+﻿using pry20220181_core_layer.Modules.Campaigns.DTOs.Input;
+using pry20220181_core_layer.Modules.Campaigns.DTOs.Output;
 using pry20220181_core_layer.Modules.Campaigns.Models;
 using pry20220181_core_layer.Modules.Campaigns.Repositories;
 using System;
@@ -73,6 +74,36 @@ namespace pry20220181_core_layer.Modules.Campaigns.Services.Impl
                 });
             }
             return vaccinationCampaignsToReturn;
+        }
+
+        public async Task<int> CreateVaccinationCampaign(VaccinationCampaignCreateDTO vaccinationCampaignCreateDTO)
+        {
+            var vaccinationCampaignToCreate = new VaccinationCampaign()
+            {
+                Name = vaccinationCampaignCreateDTO.Name,
+                Description = vaccinationCampaignCreateDTO.Description,
+                StartDateTime = vaccinationCampaignCreateDTO.StartDateTime,
+                EndDateTime = vaccinationCampaignCreateDTO.EndDateTime,
+                VaccinationCampaignDetails = new List<VaccinationCampaignDetail>(),
+                VaccinationCampaignLocations = new List<VaccinationCampaignLocation>()
+            };
+            foreach (var healthCenterForCampaign in vaccinationCampaignCreateDTO.CampaignHealthCenters)
+            {
+                vaccinationCampaignToCreate.VaccinationCampaignLocations.Add(new VaccinationCampaignLocation()
+                {
+                    HealthCenterId = healthCenterForCampaign.HealthCenterId
+                });
+            }
+
+            foreach (var vaccineForCampaign in vaccinationCampaignCreateDTO.VaccinesForCampaign)
+            {
+                vaccinationCampaignToCreate.VaccinationCampaignDetails.Add(new ()
+                {
+                    VaccineId = vaccineForCampaign.VaccineId
+                });
+            }
+
+            return await _vaccinationCampaignRepository.CreateVaccinationCampaign(vaccinationCampaignToCreate);
         }
     }
 }

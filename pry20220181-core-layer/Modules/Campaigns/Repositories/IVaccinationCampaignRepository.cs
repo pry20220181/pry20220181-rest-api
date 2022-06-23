@@ -11,5 +11,6 @@ namespace pry20220181_core_layer.Modules.Campaigns.Repositories
     {
         public Task<VaccinationCampaign> GetByIdWithLocationsAndVaccinesAsync(int campaignId);
         public Task<List<VaccinationCampaign>> GetByHealthCenterIdAsync(int healthCenterId);
+        public Task<int> CreateVaccinationCampaign(VaccinationCampaign vaccinationCampaign);
     }
 }
