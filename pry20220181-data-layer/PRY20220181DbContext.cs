@@ -407,10 +407,10 @@ namespace pry20220181_data_layer
             #endregion
 
             #region Vaccine Inventory
-            VaccineInventory vaccineInventory1 = new VaccineInventory { HealthCenterId = TumbesCS.HealthCenterId, VaccineId = BCG.VaccineId, Stock = 10 };
-            VaccineInventory vaccineInventory2 = new VaccineInventory { HealthCenterId = TumbesCS.HealthCenterId, VaccineId = VacunaPentavalente.VaccineId, Stock = 10 };
-            VaccineInventory vaccineInventory3 = new VaccineInventory { HealthCenterId = TumbesCS.HealthCenterId, VaccineId = VacunaAntineumococica.VaccineId, Stock = 10 };
-            VaccineInventory vaccineInventory4 = new VaccineInventory { HealthCenterId = TumbesCS.HealthCenterId, VaccineId = VacunaContraLaVaricela.VaccineId, Stock = 10 };
+            VaccineInventory vaccineInventory1 = new VaccineInventory { HealthCenterId = TumbesCS.HealthCenterId, VaccineId = BCG.VaccineId, Stock = 15 };
+            VaccineInventory vaccineInventory2 = new VaccineInventory { HealthCenterId = TumbesCS.HealthCenterId, VaccineId = VacunaPentavalente.VaccineId, Stock = 18 };
+            VaccineInventory vaccineInventory3 = new VaccineInventory { HealthCenterId = TumbesCS.HealthCenterId, VaccineId = VacunaAntineumococica.VaccineId, Stock = 13 };
+            VaccineInventory vaccineInventory4 = new VaccineInventory { HealthCenterId = TumbesCS.HealthCenterId, VaccineId = VacunaContraLaVaricela.VaccineId, Stock = 9 };
             if (!VaccineInventory.Any())
             {
                 VaccineInventory.AddRange(new List<VaccineInventory>() {
