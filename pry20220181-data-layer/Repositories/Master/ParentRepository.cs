@@ -18,23 +18,12 @@ namespace pry20220181_data_layer.Repositories.Master
         {
             _dbContext = dbContext;
         }
-        public async Task<int> CreateAsync(Parent parent)
+
+        public async Task<int> CreateWithChildrenAsync(Parent parent)
         {
-            if (parent.UserId is null)
-            {
-                throw new NotImplementedException("The userId field is not present");
-            }
-            var createdParent = await _dbContext.Parents.AddAsync(parent);
-
-
+            var newParent = await _dbContext.Parents.AddAsync(parent);
             await _dbContext.SaveChangesAsync();
-
-            //var parentWithItsUser = await _dbContext.Parents
-            //    .Include(p=>p.User)
-            //    .FirstOrDefaultAsync(p => p.ParentId == createdParent.Entity.ParentId);
-            //Console.WriteLine(parentWithItsUser);
-
-            return createdParent.Entity.ParentId;
+            return newParent.Entity.ParentId;
         }
     }
 }

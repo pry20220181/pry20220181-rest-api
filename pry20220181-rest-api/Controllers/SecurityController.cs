@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using pry20220181_core_layer.Modules.Master.DTOs.Input;
 using pry20220181_core_layer.Modules.Master.Models;
 using pry20220181_core_layer.Modules.Master.Repositories;
+using pry20220181_core_layer.Modules.Master.Services;
 using pry20220181_rest_api.Security.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -17,15 +19,21 @@ namespace pry20220181_rest_api.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly IParentRepository _parentRepository;
+        private readonly IParentService _parentService;
         private readonly IHealthPersonnelRepository _healthPersonnelRepository;
 
-        public SecurityController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IParentRepository parentRepository, IHealthPersonnelRepository healthPersonnelRepository)
+        public SecurityController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IParentRepository parentRepository, IHealthPersonnelRepository healthPersonnelRepository, IParentService parentService)
         {
-            _userManager = userManager;
             _roleManager = roleManager;
-            _parentRepository = parentRepository;
+
+            _roleManager.CreateAsync(new IdentityRole
+            {
+                Name = "Parent"
+            });
+
+            _userManager = userManager;
             _healthPersonnelRepository = healthPersonnelRepository;
+            _parentService = parentService;
         }
 
         [HttpPost("authenticate")]
@@ -71,6 +79,25 @@ namespace pry20220181_rest_api.Controllers
             });
         }
 
+        [HttpPost("parent",Name = "RegisterParent")]
+        public async Task<IResult> RegisterParent(ParentCreateDTO parentCreateDTO)
+        {
+            var newUser = new User
+            {
+                Email = parentCreateDTO.Email,
+                FirstName = parentCreateDTO.FirstName,
+                LastName = parentCreateDTO.LastName,
+                UserName = parentCreateDTO.DNI
+            };
+
+            await _userManager.CreateAsync(newUser, parentCreateDTO.Password);
+            await _userManager.AddToRoleAsync(newUser, "Parent");
+            parentCreateDTO.UserId = newUser.Id;
+
+            var newParentId = await _parentService.RegisterParentAndChildrenAsync(parentCreateDTO);
+            return Results.Ok(newParentId);
+        }
+
         [HttpGet("register")]
         public async Task<IResult> Register()
         {
@@ -110,116 +137,116 @@ namespace pry20220181_rest_api.Controllers
             }
         }
 
-        [HttpGet("seeddata")]
-        public async Task<IResult> SeedData()
-        {
-            var password = "Abc123+";
-            #region Parent 1
-            var parent1User = new User
-            {
-                Email = "parent1@live.com",
-                FirstName = "Parent",
-                LastName = "One",
-                UserName = "parent1"
-            };
+        //[HttpGet("seeddata")]
+        //public async Task<IResult> SeedData()
+        //{
+        //    var password = "Abc123+";
+        //    #region Parent 1
+        //    var parent1User = new User
+        //    {
+        //        Email = "parent1@live.com",
+        //        FirstName = "Parent",
+        //        LastName = "One",
+        //        UserName = "parent1"
+        //    };
 
-            await _userManager.CreateAsync(parent1User, password);
+        //    await _userManager.CreateAsync(parent1User, password);
 
-            var parent1 = new Parent
-            {
-                DNI = "71222441",
-                Telephone = "123456789",
-                UserId = parent1User.Id
-            };
+        //    var parent1 = new Parent
+        //    {
+        //        DNI = "71222441",
+        //        Telephone = "123456789",
+        //        UserId = parent1User.Id
+        //    };
 
-            await _parentRepository.CreateAsync(parent1);
-            #endregion
+        //    await _parentRepository.CreateAsync(parent1);
+        //    #endregion
 
-            #region Parent 2
-            var parent2User = new User
-            {
-                Email = "parent2@live.com",
-                FirstName = "Parent",
-                LastName = "Two",
-                UserName = "parent2"
-            };
+        //    #region Parent 2
+        //    var parent2User = new User
+        //    {
+        //        Email = "parent2@live.com",
+        //        FirstName = "Parent",
+        //        LastName = "Two",
+        //        UserName = "parent2"
+        //    };
 
-            await _userManager.CreateAsync(parent2User, password);
+        //    await _userManager.CreateAsync(parent2User, password);
 
-            var parent2 = new Parent
-            {
-                DNI = "71222442",
-                Telephone = "123456799",
-                UserId = parent2User.Id
-            };
+        //    var parent2 = new Parent
+        //    {
+        //        DNI = "71222442",
+        //        Telephone = "123456799",
+        //        UserId = parent2User.Id
+        //    };
 
-            await _parentRepository.CreateAsync(parent2);
-            #endregion
+        //    await _parentRepository.CreateAsync(parent2);
+        //    #endregion
 
-            #region HealthPersonnel 1
-            var healthPersonnel1User = new User
-            {
-                Email = "personnel1@live.com",
-                FirstName = "Health",
-                LastName = "Personnel1",
-                UserName = "personnel1"
-            };
+        //    #region HealthPersonnel 1
+        //    var healthPersonnel1User = new User
+        //    {
+        //        Email = "personnel1@live.com",
+        //        FirstName = "Health",
+        //        LastName = "Personnel1",
+        //        UserName = "personnel1"
+        //    };
 
-            await _userManager.CreateAsync(healthPersonnel1User, password);
+        //    await _userManager.CreateAsync(healthPersonnel1User, password);
 
-            var healthPersonnel1 = new HealthPersonnel
-            {
-                UserId = healthPersonnel1User.Id
-            };
+        //    var healthPersonnel1 = new HealthPersonnel
+        //    {
+        //        UserId = healthPersonnel1User.Id
+        //    };
 
-            await _healthPersonnelRepository.CreateAsync(healthPersonnel1);
-            #endregion
+        //    await _healthPersonnelRepository.CreateAsync(healthPersonnel1);
+        //    #endregion
 
-            #region HealthPersonnel 2
-            var healthPersonnel2User = new User
-            {
-                Email = "personnel2@live.com",
-                FirstName = "Health",
-                LastName = "Personnel2",
-                UserName = "personnel2"
-            };
+        //    #region HealthPersonnel 2
+        //    var healthPersonnel2User = new User
+        //    {
+        //        Email = "personnel2@live.com",
+        //        FirstName = "Health",
+        //        LastName = "Personnel2",
+        //        UserName = "personnel2"
+        //    };
 
-            await _userManager.CreateAsync(healthPersonnel2User, password);
+        //    await _userManager.CreateAsync(healthPersonnel2User, password);
 
-            var healthPersonnel2 = new HealthPersonnel
-            {
-                UserId = healthPersonnel2User.Id
-            };
+        //    var healthPersonnel2 = new HealthPersonnel
+        //    {
+        //        UserId = healthPersonnel2User.Id
+        //    };
 
-            await _healthPersonnelRepository.CreateAsync(healthPersonnel2);
-            #endregion
+        //    await _healthPersonnelRepository.CreateAsync(healthPersonnel2);
+        //    #endregion
 
-            #region Roles
-            var parentRole = await _roleManager.CreateAsync(new IdentityRole
-            {
-                Name = "Parent"
-            });
+        //    #region Roles
+        //    var parentRole = await _roleManager.CreateAsync(new IdentityRole
+        //    {
+        //        Name = "Parent"
+        //    });
 
-            var healthPersonnelRole = await _roleManager.CreateAsync(new IdentityRole
-            {
-                Name = "HealthPersonnel"
-            });
+        //    var healthPersonnelRole = await _roleManager.CreateAsync(new IdentityRole
+        //    {
+        //        Name = "HealthPersonnel"
+        //    });
 
-            await _roleManager.CreateAsync(new IdentityRole
-            {
-                Name = "Admin"
-            });
+        //    await _roleManager.CreateAsync(new IdentityRole
+        //    {
+        //        Name = "Admin"
+        //    });
 
-            await _userManager.AddToRoleAsync(parent1User, "Parent");
-            await _userManager.AddToRoleAsync(parent2User, "Parent");
-            await _userManager.AddToRoleAsync(healthPersonnel1User, "HealthPersonnel");
-            await _userManager.AddToRoleAsync(healthPersonnel2User, "HealthPersonnel");
-            #endregion
+        //    await _userManager.AddToRoleAsync(parent1User, "Parent");
+        //    await _userManager.AddToRoleAsync(parent2User, "Parent");
+        //    await _userManager.AddToRoleAsync(healthPersonnel1User, "HealthPersonnel");
+        //    await _userManager.AddToRoleAsync(healthPersonnel2User, "HealthPersonnel");
+        //    #endregion
 
-            return Results.Ok(new
-            {
-                Response = "Parents and HealtPersonnel user created"
-            });
-        }
+        //    return Results.Ok(new
+        //    {
+        //        Response = "Parents and HealtPersonnel user created"
+        //    });
+        //}
     }
 }
