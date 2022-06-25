@@ -20,9 +20,9 @@ namespace pry20220181_rest_api.Controllers
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IParentService _parentService;
-        private readonly IHealthPersonnelRepository _healthPersonnelRepository;
+        private readonly IHealthPersonnelService _healthPersonnelService;
 
-        public SecurityController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IParentRepository parentRepository, IHealthPersonnelRepository healthPersonnelRepository, IParentService parentService)
+        public SecurityController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IParentRepository parentRepository, IParentService parentService, IHealthPersonnelService healthPersonnelService)
         {
             _roleManager = roleManager;
 
@@ -30,10 +30,14 @@ namespace pry20220181_rest_api.Controllers
             {
                 Name = "Parent"
             });
+            _roleManager.CreateAsync(new IdentityRole
+            {
+                Name = "HealthPersonnel"
+            });
 
             _userManager = userManager;
-            _healthPersonnelRepository = healthPersonnelRepository;
             _parentService = parentService;
+            _healthPersonnelService = healthPersonnelService;
         }
 
         [HttpPost("authenticate")]
@@ -79,7 +83,7 @@ namespace pry20220181_rest_api.Controllers
             });
         }
 
-        [HttpPost("parent",Name = "RegisterParent")]
+        [HttpPost("parent", Name = "RegisterParent")]
         public async Task<IResult> RegisterParent(ParentCreateDTO parentCreateDTO)
         {
             var newUser = new User
@@ -96,6 +100,25 @@ namespace pry20220181_rest_api.Controllers
 
             var newParentId = await _parentService.RegisterParentAndChildrenAsync(parentCreateDTO);
             return Results.Ok(newParentId);
+        }
+
+        [HttpPost("health-personnel", Name = "RegisterHealthPersonnel")]
+        public async Task<IResult> RegisterHealthPersonnel(HealthPersonnelCreateDTO healthPersonnelCreateDTO)
+        {
+            var newUser = new User
+            {
+                Email = healthPersonnelCreateDTO.Email,
+                FirstName = healthPersonnelCreateDTO.FirstName,
+                LastName = healthPersonnelCreateDTO.LastName,
+                UserName = healthPersonnelCreateDTO.DNI
+            };
+
+            await _userManager.CreateAsync(newUser, healthPersonnelCreateDTO.Password);
+            await _userManager.AddToRoleAsync(newUser, "HealthPersonnel");
+            healthPersonnelCreateDTO.UserId = newUser.Id;
+
+            var nnewHealthPersonelId = await _healthPersonnelService.RegisterHealthPersonnelAsync(healthPersonnelCreateDTO);
+            return Results.Ok(nnewHealthPersonelId);
         }
 
         [HttpGet("register")]
