@@ -49,5 +49,12 @@ namespace pry20220181_data_layer.Repositories.Master
                 Gender = p.Child.Gender
             }).ToList();
         }
+
+        public async Task<Parent> GetByIdAsync(int parentId)
+        {
+            return await _dbContext.Parents
+                .Include(p=>p.User)
+                .FirstOrDefaultAsync(p => p.ParentId == parentId);
+        }
     }
 }

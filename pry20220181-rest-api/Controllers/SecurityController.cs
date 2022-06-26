@@ -101,6 +101,14 @@ namespace pry20220181_rest_api.Controllers
             var newParentId = await _parentService.RegisterParentAndChildrenAsync(parentCreateDTO);
             return Results.Ok(newParentId);
         }
+        [HttpGet("parent/{parentId}", Name = "GetParentInfo")]
+        public async Task<IResult> GetParent(int parentId)
+        {
+            return Results.Ok(new
+            {
+                Parent = await _parentService.GetParentAsync(parentId)
+            });
+        }
 
         [HttpPost("health-personnel", Name = "RegisterHealthPersonnel")]
         public async Task<IResult> RegisterHealthPersonnel(HealthPersonnelCreateDTO healthPersonnelCreateDTO)

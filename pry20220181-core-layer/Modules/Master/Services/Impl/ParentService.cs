@@ -40,6 +40,20 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
             return childrenToReturn;
         }
 
+        public async Task<ParentDTO> GetParentAsync(int parentId)
+        {
+            var parentFromDb = await _parentRepository.GetByIdAsync(parentId);
+            return new ParentDTO()
+            {
+                DNI = parentFromDb.DNI,
+                Email = parentFromDb.User.Email,
+                FirstName = parentFromDb.User.FirstName,
+                LastName = parentFromDb.User.LastName,
+                Telephone = parentFromDb.Telephone,
+                UbigeoId = parentFromDb.UbigeoId
+            };
+        }
+
         public async Task<int> RegisterParentAndChildrenAsync(ParentCreateDTO parentCreateDTO)
         {
             Parent parent = new Parent()
