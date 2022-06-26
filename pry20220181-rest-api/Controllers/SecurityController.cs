@@ -101,6 +101,7 @@ namespace pry20220181_rest_api.Controllers
             var newParentId = await _parentService.RegisterParentAndChildrenAsync(parentCreateDTO);
             return Results.Ok(newParentId);
         }
+
         [HttpGet("parent/{parentId}", Name = "GetParentInfo")]
         public async Task<IResult> GetParent(int parentId)
         {
@@ -127,6 +128,15 @@ namespace pry20220181_rest_api.Controllers
 
             var nnewHealthPersonelId = await _healthPersonnelService.RegisterHealthPersonnelAsync(healthPersonnelCreateDTO);
             return Results.Ok(nnewHealthPersonelId);
+        }
+
+        [HttpGet("health-personnel/{healthPersonnelId}", Name = "GetHealthPersonnelInfo")]
+        public async Task<IResult> GetHealthPersonnel(int healthPersonnelId)
+        {
+            return Results.Ok(new
+            {
+                HealthPersonnel = await _healthPersonnelService.GetHealthPersonnelAsync(healthPersonnelId)
+            });
         }
 
         [HttpGet("register")]

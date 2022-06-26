@@ -1,4 +1,5 @@
 ﻿using pry20220181_core_layer.Modules.Master.DTOs.Input;
+using pry20220181_core_layer.Modules.Master.DTOs.Output;
 using pry20220181_core_layer.Modules.Master.Models;
 using pry20220181_core_layer.Modules.Master.Repositories;
 using System;
@@ -27,6 +28,18 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
             };
 
             return await _healthPersonnelRepository.CreateAsync(healthPersonnel);
+        }
+
+        public async Task<HealthPersonnelDTO> GetHealthPersonnelAsync(int healthPersonnelId)
+        {
+            var healthPersonnelFromDb = await _healthPersonnelRepository.GetByIdAsync(healthPersonnelId);
+            return new HealthPersonnelDTO()
+            {
+                DNI = healthPersonnelFromDb.DNI,
+                Email = healthPersonnelFromDb.User.Email,
+                FirstName = healthPersonnelFromDb.User.FirstName,
+                LastName = healthPersonnelFromDb.User.LastName
+            };
         }
     }
 }

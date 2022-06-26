@@ -15,5 +15,6 @@ namespace pry20220181_core_layer.Modules.Master.Repositories
         /// <param name="healthPersonnel"></param>
         /// <returns>The id of the new HealthPersonnel</returns>
         public Task<int> CreateAsync(HealthPersonnel healthPersonnel);
+        public Task<HealthPersonnel> GetByIdAsync(int healthPersonnelId);
     }
 }

@@ -39,5 +39,13 @@ namespace pry20220181_data_layer.Repositories.Master
             }
 
         }
+
+        public async Task<HealthPersonnel> GetByIdAsync(int healthPersonnelId)
+        {
+            return await _dbContext.HealthPersonnel
+                .Include(p => p.User)
+                .FirstOrDefaultAsync(p => p.HealthPersonnelId == healthPersonnelId);
+
+        }
     }
 }
