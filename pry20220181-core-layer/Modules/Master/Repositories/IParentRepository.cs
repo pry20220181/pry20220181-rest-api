@@ -16,5 +16,7 @@ namespace pry20220181_core_layer.Modules.Master.Repositories
         /// <param name="parent"></param>
         /// <returns>The id of the new Parent</returns>
         public Task<int> CreateWithChildrenAsync(Parent parent);
+
+        public Task<List<Child>> GetChildrenAsync(int parentId);
     }
 }

@@ -1,6 +1,8 @@
 ﻿using pry20220181_core_layer.Modules.Master.DTOs.Input;
+using pry20220181_core_layer.Modules.Master.DTOs.Output;
 using pry20220181_core_layer.Modules.Master.Models;
 using pry20220181_core_layer.Modules.Master.Repositories;
+using pry20220181_core_layer.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +18,26 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
         public ParentService(IParentRepository parentRepository)
         {
             _parentRepository = parentRepository;
+        }
+
+        public async Task<List<ChildDTO>> GetChildrenAsync(int parentId)
+        {
+            var children = await _parentRepository.GetChildrenAsync(parentId);
+            var childrenToReturn = new List<ChildDTO>();
+            foreach (var child in children)
+            {
+                childrenToReturn.Add(new ChildDTO()
+                {
+                    ChildId = child.ChildId,
+                    DNI = child.DNI,
+                    Firstname = child.Firstname,
+                    Lastname = child.Lastname,
+                    Birthdate = child.Birthdate,
+                    Gender = child.Gender,
+                    Age = GetAgeFromBirthdate.GetAge(child.Birthdate)
+                });
+            }
+            return childrenToReturn;
         }
 
         public async Task<int> RegisterParentAndChildrenAsync(ParentCreateDTO parentCreateDTO)

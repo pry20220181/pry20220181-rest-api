@@ -13,6 +13,7 @@ namespace pry20220181_rest_api.Controllers
     {
         private readonly IChildService _childService;
 
+
         public ChildrenController(IChildService childService)
         {
             _childService = childService;
@@ -24,6 +25,8 @@ namespace pry20220181_rest_api.Controllers
             var child = await _childService.GetChildByDniAsync(dni);
             return child;
         }
+
+
         [HttpGet("{childId}/vaccination-card")]
         public async Task<IResult> GetVaccinationCard([FromRoute] int childId)
         {

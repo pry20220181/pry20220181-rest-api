@@ -25,5 +25,22 @@ namespace pry20220181_data_layer.Repositories.Master
             await _dbContext.SaveChangesAsync();
             return newParent.Entity.ParentId;
         }
+
+        public async Task<List<Child>> GetChildrenAsync(int parentId)
+        {
+            var children = await _dbContext.ChildrenParents
+                .Include(p => p.Child)
+                .Where(p => p.ParentId == parentId)
+                .ToListAsync();
+
+            return children.Select(p => new Child()
+            {
+                Firstname = p.Child.Firstname,
+                Lastname = p.Child.Lastname,
+                DNI = p.Child.DNI,
+                Birthdate = p.Child.Birthdate,
+                Gender = p.Child.Gender
+            }).ToList();
+        }
     }
 }
