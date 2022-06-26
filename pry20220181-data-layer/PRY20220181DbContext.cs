@@ -61,7 +61,7 @@ namespace pry20220181_data_layer
 
             modelBuilder.Entity<VaccinationSchemeDetail>()
                 .HasOne(v => v.Vaccine)
-                .WithMany(v=>v.VaccinationSchemeDetails)
+                .WithMany(v => v.VaccinationSchemeDetails)
                 .HasForeignKey(v => v.VaccineId);
             #endregion
 
@@ -227,6 +227,9 @@ namespace pry20220181_data_layer
                 .ValueGeneratedOnAdd();
             modelBuilder.Entity<HealthPersonnel>()
                 .HasKey(p => p.HealthPersonnelId);
+            modelBuilder.Entity<HealthPersonnel>()
+                .HasIndex(p => p.DNI)
+                .IsUnique();
 
             modelBuilder.Entity<HealthPersonnel>()
                 .HasOne(p => p.User)
@@ -436,7 +439,7 @@ namespace pry20220181_data_layer
                 InitialAge = 1,
                 FinalAge = 1,
             };
-            
+
             if (!VaccinationSchemes.Any())
             {
                 VaccinationSchemes.AddRange(new List<VaccinationScheme>() {
@@ -490,7 +493,8 @@ namespace pry20220181_data_layer
             };
             #endregion
 
-            if (!VaccinationSchemeDetails.Any()) {
+            if (!VaccinationSchemeDetails.Any())
+            {
                 VaccinationSchemeDetails.AddRange(new List<VaccinationSchemeDetail>() {
                     vaccinationSchemeDetail1A, vaccinationSchemeDetail1B, vaccinationSchemeDetail1C, vaccinationSchemeDetail2A, vaccinationSchemeDetail2B
                 });
@@ -579,7 +583,7 @@ namespace pry20220181_data_layer
                 });
             }
             #endregion
-            
+
             #region ChildParents
             ChildParent childParent1 = new ChildParent()
             {

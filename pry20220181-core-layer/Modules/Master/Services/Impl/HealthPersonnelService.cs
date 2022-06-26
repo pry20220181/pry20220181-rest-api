@@ -22,7 +22,8 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
         {
             HealthPersonnel healthPersonnel = new HealthPersonnel()
             {
-                UserId = healthPersonnelCreateDTO.UserId
+                UserId = healthPersonnelCreateDTO.UserId,
+                DNI = healthPersonnelCreateDTO.DNI
             };
 
             return await _healthPersonnelRepository.CreateAsync(healthPersonnel);

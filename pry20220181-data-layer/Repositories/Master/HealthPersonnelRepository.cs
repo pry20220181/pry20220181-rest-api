@@ -1,4 +1,5 @@
-﻿using pry20220181_core_layer.Modules.Master.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using pry20220181_core_layer.Modules.Master.Models;
 using pry20220181_core_layer.Modules.Master.Repositories;
 using System;
 using System.Collections.Generic;
@@ -23,17 +24,20 @@ namespace pry20220181_data_layer.Repositories.Master
             {
                 throw new NotImplementedException("The userId field is not present");
             }
-            var createdHealthPersonnel = await _dbContext.HealthPersonnel.AddAsync(healthPersonnel);
 
+            if ((await _dbContext.HealthPersonnel.FirstOrDefaultAsync(p => p.DNI == healthPersonnel.DNI)) is null)
+            {
+                var createdHealthPersonnel = await _dbContext.HealthPersonnel.AddAsync(healthPersonnel);
 
-            await _dbContext.SaveChangesAsync();
+                await _dbContext.SaveChangesAsync();
 
-            //var parentWithItsUser = await _dbContext.Parents
-            //    .Include(p=>p.User)
-            //    .FirstOrDefaultAsync(p => p.ParentId == createdParent.Entity.ParentId);
-            //Console.WriteLine(parentWithItsUser);
+                return createdHealthPersonnel.Entity.HealthPersonnelId;
+            }
+            else
+            {
+                throw new Exception($"A Health Personnel with DNI {healthPersonnel.DNI} already exists");
+            }
 
-            return createdHealthPersonnel.Entity.HealthPersonnelId;
         }
     }
 }
