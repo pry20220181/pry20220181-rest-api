@@ -188,6 +188,9 @@ namespace pry20220181_data_layer
                 .ValueGeneratedOnAdd();
             modelBuilder.Entity<Parent>()
                 .HasKey(p => p.ParentId);
+            modelBuilder.Entity<Parent>()
+                .HasIndex(p => p.DNI)
+                .IsUnique();
 
             modelBuilder.Entity<Parent>()
                 .HasOne(p => p.Ubigeo)

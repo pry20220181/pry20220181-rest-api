@@ -21,9 +21,16 @@ namespace pry20220181_data_layer.Repositories.Master
 
         public async Task<int> CreateWithChildrenAsync(Parent parent)
         {
-            var newParent = await _dbContext.Parents.AddAsync(parent);
-            await _dbContext.SaveChangesAsync();
-            return newParent.Entity.ParentId;
+            if((await _dbContext.Parents.FirstOrDefaultAsync(p=>p.DNI == parent.DNI)) is null)
+            {
+                var newParent = await _dbContext.Parents.AddAsync(parent);
+                await _dbContext.SaveChangesAsync();
+                return newParent.Entity.ParentId;
+            }
+            else
+            {
+                throw new Exception($"A Parent with DNI {parent.DNI} already exists");
+            }
         }
 
         public async Task<List<Child>> GetChildrenAsync(int parentId)
