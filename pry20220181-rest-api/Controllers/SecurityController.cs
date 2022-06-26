@@ -48,7 +48,11 @@ namespace pry20220181_rest_api.Controllers
 
             if (user is null || !await _userManager.CheckPasswordAsync(user, request.Password))
             {
-                return Results.Forbid();
+                return Results.BadRequest(new
+                {
+                    StatusCode = 403,
+                    Message = "Wrong credentials"
+                });
             }
 
             var roles = await _userManager.GetRolesAsync(user);
@@ -177,117 +181,5 @@ namespace pry20220181_rest_api.Controllers
                 });
             }
         }
-
-        //[HttpGet("seeddata")]
-        //public async Task<IResult> SeedData()
-        //{
-        //    var password = "Abc123+";
-        //    #region Parent 1
-        //    var parent1User = new User
-        //    {
-        //        Email = "parent1@live.com",
-        //        FirstName = "Parent",
-        //        LastName = "One",
-        //        UserName = "parent1"
-        //    };
-
-        //    await _userManager.CreateAsync(parent1User, password);
-
-        //    var parent1 = new Parent
-        //    {
-        //        DNI = "71222441",
-        //        Telephone = "123456789",
-        //        UserId = parent1User.Id
-        //    };
-
-        //    await _parentRepository.CreateAsync(parent1);
-        //    #endregion
-
-        //    #region Parent 2
-        //    var parent2User = new User
-        //    {
-        //        Email = "parent2@live.com",
-        //        FirstName = "Parent",
-        //        LastName = "Two",
-        //        UserName = "parent2"
-        //    };
-
-        //    await _userManager.CreateAsync(parent2User, password);
-
-        //    var parent2 = new Parent
-        //    {
-        //        DNI = "71222442",
-        //        Telephone = "123456799",
-        //        UserId = parent2User.Id
-        //    };
-
-        //    await _parentRepository.CreateAsync(parent2);
-        //    #endregion
-
-        //    #region HealthPersonnel 1
-        //    var healthPersonnel1User = new User
-        //    {
-        //        Email = "personnel1@live.com",
-        //        FirstName = "Health",
-        //        LastName = "Personnel1",
-        //        UserName = "personnel1"
-        //    };
-
-        //    await _userManager.CreateAsync(healthPersonnel1User, password);
-
-        //    var healthPersonnel1 = new HealthPersonnel
-        //    {
-        //        UserId = healthPersonnel1User.Id
-        //    };
-
-        //    await _healthPersonnelRepository.CreateAsync(healthPersonnel1);
-        //    #endregion
-
-        //    #region HealthPersonnel 2
-        //    var healthPersonnel2User = new User
-        //    {
-        //        Email = "personnel2@live.com",
-        //        FirstName = "Health",
-        //        LastName = "Personnel2",
-        //        UserName = "personnel2"
-        //    };
-
-        //    await _userManager.CreateAsync(healthPersonnel2User, password);
-
-        //    var healthPersonnel2 = new HealthPersonnel
-        //    {
-        //        UserId = healthPersonnel2User.Id
-        //    };
-
-        //    await _healthPersonnelRepository.CreateAsync(healthPersonnel2);
-        //    #endregion
-
-        //    #region Roles
-        //    var parentRole = await _roleManager.CreateAsync(new IdentityRole
-        //    {
-        //        Name = "Parent"
-        //    });
-
-        //    var healthPersonnelRole = await _roleManager.CreateAsync(new IdentityRole
-        //    {
-        //        Name = "HealthPersonnel"
-        //    });
-
-        //    await _roleManager.CreateAsync(new IdentityRole
-        //    {
-        //        Name = "Admin"
-        //    });
-
-        //    await _userManager.AddToRoleAsync(parent1User, "Parent");
-        //    await _userManager.AddToRoleAsync(parent2User, "Parent");
-        //    await _userManager.AddToRoleAsync(healthPersonnel1User, "HealthPersonnel");
-        //    await _userManager.AddToRoleAsync(healthPersonnel2User, "HealthPersonnel");
-        //    #endregion
-
-        //    return Results.Ok(new
-        //    {
-        //        Response = "Parents and HealtPersonnel user created"
-        //    });
-        //}
     }
 }
