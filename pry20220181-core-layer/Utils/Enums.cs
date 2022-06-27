@@ -12,4 +12,9 @@ namespace pry20220181_core_layer.Utils
     //    CanNotBePut,
     //    Overdue
     //}
+    public static class ReminderVias
+    {
+        public const string SMS = "SMS";
+        public const string Email = "Email";
+    }
 }
