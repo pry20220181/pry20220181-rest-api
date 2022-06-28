@@ -10,6 +10,8 @@ namespace pry20220181_core_layer.Modules.Master.Repositories
     public interface IReminderRepository
     {
         public Task<int> CreateAsync(Reminder reminder);
+        public Task CreateRangeAsync(List<Reminder> reminders);
         public Task<List<Reminder>> GetAllVaccinationAppointmentRemindersAsync();
+        public Task<List<Reminder>> GetAllVaccinationCampaignRemindersAsync();
     }
 }

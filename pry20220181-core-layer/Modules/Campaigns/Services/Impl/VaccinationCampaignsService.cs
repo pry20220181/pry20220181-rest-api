@@ -2,6 +2,10 @@
 using pry20220181_core_layer.Modules.Campaigns.DTOs.Output;
 using pry20220181_core_layer.Modules.Campaigns.Models;
 using pry20220181_core_layer.Modules.Campaigns.Repositories;
+using pry20220181_core_layer.Modules.Master.Models;
+using pry20220181_core_layer.Modules.Master.Repositories;
+using pry20220181_core_layer.Modules.Vaccination.Models;
+using pry20220181_core_layer.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +17,14 @@ namespace pry20220181_core_layer.Modules.Campaigns.Services.Impl
     public class VaccinationCampaignsService : IVaccinationCampaignsService
     {
         IVaccinationCampaignRepository _vaccinationCampaignRepository { get; set; }
+        IParentRepository _parentRepository { get; set; }
+        IReminderRepository _reminderRepository { get; set; }
 
-        public VaccinationCampaignsService(IVaccinationCampaignRepository vaccinationCampaignRepository)
+        public VaccinationCampaignsService(IVaccinationCampaignRepository vaccinationCampaignRepository, IParentRepository parentRepository, IReminderRepository reminderRepository)
         {
             _vaccinationCampaignRepository = vaccinationCampaignRepository;
+            _parentRepository = parentRepository;
+            _reminderRepository = reminderRepository;
         }
 
         public async Task<VaccinationCampaignDetailDTO> GetVaccinationCampaignById(int vaccinationCampaignId)
@@ -97,13 +105,29 @@ namespace pry20220181_core_layer.Modules.Campaigns.Services.Impl
 
             foreach (var vaccineForCampaign in vaccinationCampaignCreateDTO.VaccinesForCampaign)
             {
-                vaccinationCampaignToCreate.VaccinationCampaignDetails.Add(new ()
+                vaccinationCampaignToCreate.VaccinationCampaignDetails.Add(new()
                 {
                     VaccineId = vaccineForCampaign.VaccineId
                 });
             }
 
-            return await _vaccinationCampaignRepository.CreateVaccinationCampaign(vaccinationCampaignToCreate);
+            var createdCampaignId = await _vaccinationCampaignRepository.CreateVaccinationCampaign(vaccinationCampaignToCreate);
+            var ubigeoIds = await _vaccinationCampaignRepository.GetUbigeosByVaccinationCampaignId(createdCampaignId);
+            var parentsAbleToGoTheCampaign = await _parentRepository.GetAllByUbigeoIds(ubigeoIds);
+            var remindersToCreate = new List<Reminder>();
+            foreach (var parent in parentsAbleToGoTheCampaign)
+            {
+                Reminder reminder = new Reminder()
+                {
+                    ParentId = parent.ParentId,
+                    SendDate = vaccinationCampaignToCreate.StartDateTime.AddDays(-3),
+                    VaccinationCampaignId = createdCampaignId,
+                    Via = ReminderVias.SMS
+                };
+                remindersToCreate.Add(reminder); 
+            }
+            await _reminderRepository.CreateRangeAsync(remindersToCreate);
+            return createdCampaignId;
         }
     }
 }

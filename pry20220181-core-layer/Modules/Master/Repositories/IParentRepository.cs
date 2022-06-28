@@ -20,5 +20,6 @@ namespace pry20220181_core_layer.Modules.Master.Repositories
         public Task<List<Child>> GetChildrenAsync(int parentId);
 
         public Task<Parent> GetByIdAsync(int parentId);
+        public Task<List<Parent>> GetAllByUbigeoIds(List<int> ubigeoIds);
     }
 }

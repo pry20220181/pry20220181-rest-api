@@ -42,6 +42,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
                 });
             }
             var createdAppointmentId = await _vaccinationAppointmentRepository.CreateAsync(vaccinationAppointment);
+
             Reminder reminder = new Reminder()
             {
                 ParentId = vaccinationAppointment.ParentId,

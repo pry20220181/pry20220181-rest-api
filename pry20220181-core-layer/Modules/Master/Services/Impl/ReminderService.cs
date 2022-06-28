@@ -53,5 +53,24 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
             }
             return remindersToReturn;
         }
+
+        public async Task<List<VaccinationCampaignReminderDTO>> GetAllVaccinationCampaignRemindersAsync()
+        {
+            var campaignRemindersFromDb = await _reminderRepository.GetAllVaccinationCampaignRemindersAsync();
+            List<VaccinationCampaignReminderDTO> remindersToReturn = new List<VaccinationCampaignReminderDTO>();
+            foreach (var reminder in campaignRemindersFromDb)
+            {
+                remindersToReturn.Add(new VaccinationCampaignReminderDTO()
+                {
+                    ParentId = reminder.ParentId,
+                    //Parent = reminder.Parent,
+                    ReminderId = reminder.ReminderId,
+                    SendDate = reminder.SendDate,
+                    VaccinationCampaignId = reminder.VaccinationCampaignId,
+                    Via = reminder.Via
+                });
+            }
+            return remindersToReturn;
+        }
     }
 }

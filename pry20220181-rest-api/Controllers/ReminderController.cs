@@ -31,5 +31,15 @@ namespace pry20220181_rest_api.Controllers
                 VaccinationAppointmentReminders = remindersFromDb
             });
         }
+
+        [HttpGet("vaccination-campaigns", Name = "GetVaccinationCampaignsReminders")]
+        public async Task<IResult> GetVaccinationCampaignsReminders()
+        {
+            var remindersFromDb = await _reminderService.GetAllVaccinationCampaignRemindersAsync();
+            return Results.Ok(new
+            {
+                VaccinationCampaignReminders = remindersFromDb
+            });
+        }
     }
 }
