@@ -1,4 +1,5 @@
-﻿using pry20220181_core_layer.Modules.Vaccination.DTOs.Input;
+﻿using pry20220181_core_layer.Modules.Master.Repositories;
+using pry20220181_core_layer.Modules.Vaccination.DTOs.Input;
 using pry20220181_core_layer.Modules.Vaccination.DTOs.Output;
 using pry20220181_core_layer.Modules.Vaccination.Models;
 using pry20220181_core_layer.Modules.Vaccination.Repositories;
@@ -15,11 +16,13 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
     {
         private readonly IDoseDetailRepository _doseDetailRepository;
         private readonly IAdministeredDoseRepository _administeredDoseRepository;
+        private readonly IChildRepository _childRepository;
 
-        public DosesService(IDoseDetailRepository dosesRepository, IAdministeredDoseRepository administeredDoseRepository)
+        public DosesService(IDoseDetailRepository dosesRepository, IAdministeredDoseRepository administeredDoseRepository, IChildRepository childRepository)
         {
             _doseDetailRepository = dosesRepository;
             _administeredDoseRepository = administeredDoseRepository;
+            _childRepository = childRepository;
         }
 
         public async Task<List<RemainingDoseDTO>> GetRemainingDosesByChild(int childId)
@@ -67,7 +70,38 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
                 HealthPersonnelId = administeredDoseCreationDTO.HealthPersonnelId,
                 DoseDate = administeredDoseCreationDTO.DoseDate
             };
-            return await _administeredDoseRepository.CreateAsync(administeredDose);
+            var adminesteredDoseId = await _administeredDoseRepository.CreateAsync(administeredDose);
+            #region Get the remaining doses of the current Scheme that are able to put
+            var currentVaccinationScheme = await _doseDetailRepository.GetVaccinationSchemeByDoseDetailIdAsync(administeredDose.DoseDetailId);
+            var currentVaccinationSchemeDetails = currentVaccinationScheme.VaccinationSchemeDetails;
+            var currentDosesDetails = new List<DoseDetail>();
+            var dosesDetailId = new List<int>();
+
+            foreach (var vaccinationSchemeDetail in currentVaccinationSchemeDetails)
+            {
+                currentDosesDetails.AddRange(vaccinationSchemeDetail.DosesDetails);
+                dosesDetailId.AddRange(vaccinationSchemeDetail.DosesDetails.Select(d => d.DoseDetailId));
+            }
+
+            var administeredDosesOfCurrentVaccinationScheme = await _administeredDoseRepository.GetByDosesIdList(dosesDetailId);
+
+            var child = await _childRepository.GetByIdAsync(administeredDose.ChildId);
+            var remainingDosesToAdminister = currentDosesDetails
+                .Where(d => administeredDosesOfCurrentVaccinationScheme
+                .Exists(ad => ad.DoseDetailId == d.DoseDetailId) == false)
+                .ToList();
+
+            remainingDosesToAdminister = DosesAnalyzer.EvaluateIfTheDosesCanBePut(child, administeredDosesOfCurrentVaccinationScheme, remainingDosesToAdminister);
+            var remainingDosesToAdministerThatCanBePut = remainingDosesToAdminister.Where(d => d.CanBePut).ToList();
+            #endregion
+            //O SEA TENGO QUE CREAR UN RECORDATORIO PARA TODAS ESTAS DOSIS RESTANTES QUE YA SE PUEDEN PONER,
+            //LO QUE FALTA ES EL CUANDO ENVIO ESTE RECORDATORIO: 28/6/22 22:26 Para no loquearme mucho, los pongo para dentro de una semana
+
+            //AHORA PARA UN ESCENARIO MAS REAL HABRIA UN JOB QUE REVISE DE TODOS LOS NIÑOS (por departamento x ejemplo)
+            //QUE VACUNAS RESTANTES ESTAN APTAS PARA QUE SE LES PONGA, Y DE ESAS CREAR LOS REMINDERS
+            //TODO: Agregar revision de reminders para esta dosis, es decir revisar si hy un recordatorio por enviar sobre esta dosis (de este niño) que se acaba de registrar para eliminarlo
+
+            return adminesteredDoseId;
         }
 
         public async Task<List<AdministeredDoseDTO>> GetAdministeredDosesByChild(int childId)

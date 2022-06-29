@@ -34,5 +34,20 @@ namespace pry20220181_data_layer.Repositories.Vaccination
                     .ThenInclude(v => v.Vaccine)
                 .ToListAsync();
         }
+
+        public async Task<VaccinationScheme> GetVaccinationSchemeByDoseDetailIdAsync(int doseDetailId)
+        {
+            var vaccinationSchemeId = await _dbContext.DosesDetails
+                .Include(d => d.VaccinationSchemeDetail)
+                    .ThenInclude(s=>s.DosesDetails)
+                .Include(d => d.VaccinationSchemeDetail)
+                    .ThenInclude(s => s.VaccinationScheme)
+                .Include(d => d.VaccinationSchemeDetail)
+                    .ThenInclude(s => s.Vaccine)
+                .Where(d => d.DoseDetailId == doseDetailId)
+                .FirstOrDefaultAsync();
+
+            return vaccinationSchemeId.VaccinationSchemeDetail.VaccinationScheme;
+        }
     }
 }

@@ -11,6 +11,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Repositories
     {
         public Task<List<DoseDetail>> CreateRangeAsync(List<DoseDetail> dosesDetails);
         public Task<List<DoseDetail>> GetAllWithSchemesAndVaccinesAsync();
+        public Task<VaccinationScheme> GetVaccinationSchemeByDoseDetailIdAsync(int doseDetailId);
         
     }
 }
