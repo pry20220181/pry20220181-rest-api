@@ -1,4 +1,6 @@
-﻿using pry20220181_core_layer.Modules.Master.Repositories;
+﻿using Microsoft.Extensions.Logging;
+using pry20220181_core_layer.Modules.Master.Models;
+using pry20220181_core_layer.Modules.Master.Repositories;
 using pry20220181_core_layer.Modules.Vaccination.DTOs.Input;
 using pry20220181_core_layer.Modules.Vaccination.DTOs.Output;
 using pry20220181_core_layer.Modules.Vaccination.Models;
@@ -17,12 +19,16 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
         private readonly IDoseDetailRepository _doseDetailRepository;
         private readonly IAdministeredDoseRepository _administeredDoseRepository;
         private readonly IChildRepository _childRepository;
+        private readonly IReminderRepository _reminderRepository;
+        private readonly ILogger<DosesService> _logger;
 
-        public DosesService(IDoseDetailRepository dosesRepository, IAdministeredDoseRepository administeredDoseRepository, IChildRepository childRepository)
+        public DosesService(IDoseDetailRepository dosesRepository, IAdministeredDoseRepository administeredDoseRepository, IChildRepository childRepository, IReminderRepository reminderRepository, ILogger<DosesService> logger)
         {
             _doseDetailRepository = dosesRepository;
             _administeredDoseRepository = administeredDoseRepository;
             _childRepository = childRepository;
+            _reminderRepository = reminderRepository;
+            _logger = logger;
         }
 
         public async Task<List<RemainingDoseDTO>> GetRemainingDosesByChild(int childId)
@@ -62,30 +68,46 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
 
         public async Task<int> CreateAdministeredDose(AdministeredDoseCreationDTO administeredDoseCreationDTO)
         {
+            #region Register the administered dose
+            int childId = administeredDoseCreationDTO.ChildId;
+            int doseDetailid = administeredDoseCreationDTO.DoseDetailId;
             var administeredDose = new AdministeredDose()
             {
-                DoseDetailId = administeredDoseCreationDTO.DoseDetailId,
-                ChildId = administeredDoseCreationDTO.ChildId,
+                DoseDetailId = doseDetailid,
+                ChildId = childId,
                 HealthCenterId = administeredDoseCreationDTO.HealthCenterId,
                 HealthPersonnelId = administeredDoseCreationDTO.HealthPersonnelId,
                 DoseDate = administeredDoseCreationDTO.DoseDate
             };
             var adminesteredDoseId = await _administeredDoseRepository.CreateAsync(administeredDose);
+            _logger.LogInformation($"Administered dose {adminesteredDoseId} created (DoseDetailId: {doseDetailid}, ChildId: {childId})");
+            #endregion
+
+            #region Delete the reminder for this DoseDetail and Child if exists
+            var reminderIdToDelete = await _reminderRepository
+                .GetReminderByDoseDetailAndChildIdAsync(doseDetailid, childId);
+            if (reminderIdToDelete > 0)
+            {
+                _reminderRepository.DeleteReminderAsync(reminderIdToDelete);
+                _logger.LogInformation($"A reminder of the DoseDetail {doseDetailid} for the child {childId} existed. It has just removed");
+            }
+            #endregion
+
             #region Get the remaining doses of the current Scheme that are able to put
-            var currentVaccinationScheme = await _doseDetailRepository.GetVaccinationSchemeByDoseDetailIdAsync(administeredDose.DoseDetailId);
+            var currentVaccinationScheme = await _doseDetailRepository.GetVaccinationSchemeByDoseDetailIdAsync(doseDetailid);
             var currentVaccinationSchemeDetails = currentVaccinationScheme.VaccinationSchemeDetails;
             var currentDosesDetails = new List<DoseDetail>();
-            var dosesDetailId = new List<int>();
+            var dosesDetailIds = new List<int>();
 
             foreach (var vaccinationSchemeDetail in currentVaccinationSchemeDetails)
             {
                 currentDosesDetails.AddRange(vaccinationSchemeDetail.DosesDetails);
-                dosesDetailId.AddRange(vaccinationSchemeDetail.DosesDetails.Select(d => d.DoseDetailId));
+                dosesDetailIds.AddRange(vaccinationSchemeDetail.DosesDetails.Select(d => d.DoseDetailId));
             }
 
-            var administeredDosesOfCurrentVaccinationScheme = await _administeredDoseRepository.GetByDosesIdList(dosesDetailId);
+            var administeredDosesOfCurrentVaccinationScheme = await _administeredDoseRepository.GetByDosesIdList(dosesDetailIds);
 
-            var child = await _childRepository.GetByIdAsync(administeredDose.ChildId);
+            var child = await _childRepository.GetByIdWithParentsIdAsync(childId);
             var remainingDosesToAdminister = currentDosesDetails
                 .Where(d => administeredDosesOfCurrentVaccinationScheme
                 .Exists(ad => ad.DoseDetailId == d.DoseDetailId) == false)
@@ -93,13 +115,35 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
 
             remainingDosesToAdminister = DosesAnalyzer.EvaluateIfTheDosesCanBePut(child, administeredDosesOfCurrentVaccinationScheme, remainingDosesToAdminister);
             var remainingDosesToAdministerThatCanBePut = remainingDosesToAdminister.Where(d => d.CanBePut).ToList();
+            _logger.LogInformation($"For the child {childId} are {remainingDosesToAdminister.Count} remaining doses to administer. {remainingDosesToAdministerThatCanBePut.Count} doses are apt to administer");
+            #endregion
+
+            #region Create the reminders for the remaining doses that are apt to put
+            if (remainingDosesToAdministerThatCanBePut.Count > 0)
+            {
+                var parentId = child.ChildParents[0].ParentId;
+                var remindersToCreate = new List<Reminder>();
+
+                foreach (var remainingDose in remainingDosesToAdministerThatCanBePut)
+                {
+                    remindersToCreate.Add(new Reminder()
+                    {
+                        ChildId = childId,
+                        DoseDetailId = doseDetailid,
+                        ParentId = parentId,
+                        SendDate = DateTime.UtcNow.AddHours(-5).AddDays(7),
+                        Via = ReminderVias.SMS
+                    });
+                }
+                await _reminderRepository.CreateRangeAsync(remindersToCreate);
+                _logger.LogInformation($"{remindersToCreate.Count} reminders has been created for the parent {parentId} of their child about their reamining doses apt to administer");
+            }
             #endregion
             //O SEA TENGO QUE CREAR UN RECORDATORIO PARA TODAS ESTAS DOSIS RESTANTES QUE YA SE PUEDEN PONER,
             //LO QUE FALTA ES EL CUANDO ENVIO ESTE RECORDATORIO: 28/6/22 22:26 Para no loquearme mucho, los pongo para dentro de una semana
 
             //AHORA PARA UN ESCENARIO MAS REAL HABRIA UN JOB QUE REVISE DE TODOS LOS NIÑOS (por departamento x ejemplo)
             //QUE VACUNAS RESTANTES ESTAN APTAS PARA QUE SE LES PONGA, Y DE ESAS CREAR LOS REMINDERS
-            //TODO: Agregar revision de reminders para esta dosis, es decir revisar si hy un recordatorio por enviar sobre esta dosis (de este niño) que se acaba de registrar para eliminarlo
 
             return adminesteredDoseId;
         }

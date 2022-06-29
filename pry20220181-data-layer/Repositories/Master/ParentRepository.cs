@@ -42,6 +42,7 @@ namespace pry20220181_data_layer.Repositories.Master
 
             return children.Select(p => new Child()
             {
+                ChildId = p.ChildId,
                 Firstname = p.Child.Firstname,
                 Lastname = p.Child.Lastname,
                 DNI = p.Child.DNI,

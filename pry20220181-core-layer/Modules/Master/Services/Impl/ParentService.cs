@@ -81,7 +81,7 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
                     Parent = parent,
                     ParentId = parent.ParentId,
                     Child = child,
-                    ChildId = child.ChildId
+                    //ChildId = child.ChildId
                 });
             }
 
