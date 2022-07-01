@@ -48,7 +48,7 @@ namespace pry20220181_rest_api.Controllers
             var remindersFromDb = await _reminderService.GetAllDoseRemindersByParentIdAsync(parentId);
             return Results.Ok(new
             {
-                VaccinationCampaignReminders = remindersFromDb
+                DosesReminders = remindersFromDb
             });
         }
     }

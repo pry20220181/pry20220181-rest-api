@@ -35,7 +35,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
         {
             var allDosesFromDb = await _doseDetailRepository.GetAllWithSchemesAndVaccinesAsync();
             var administeredDosesToChild = await _administeredDoseRepository.GetByChildIdAsync(childId);
-            var child = administeredDosesToChild.FirstOrDefault().Child;
+            var child = await _childRepository.GetByIdAsync(childId);
             var remainingDosesToAdminister = allDosesFromDb
                 .Where(d => administeredDosesToChild
                 .Exists(ad => ad.DoseDetailId == d.DoseDetailId) == false)
@@ -129,7 +129,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
                     remindersToCreate.Add(new Reminder()
                     {
                         ChildId = childId,
-                        DoseDetailId = doseDetailid,
+                        DoseDetailId = remainingDose.DoseDetailId,
                         ParentId = parentId,
                         SendDate = DateTime.UtcNow.AddHours(-5).AddDays(7),
                         Via = ReminderVias.SMS

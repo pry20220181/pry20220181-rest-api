@@ -18,8 +18,10 @@ namespace pry20220181_data_layer
 {
     public class PRY20220181DbContext : IdentityDbContext<User>
     {
-        public PRY20220181DbContext(DbContextOptions<PRY20220181DbContext> options) : base(options)
+        private ILogger<PRY20220181DbContext> _logger { get; set; }
+        public PRY20220181DbContext(DbContextOptions<PRY20220181DbContext> options, ILogger<PRY20220181DbContext> logger) : base(options)
         {
+            _logger = logger;
             if (!Initialized)
             {
                 SeedData();//Agrega la data a los DbSet
@@ -373,6 +375,7 @@ namespace pry20220181_data_layer
                     Tumbes, Corrales, Ate, Breña
                 };
                 Ubigeo.AddRange(ubigeosToInsert);
+                _logger.LogInformation("4 Ubigeos Creados");
             }
             #endregion
 
@@ -388,6 +391,7 @@ namespace pry20220181_data_layer
                     TumbesCS, CorralesCS, AteCS, BreñaCS
                 };
                 HealthCenters.AddRange(healthCentersToInsert);
+                _logger.LogInformation("4 Centros de Salud Creados");
             }
             #endregion
 
@@ -409,6 +413,7 @@ namespace pry20220181_data_layer
                 Vaccines.AddRange(new List<Vaccine>() {
                     BCG, HVB, VacunaPentavalente, VacunaAntineumococica, VacunaContraLaVaricela
                 });
+                _logger.LogInformation("5 Vacunadas Creadas");
             }
             #endregion
 
@@ -422,6 +427,7 @@ namespace pry20220181_data_layer
                 VaccineInventory.AddRange(new List<VaccineInventory>() {
                     vaccineInventory1, vaccineInventory2, vaccineInventory3, vaccineInventory4
                 });
+                _logger.LogInformation("4 VaccineInventory Creados");
             }
             #endregion
 
@@ -445,6 +451,7 @@ namespace pry20220181_data_layer
                 VaccinationSchemes.AddRange(new List<VaccinationScheme>() {
                     vaccinationScheme1, vaccinationScheme2
                 });
+                _logger.LogInformation("2 Esquemas de Vacunaciones Creados");
             }
             #endregion
 
@@ -498,6 +505,7 @@ namespace pry20220181_data_layer
                 VaccinationSchemeDetails.AddRange(new List<VaccinationSchemeDetail>() {
                     vaccinationSchemeDetail1A, vaccinationSchemeDetail1B, vaccinationSchemeDetail1C, vaccinationSchemeDetail2A, vaccinationSchemeDetail2B
                 });
+                _logger.LogInformation("5 Detalles de Esquemas de Vacunación Creados");
             }
             #endregion
 
@@ -562,6 +570,7 @@ namespace pry20220181_data_layer
                     dosis1VacunaBCG, dosis1VacunaHVB, dosis1VacunaPentavalente, dosis2VacunaPentavalente, dosis3VacunaPentavalente,
                     dosis1VacunaAntineumococica, dosis1VacunaContraVaricela
                 });
+                _logger.LogInformation("7 Doses Detail Creados");
             }
             #endregion
 
@@ -581,6 +590,34 @@ namespace pry20220181_data_layer
                 {
                     child1
                 });
+                _logger.LogInformation("1 Niño Creado");
+            }
+            #endregion
+
+
+            #region Parents
+            User userParent = new User()
+            {
+                Id = Guid.NewGuid().ToString(),
+                FirstName = "Arthur",
+                LastName = "Valladares"
+            };
+            base.Users.Add(userParent);
+            Parent parent1 = new Parent()
+            {
+                DNI = "12345678",
+                Telephone = "953265685",
+                UbigeoId = 1,
+                UserId = userParent.Id
+            };
+
+            if (!Parents.Any())
+            {
+                Parents.AddRange(new List<Parent>()
+                {
+                    parent1
+                });
+                _logger.LogInformation("1 Padre Creado");
             }
             #endregion
 
@@ -597,59 +634,54 @@ namespace pry20220181_data_layer
                 {
                     childParent1
                 });
+                _logger.LogInformation("1 ChildParent Creado");
             }
             #endregion
 
-            //#region Parents
-            //Parent parent1 = new Parent()
-            //{
-            //    DNI = "12345678",
-            //    Telephone = "953265685",
-            //    UbigeoId = 1
-            //};
-
-            //if (!Parents.Any())
-            //{
-            //    Parents.AddRange(new List<Parent>()
-            //    {
-            //        parent1
-            //    });
-            //}
-            //#endregion
-
-            //#region Health Personnel
-            //HealthPersonnel healthPersonnel1 = new HealthPersonnel()
-            //{
-            //};
-
-            //if (!HealthPersonnel.Any())
-            //{
-            //    HealthPersonnel.AddRange(new List<HealthPersonnel>()
-            //    {
-            //        healthPersonnel1
-            //    });
-            //}
-            //#endregion
-
-            #region AdministeredDoses
-            AdministeredDose administeredDose1 = new AdministeredDose()
+            #region Health Personnel
+            User userHP = new User()
             {
-                DoseDetailId = dosis1VacunaBCG.DoseDetailId,
-                ChildId = child1.ChildId,
-                HealthCenterId = TumbesCS.HealthCenterId,
-                HealthPersonnelId = 1,
-                DoseDate = DateTime.UtcNow.AddHours(-5)
+                Id = Guid.NewGuid().ToString(),
+                FirstName = "Javier",
+                LastName = "Valladares"
+            };
+            HealthPersonnel healthPersonnel1 = new HealthPersonnel()
+            {
+                UserId = userHP.Id,
+                DNI = "71224453"
             };
 
-            if (!AdministeredDoses.Any())
+            if (!HealthPersonnel.Any())
             {
-                AdministeredDoses.AddRange(new List<AdministeredDose>()
+                HealthPersonnel.AddRange(new List<HealthPersonnel>()
                 {
-                    administeredDose1
+                    healthPersonnel1
                 });
+                _logger.LogInformation("1 Personal de Salud Creado");
             }
             #endregion
 
+            //COMENTADO PARA TENER LIMPIA LA DATA TRANSACCIONAL
+            //#region AdministeredDoses
+            //AdministeredDose administeredDose1 = new AdministeredDose()
+            //{
+            //    DoseDetailId = dosis1VacunaBCG.DoseDetailId,
+            //    ChildId = child1.ChildId,
+            //    HealthCenterId = TumbesCS.HealthCenterId,
+            //    HealthPersonnelId = 1,
+            //    DoseDate = DateTime.UtcNow.AddHours(-5)
+            //};
+
+            //if (!AdministeredDoses.Any())
+            //{
+            //    AdministeredDoses.AddRange(new List<AdministeredDose>()
+            //    {
+            //        administeredDose1
+            //    });
+            //}
+            //#endregion
+
+            //TODO: Aca meter Datar
             #region VaccinationCampaign
             VaccinationCampaign vaccinationCampaign1 = new VaccinationCampaign()
             {
@@ -675,6 +707,7 @@ namespace pry20220181_data_layer
                 {
                     vaccinationCampaign1, vaccinationCampaign2
                 });
+                _logger.LogInformation("2 Campañas de Vacunación Creadas");
             }
             #endregion
 
@@ -710,6 +743,7 @@ namespace pry20220181_data_layer
                     vaccinationCampaignLocation1, vaccinationCampaignLocation2, vaccinationCampaignLocation3, vaccinationCampaignLocation4
                 });
             }
+            _logger.LogInformation("4 Ubicaciones de Campaña de Vacunación Creadas");
             #endregion
 
             #region VaccinationCampaignDetails
@@ -756,6 +790,7 @@ namespace pry20220181_data_layer
                     vaccinationCampaignDetail1, vaccinationCampaignDetail2, vaccinationCampaignDetail3, vaccinationCampaignDetail4, vaccinationCampaignDetail5, vaccinationCampaignDetail6
                 });
             }
+            _logger.LogInformation("6 Detalle de Campaña de Vacunación Creados");
             #endregion
 
             SaveChanges();
