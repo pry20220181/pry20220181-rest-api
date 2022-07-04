@@ -645,6 +645,7 @@ namespace pry20220181_data_layer
                 FirstName = "Javier",
                 LastName = "Valladares"
             };
+            base.Users.Add(userHP);
             HealthPersonnel healthPersonnel1 = new HealthPersonnel()
             {
                 UserId = userHP.Id,

@@ -5,6 +5,7 @@ using pry20220181_core_layer.Modules.Vaccination.DTOs.Input;
 using pry20220181_core_layer.Modules.Vaccination.DTOs.Output;
 using pry20220181_core_layer.Modules.Vaccination.Services;
 using pry20220181_core_layer.Utils;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace pry20220181_rest_api.Controllers
 {
@@ -23,10 +24,15 @@ namespace pry20220181_rest_api.Controllers
         }
 
         [HttpGet(Name = "GetVaccines")]
-        public async Task<IEnumerable<VaccineDTO>> Get([FromQuery] PaginationParameter paginationParameter, [FromQuery] string? fields = "all")
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [SwaggerResponse(200, "Vaccines", typeof(List<VaccineDTO>))]
+        public async Task<IResult> Get([FromQuery] PaginationParameter paginationParameter, [FromQuery] string? fields = "all")
         {
-            //return await _vaccineService.GetVaccinesAsync(paginationParameter, fields);
-            return await _vaccineService.GetVaccinesCompleteInfoAsync(paginationParameter, fields);
+            var vaccines = await _vaccineService.GetVaccinesCompleteInfoAsync(paginationParameter, fields);
+            return Results.Ok(new
+            {
+                Vaccines = vaccines
+            });
         }
 
         [HttpGet("{id}", Name = "GetVaccineById")]

@@ -20,28 +20,25 @@ namespace pry20220181_data_layer.Repositories.Vaccination
             _dbContext = dbContext;
         }
 
-
-        public async Task<List<Vaccine>> GetAsync(PaginationParameter paginationParameter, string fields = "all")
+        public async Task<List<Vaccine>> GetWithSchemesAndDosesAsync(PaginationParameter paginationParameter)
         {
-            if (fields == "minimal")
-            {
-                return await _dbContext.Vaccines
-                     .Skip(paginationParameter.PageSize * (paginationParameter.Page - 1))
-                     .Take(paginationParameter.PageSize)
-                     .Select(v => new Vaccine { VaccineId = v.VaccineId, Name = v.Name })
-                     .ToListAsync();
-            }
-            else if (fields == "all")
-            {
-                return await _dbContext.Vaccines
-                    .Skip(paginationParameter.PageSize * (paginationParameter.Page - 1))
-                    .Take(paginationParameter.PageSize)
-                    .ToListAsync();
-            }
-            else
-            {
-                throw new Exception("Invalid fields parameter : " + fields);
-            }
+            return await _dbContext.Vaccines
+                .Skip(paginationParameter.PageSize * (paginationParameter.Page - 1))
+                .Take(paginationParameter.PageSize)
+                .Include(v => v.VaccinationSchemeDetails)
+                    .ThenInclude(v => v.VaccinationScheme)
+                .Include(v => v.VaccinationSchemeDetails)
+                    .ThenInclude(v => v.DosesDetails)
+                .ToListAsync();
+        }
+
+        public async Task<List<Vaccine>> GetMinimalInfo(PaginationParameter paginationParameter)
+        {
+            return await _dbContext.Vaccines
+             .Skip(paginationParameter.PageSize * (paginationParameter.Page - 1))
+             .Take(paginationParameter.PageSize)
+             .Select(v => new Vaccine { VaccineId = v.VaccineId, Name = v.Name })
+             .ToListAsync();
         }
 
         public async Task<Vaccine> GetByIdAsync(int id)
@@ -85,18 +82,6 @@ namespace pry20220181_data_layer.Repositories.Vaccination
             return true;
         }
 
-        public async Task<List<Vaccine>> GetWithSchemesAndDosesAsync(PaginationParameter paginationParameter, string fields)
-        {
-            return await _dbContext.Vaccines
-                .Skip(paginationParameter.PageSize * (paginationParameter.Page - 1))
-                .Take(paginationParameter.PageSize)
-                .Include(v => v.VaccinationSchemeDetails)
-                    .ThenInclude(v => v.VaccinationScheme)
-                .Include(v => v.VaccinationSchemeDetails)
-                    .ThenInclude(v => v.DosesDetails)
-                .ToListAsync();
-        }
-
         public async Task<Vaccine> GetByIdWithSchemesAndDosesAsync(int id)
         {
             return await _dbContext.Vaccines
@@ -106,5 +91,6 @@ namespace pry20220181_data_layer.Repositories.Vaccination
                     .ThenInclude(v => v.DosesDetails)
                     .FirstOrDefaultAsync(v => v.VaccineId == id);
         }
+
     }
 }

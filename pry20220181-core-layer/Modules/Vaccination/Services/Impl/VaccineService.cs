@@ -43,31 +43,6 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
             return vaccineToReturn;
         }
 
-        public async Task<List<VaccineDTO>> GetVaccinesAsync(PaginationParameter paginationParameter, string fields = "all")
-        {
-            //TODO: Implement Validation logic
-            var vaccinesToReturn = new List<VaccineDTO>();
-            var vaccinesFromDb = await _vaccineRepository.GetAsync(paginationParameter, fields);
-            foreach (var vaccine in vaccinesFromDb)
-            {
-                var vaccineToReturn = new VaccineDTO()
-                {
-                    Id = vaccine.VaccineId,
-                    Name = vaccine.Name
-                };
-
-                if (fields == "all")
-                {
-                    vaccineToReturn.Description = vaccine.Description;
-                    vaccineToReturn.MinTemperature = vaccine.MinTemperature;
-                    vaccineToReturn.MaxTemperature = vaccine.MaxTemperature;
-                }
-
-                vaccinesToReturn.Add(vaccineToReturn);
-            }
-            return vaccinesToReturn;
-        }
-
         public async Task<int> CreateVaccineAsync(VaccineCreationDTO vaccineCreationDTO)
         {
             #region Register Vaccine
@@ -197,7 +172,8 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
         public async Task<List<VaccineDTO>> GetVaccinesCompleteInfoAsync(PaginationParameter paginationParameter, string fields)
         {
             var vaccinesToReturn = new List<VaccineDTO>();
-            var vaccinesFromDb = await _vaccineRepository.GetWithSchemesAndDosesAsync(paginationParameter, fields);
+            var vaccinesFromDb = (fields == "all" ? await _vaccineRepository.GetWithSchemesAndDosesAsync(paginationParameter) : await _vaccineRepository.GetMinimalInfo(paginationParameter));
+            
             foreach (var vaccine in vaccinesFromDb)
             {
                 var vaccineToReturn = new VaccineDTO()
@@ -242,6 +218,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
 
                 vaccinesToReturn.Add(vaccineToReturn);
             }
+
             return vaccinesToReturn;
         }
 
