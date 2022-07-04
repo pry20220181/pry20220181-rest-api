@@ -32,7 +32,7 @@ namespace pry20220181_data_layer.Repositories.Vaccination
                 .ToListAsync();
         }
 
-        public async Task<List<Vaccine>> GetMinimalInfo(PaginationParameter paginationParameter)
+        public async Task<List<Vaccine>> GetMinimalInfoAsync(PaginationParameter paginationParameter)
         {
             return await _dbContext.Vaccines
              .Skip(paginationParameter.PageSize * (paginationParameter.Page - 1))

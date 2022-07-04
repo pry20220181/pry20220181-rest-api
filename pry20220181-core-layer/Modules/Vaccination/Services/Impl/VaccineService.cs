@@ -172,7 +172,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
         public async Task<List<VaccineDTO>> GetVaccinesCompleteInfoAsync(PaginationParameter paginationParameter, string fields)
         {
             var vaccinesToReturn = new List<VaccineDTO>();
-            var vaccinesFromDb = (fields == "all" ? await _vaccineRepository.GetWithSchemesAndDosesAsync(paginationParameter) : await _vaccineRepository.GetMinimalInfo(paginationParameter));
+            var vaccinesFromDb = (fields == "all" ? await _vaccineRepository.GetWithSchemesAndDosesAsync(paginationParameter) : await _vaccineRepository.GetMinimalInfoAsync(paginationParameter));
             
             foreach (var vaccine in vaccinesFromDb)
             {

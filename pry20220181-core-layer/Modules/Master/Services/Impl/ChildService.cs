@@ -1,4 +1,5 @@
-﻿using pry20220181_core_layer.Modules.Master.DTOs.Output;
+﻿using Microsoft.Extensions.Logging;
+using pry20220181_core_layer.Modules.Master.DTOs.Output;
 using pry20220181_core_layer.Modules.Master.Models;
 using pry20220181_core_layer.Modules.Master.Repositories;
 using pry20220181_core_layer.Modules.Vaccination.Repositories;
@@ -17,12 +18,13 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
         private readonly IChildRepository _childRepository;
         private readonly IVaccinationSchemeDetailRepository _vaccinationSchemeDetailRepository;
         private readonly IAdministeredDoseRepository _administeredDoseRepository;
-
-        public ChildService(IChildRepository childRepository, IVaccinationSchemeDetailRepository vaccinationSchemeDetailRepository, IAdministeredDoseRepository administeredDoseRepository)
+        private readonly ILogger<ChildService> _logger { get; set; }
+        public ChildService(IChildRepository childRepository, IVaccinationSchemeDetailRepository vaccinationSchemeDetailRepository, IAdministeredDoseRepository administeredDoseRepository, ILogger<ChildService> logger)
         {
             _childRepository = childRepository;
             _vaccinationSchemeDetailRepository = vaccinationSchemeDetailRepository;
             _administeredDoseRepository = administeredDoseRepository;
+            _logger = logger;
         }
 
         public async Task<ChildDTO> GetChildByDniAsync(string DNI)
@@ -44,6 +46,13 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
         public async Task<VaccinationCardDTO> GetVaccinationCardAsync(int childId)
         {
             var childFromDb = await _childRepository.GetByIdAsync(childId);
+
+            if(childFromDb is null)
+            {
+                _logger.LogError($"The Child with ID {childId} does not exist");
+                return null;
+            }
+
             var allVaccinationSchemesFromDb = await _vaccinationSchemeDetailRepository.GetAllWithVaccinesAndDosesAsync();
             //var administeredDosesToChildFromDb = await _administeredDoseRepository.GetByChildIdWithAllRelatedInfoAsync(childId);//TODO: Analizar si basta con solo traer los datos de sus tablas, sin data relacionada
             var administeredDosesToChildFromDb = await _administeredDoseRepository.GetByChildIdAsync(childId);

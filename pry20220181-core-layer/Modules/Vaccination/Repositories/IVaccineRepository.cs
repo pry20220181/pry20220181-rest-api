@@ -20,7 +20,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Repositories
         /// Obtain the list of Vaccines with only its Id and name
         /// </summary>
         /// <returns>The vaccines with only its ID and Name</returns>
-        public Task<List<Vaccine>> GetMinimalInfo(PaginationParameter paginationParameter);
+        public Task<List<Vaccine>> GetMinimalInfoAsync(PaginationParameter paginationParameter);
 
         /// <summary>
         /// 
