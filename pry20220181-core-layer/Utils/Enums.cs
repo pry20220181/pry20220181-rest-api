@@ -17,4 +17,10 @@ namespace pry20220181_core_layer.Utils
         public const string SMS = "SMS";
         public const string Email = "Email";
     }
+
+    public static class GetVaccinesMode
+    {
+        public const string WithAllInfo = "all";
+        public const string OnlyIdAndName = "minimal";
+    }
 }

@@ -26,13 +26,21 @@ namespace pry20220181_rest_api.Controllers
         [HttpGet(Name = "GetVaccines")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [SwaggerResponse(200, "Vaccines", typeof(List<VaccineDTO>))]
-        public async Task<IResult> Get([FromQuery] PaginationParameter paginationParameter, [FromQuery] string? fields = "all")
+        public async Task<IResult> Get([FromQuery] PaginationParameter paginationParameter, [FromQuery] string? fields = GetVaccinesMode.WithAllInfo)
         {
-            var vaccines = await _vaccineService.GetVaccinesCompleteInfoAsync(paginationParameter, fields);
-            return Results.Ok(new
+            try
             {
-                Vaccines = vaccines
-            });
+                var vaccines = await _vaccineService.GetVaccinesCompleteInfoAsync(paginationParameter, fields);
+                return Results.Ok(new
+                {
+                    Vaccines = vaccines
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message + "\nStacktrace " + ex.StackTrace);
+                return Results.Problem("Internal error", statusCode : 500);
+            }
         }
 
         [HttpGet("{id}", Name = "GetVaccineById")]
