@@ -18,7 +18,7 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
         private readonly IChildRepository _childRepository;
         private readonly IVaccinationSchemeDetailRepository _vaccinationSchemeDetailRepository;
         private readonly IAdministeredDoseRepository _administeredDoseRepository;
-        private readonly ILogger<ChildService> _logger { get; set; }
+        private ILogger<ChildService> _logger { get; set; }
         public ChildService(IChildRepository childRepository, IVaccinationSchemeDetailRepository vaccinationSchemeDetailRepository, IAdministeredDoseRepository administeredDoseRepository, ILogger<ChildService> logger)
         {
             _childRepository = childRepository;
