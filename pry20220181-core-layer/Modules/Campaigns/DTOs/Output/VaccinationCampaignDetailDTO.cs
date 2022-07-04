@@ -8,7 +8,11 @@ namespace pry20220181_core_layer.Modules.Campaigns.DTOs.Output
 {
     public class VaccinationCampaignDetailDTO
     {
-        public VaccinationCampaignDTO VaccinationCampaign { get; set; }
+        public int VaccinationCampaignId { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public DateTime StartDateTime { get; set; }
+        public DateTime EndDateTime { get; set; }
         public List<Vaccine> Vaccines { get; set; } = new List<Vaccine>();
         public List<HealthCenter> HealthCenters { get; set; } = new List<HealthCenter>();
         public class Vaccine

@@ -74,12 +74,21 @@ namespace pry20220181_data_layer.Repositories.Master
                 return;
             }
             _dbContext.Reminders.Remove(reminderToDelete);
+            await _dbContext.SaveChangesAsync();
             _logger.LogInformation($"Reminder {reminderId} removed");
         }
 
         public async Task<List<Reminder>> GetAllDoseReminderByParentIdAsync(int parentId)
         {
             return await _dbContext.Reminders.Where(r => r.ParentId == parentId).ToListAsync();
+        }
+
+        public async Task DeleteRemindersByDoseDetailAndChildIdAsync(int doseDetailId, int childId)
+        {
+            var remindersToDelete = _dbContext.Reminders.Where(r => r.DoseDetailId == doseDetailId && r.ChildId == childId);
+            _dbContext.Reminders.RemoveRange(remindersToDelete);
+            _logger.LogInformation($"{remindersToDelete.Count()} reminders removed");
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

@@ -37,17 +37,30 @@ namespace pry20220181_data_layer.Repositories.Vaccination
 
         public async Task<VaccinationScheme> GetVaccinationSchemeByDoseDetailIdAsync(int doseDetailId)
         {
+            //var vaccinationSchemeId = await _dbContext.DosesDetails
+            //    .Include(d => d.VaccinationSchemeDetail)
+            //        .ThenInclude(s=>s.DosesDetails)
+            //    .Include(d => d.VaccinationSchemeDetail)
+            //        .ThenInclude(s => s.VaccinationScheme)
+            //    .Include(d => d.VaccinationSchemeDetail)
+            //        .ThenInclude(s => s.Vaccine)
+            //    .Where(d => d.DoseDetailId == doseDetailId)
+            //    .FirstOrDefaultAsync();
+
             var vaccinationSchemeId = await _dbContext.DosesDetails
-                .Include(d => d.VaccinationSchemeDetail)
-                    .ThenInclude(s=>s.DosesDetails)
-                .Include(d => d.VaccinationSchemeDetail)
-                    .ThenInclude(s => s.VaccinationScheme)
-                .Include(d => d.VaccinationSchemeDetail)
-                    .ThenInclude(s => s.Vaccine)
                 .Where(d => d.DoseDetailId == doseDetailId)
+                .Select(d => d.VaccinationSchemeDetail.VaccinationSchemeId)
                 .FirstOrDefaultAsync();
 
-            return vaccinationSchemeId.VaccinationSchemeDetail.VaccinationScheme;
+            var vaccinationScheme = await _dbContext.VaccinationSchemes
+                .Include(s=>s.VaccinationSchemeDetails)
+                    .ThenInclude(s=>s.Vaccine)
+                .Include(s => s.VaccinationSchemeDetails)
+                    .ThenInclude(s => s.DosesDetails)
+                .Where(d => d.VaccinationSchemeId == vaccinationSchemeId)
+                .FirstOrDefaultAsync();
+
+            return vaccinationScheme;
         }
     }
 }

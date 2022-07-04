@@ -32,14 +32,11 @@ namespace pry20220181_core_layer.Modules.Campaigns.Services.Impl
             var vaccinationCampaignFromDb = await _vaccinationCampaignRepository.GetByIdWithLocationsAndVaccinesAsync(vaccinationCampaignId);
             var vaccinationCampaignToReturn = new VaccinationCampaignDetailDTO()
             {
-                VaccinationCampaign = new VaccinationCampaignDTO()
-                {
-                    VaccinationCampaignId = vaccinationCampaignFromDb.VaccinationCampaignId,
-                    Name = vaccinationCampaignFromDb.Name,
-                    Description = vaccinationCampaignFromDb.Description,
-                    StartDateTime = vaccinationCampaignFromDb.StartDateTime,
-                    EndDateTime = vaccinationCampaignFromDb.EndDateTime,
-                }
+                VaccinationCampaignId = vaccinationCampaignFromDb.VaccinationCampaignId,
+                Name = vaccinationCampaignFromDb.Name,
+                Description = vaccinationCampaignFromDb.Description,
+                StartDateTime = vaccinationCampaignFromDb.StartDateTime,
+                EndDateTime = vaccinationCampaignFromDb.EndDateTime
             };
 
             foreach (var campaignDetail in vaccinationCampaignFromDb.VaccinationCampaignDetails)
@@ -124,7 +121,7 @@ namespace pry20220181_core_layer.Modules.Campaigns.Services.Impl
                     VaccinationCampaignId = createdCampaignId,
                     Via = ReminderVias.SMS
                 };
-                remindersToCreate.Add(reminder); 
+                remindersToCreate.Add(reminder);
             }
             await _reminderRepository.CreateRangeAsync(remindersToCreate);
             return createdCampaignId;

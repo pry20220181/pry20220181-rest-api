@@ -16,5 +16,6 @@ namespace pry20220181_core_layer.Modules.Master.Repositories
         public Task<List<Reminder>> GetAllDoseReminderByParentIdAsync(int parentId);
         public Task<int> GetReminderByDoseDetailAndChildIdAsync(int doseDetailId, int childId);
         public Task DeleteReminderAsync(int reminderId);
+        public Task DeleteRemindersByDoseDetailAndChildIdAsync(int doseDetailId, int childId);
     }
 }
