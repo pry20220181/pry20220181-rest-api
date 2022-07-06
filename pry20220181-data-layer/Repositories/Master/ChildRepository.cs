@@ -23,7 +23,7 @@ namespace pry20220181_data_layer.Repositories.Master
         {
             return await _dbContext.Children.FirstOrDefaultAsync(c => c.DNI == DNI);
         }
-
+            
         public async Task<Child> GetByIdAsync(int childId)
         {
             return await _dbContext.Children.FirstOrDefaultAsync(c => c.ChildId == childId);

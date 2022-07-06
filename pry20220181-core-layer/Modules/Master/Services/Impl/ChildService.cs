@@ -47,21 +47,26 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
         {
             var childFromDb = await _childRepository.GetByIdAsync(childId);
 
-            if(childFromDb is null)
+            if (childFromDb is null)
             {
                 _logger.LogError($"The Child with ID {childId} does not exist");
                 return null;
             }
 
             var allVaccinationSchemesFromDb = await _vaccinationSchemeDetailRepository.GetAllWithVaccinesAndDosesAsync();
-            //var administeredDosesToChildFromDb = await _administeredDoseRepository.GetByChildIdWithAllRelatedInfoAsync(childId);//TODO: Analizar si basta con solo traer los datos de sus tablas, sin data relacionada
+            _logger.LogTrace($"Got {allVaccinationSchemesFromDb.Count} Vaccination Schemes from DB (with its related info: Vaccines and Doses)");
+
             var administeredDosesToChildFromDb = await _administeredDoseRepository.GetByChildIdAsync(childId);
+            _logger.LogTrace($"The Child with ID {childId} has {administeredDosesToChildFromDb} administered doses");
 
             var vaccinationSchemesToReturn = new List<VaccinationCardDTO.VaccinationScheme>();
 
-            //As I iterate trough the vaccinationSchemeDetails and a VaccinationScheme has several details
-            //I add the vaccinationScheme id in this list to avoid duplicates, in the Loop with get all the vaccinationSchemeDetails of this vaccinationScheme
+            /// <description>
+            /// As I iterate trough the vaccinationSchemeDetails and a VaccinationScheme has several details
+            /// I add the vaccinationScheme Id in this list to avoid duplicates, in the Loop with get all the vaccinationSchemeDetails of this vaccinationScheme
+            /// </description>
             List<int> alreadyRegisteredVaccinationSchemes = new List<int>();
+
             foreach (var vaccinationScheme in allVaccinationSchemesFromDb)
             {
                 if (!alreadyRegisteredVaccinationSchemes.Contains(vaccinationScheme.VaccinationSchemeId))
@@ -73,6 +78,7 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
                         InitialAge = vaccinationScheme.VaccinationScheme.InitialAge,
                         FinalAge = vaccinationScheme.VaccinationScheme.FinalAge,
                     };
+
                     //These are the details of the present vaccination scheme, each detail has the vaccines of this scheme
                     var vaccinationSchemeDetails = allVaccinationSchemesFromDb
                         .Where(v => v.VaccinationSchemeId == vaccinationScheme.VaccinationSchemeId).ToList();
@@ -86,10 +92,11 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
                             NumberOfDosesToAdminister = vaccinationSchemeDetail.NumberOfDosesToAdminister,
                             NumberOfDosesAdministered = 0
                         };
-                        
+
                         var vaccineDosesToReturn = vaccinationSchemeDetail.DosesDetails
                             .Where(d => d.VaccinationSchemeDetailId == vaccinationSchemeDetail.VaccinationSchemeDetailId)
                             .ToList();
+
                         foreach (var vaccineDose in vaccineDosesToReturn)
                         {
                             var vaccineDoseToReturn = new VaccinationCardDTO.VaccinationScheme.Vaccine.Dose()
@@ -99,18 +106,18 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
                                 Administered = false,
                                 PutWhen = WhenPutVaccine.ToString(vaccineDose)
                             };
-                            
-                            if (administeredDosesToChildFromDb.Exists(ad=>ad.DoseDetailId == vaccineDose.DoseDetailId))
-                            {
-                                var administeredDose = administeredDosesToChildFromDb
+
+                            var administeredDose = administeredDosesToChildFromDb
                                     .FirstOrDefault(ad => ad.DoseDetailId == vaccineDose.DoseDetailId);
+                            if (!(administeredDose is null))
+                            {
                                 vaccineDoseToReturn.Administered = true;
                                 vaccineDoseToReturn.AdministeredDoseId = administeredDose.AdministeredDoseId;
                                 vaccineDoseToReturn.AdministrationDate = administeredDose.DoseDate;
                                 vaccineToReturn.NumberOfDosesAdministered++;
                             }
-                            
-                            vaccineToReturn.Doses.Add(vaccineDoseToReturn); 
+
+                            vaccineToReturn.Doses.Add(vaccineDoseToReturn);
                         }
                         vaccinationSchemeToReturn.Vaccines.Add(vaccineToReturn);
                     }
@@ -119,6 +126,7 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
 
                     vaccinationSchemesToReturn.Add(vaccinationSchemeToReturn);
                     alreadyRegisteredVaccinationSchemes.Add(vaccinationScheme.VaccinationSchemeId);
+                    _logger.LogTrace($"The Vaccination Scheme with ID {vaccinationScheme.VaccinationSchemeId} was added to the List to return with its related info");
                 }
             }
 
@@ -136,45 +144,6 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
                 },
                 VaccinationSchemes = vaccinationSchemesToReturn
             };
-
-                //return new VaccinationCardDTO()
-                //{
-                //    Child = new ChildDTO()
-                //    {
-                //        ChildId = childFromDb.ChildId,
-                //        DNI = childFromDb.DNI,
-                //        Firstname = childFromDb.Firstname,
-                //        Lastname = childFromDb.Lastname,
-                //        Birthdate = childFromDb.Birthdate,
-                //        Gender = childFromDb.Gender,
-                //        Age = GetAgeFromBirthdate.GetAge(childFromDb.Birthdate)
-                //    },
-                //    VaccinationSchemes = new List<VaccinationCardDTO.VaccinationScheme>()
-                //    {
-                //        new VaccinationCardDTO.VaccinationScheme()
-                //        {
-                //            Name = "Vacunacion niños menor 1 año",
-                //            Vaccines = new List<VaccinationCardDTO.VaccinationScheme.Vaccine>()
-                //            {
-                //               new VaccinationCardDTO.VaccinationScheme.Vaccine()
-                //               {
-                //                   Name = "Pentavalente",
-                //                   Doses = new List<VaccinationCardDTO.VaccinationScheme.Vaccine.Dose>()
-                //                   {
-                //                       new VaccinationCardDTO.VaccinationScheme.Vaccine.Dose()
-                //                       {
-                //                           DoseNumber = 1
-                //                       },
-                //                       new VaccinationCardDTO.VaccinationScheme.Vaccine.Dose()
-                //                       {
-                //                           DoseNumber = 2
-                //                       }
-                //                   }
-                //               }
-                //            }
-                //        }
-                //    }
-                //};
-            }
+        }
     }
 }

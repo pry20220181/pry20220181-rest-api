@@ -1,4 +1,5 @@
-﻿using pry20220181_core_layer.Modules.Vaccination.DTOs.Input;
+﻿using Microsoft.Extensions.Logging;
+using pry20220181_core_layer.Modules.Vaccination.DTOs.Input;
 using pry20220181_core_layer.Modules.Vaccination.DTOs.Output;
 using pry20220181_core_layer.Modules.Vaccination.Models;
 using pry20220181_core_layer.Modules.Vaccination.Repositories;
@@ -17,13 +18,15 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
         IVaccinationSchemeRepository _vaccinationSchemeRepository { get; set; }
         IVaccinationSchemeDetailRepository _vaccinationSchemeDetailRepository { get; set; }
         IDoseDetailRepository _doseDetailRepository { get; set; }
+        ILogger<VaccineService> _logger { get; set; }
 
-        public VaccineService(IVaccineRepository vaccineRepository, IVaccinationSchemeRepository vaccinationSchemeRepository, IVaccinationSchemeDetailRepository vaccinationSchemeDetailRepository, IDoseDetailRepository doseDetailRepository)
+        public VaccineService(IVaccineRepository vaccineRepository, IVaccinationSchemeRepository vaccinationSchemeRepository, IVaccinationSchemeDetailRepository vaccinationSchemeDetailRepository, IDoseDetailRepository doseDetailRepository, ILogger<VaccineService> logger)
         {
             _vaccineRepository = vaccineRepository;
             _vaccinationSchemeRepository = vaccinationSchemeRepository;
             _vaccinationSchemeDetailRepository = vaccinationSchemeDetailRepository;
             _doseDetailRepository = doseDetailRepository;
+            _logger = logger;
         }
 
         public async Task<VaccineDTO> GetVaccineByIdAsync(int id)
@@ -173,7 +176,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
         {
             var vaccinesToReturn = new List<VaccineDTO>();
             var vaccinesFromDb = (fields == GetVaccinesMode.WithAllInfo ? await _vaccineRepository.GetWithSchemesAndDosesAsync(paginationParameter) : await _vaccineRepository.GetMinimalInfoAsync(paginationParameter));
-            
+            _logger.LogTrace($"The vaccine repository returned {vaccinesFromDb.Count} vaccines");
             foreach (var vaccine in vaccinesFromDb)
             {
                 var vaccineToReturn = new VaccineDTO()

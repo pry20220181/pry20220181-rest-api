@@ -30,7 +30,6 @@ namespace pry20220181_rest_api.Controllers
         {
             try
             {
-                throw new Exception("TEST");
                 var vaccines = await _vaccineService.GetVaccinesCompleteInfoAsync(paginationParameter, fields);
                 return Results.Ok(new
                 {

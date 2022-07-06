@@ -36,21 +36,31 @@ namespace pry20220181_rest_api.Controllers
         [SwaggerResponse(200, "Child's Vaccination Card", typeof(VaccinationCardDTO))]
         public async Task<IResult> GetVaccinationCard([FromRoute] int childId = 0)
         {
-            if(childId == 0)
+            try
             {
-                return Results.BadRequest("ChildId is required");
+                if (childId == 0)
+                {
+                    return Results.BadRequest("ChildId is required");
+                }
+
+                var vaccinationCard = await _childService.GetVaccinationCardAsync(childId);
+                if (vaccinationCard is null)
+                {
+                    var errorMessage = $"Something was wrong when get the vaccination card of child with ID {childId}";
+                    _logger.LogError(errorMessage);
+                    return Results.BadRequest(errorMessage);
+                }
+
+                return Results.Ok(new
+                {
+                    VaccinationCard = vaccinationCard
+                });
             }
-            var vaccinationCard = await _childService.GetVaccinationCardAsync(childId);
-            if(vaccinationCard is null)
+            catch (Exception ex)
             {
-                var errorMessage = $"Something was wrong when get the vaccination card of child with ID {childId}";
-                _logger.LogError(errorMessage);
-                return Results.BadRequest(errorMessage);
+                _logger.LogError(ex.Message + "\nStacktrace " + ex.StackTrace);
+                return Results.Problem("Internal error", statusCode: 500);
             }
-            return Results.Ok(new
-            {
-                VaccinationCard = vaccinationCard
-            });
         }
     }
 }
