@@ -54,10 +54,10 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
             }
 
             var allVaccinationSchemesFromDb = await _vaccinationSchemeDetailRepository.GetAllWithVaccinesAndDosesAsync();
-            _logger.LogTrace($"Got {allVaccinationSchemesFromDb.Count} Vaccination Schemes from DB (with its related info: Vaccines and Doses)");
+            _logger.LogInformation($"Got {allVaccinationSchemesFromDb.Count} Vaccination Schemes from DB (with its related info: Vaccines and Doses)");
 
             var administeredDosesToChildFromDb = await _administeredDoseRepository.GetByChildIdAsync(childId);
-            _logger.LogTrace($"The Child with ID {childId} has {administeredDosesToChildFromDb} administered doses");
+            _logger.LogInformation($"The Child with ID {childId} has {administeredDosesToChildFromDb} administered doses");
 
             var vaccinationSchemesToReturn = new List<VaccinationCardDTO.VaccinationScheme>();
 
@@ -126,7 +126,7 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
 
                     vaccinationSchemesToReturn.Add(vaccinationSchemeToReturn);
                     alreadyRegisteredVaccinationSchemes.Add(vaccinationScheme.VaccinationSchemeId);
-                    _logger.LogTrace($"The Vaccination Scheme with ID {vaccinationScheme.VaccinationSchemeId} was added to the List to return with its related info");
+                    _logger.LogInformation($"The Vaccination Scheme with ID {vaccinationScheme.VaccinationSchemeId} was added to the List to return with its related info");
                 }
             }
 
