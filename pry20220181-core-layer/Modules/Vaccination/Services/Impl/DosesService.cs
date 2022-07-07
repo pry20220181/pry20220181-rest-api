@@ -153,9 +153,16 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
 
         public async Task<List<AdministeredDoseDTO>> GetAdministeredDosesByChild(int childId)
         {
-            var administeredDosesToChild = await _administeredDoseRepository.GetByChildIdWithAllRelatedInfoAsync(childId);
+            if(childId < 1)
+            {
+                return null;
+            }
+
+            var administeredDosesToChildFromDb = await _administeredDoseRepository.GetByChildIdWithAllRelatedInfoAsync(childId);
             var administeredDosesToChildToReturn = new List<AdministeredDoseDTO>();
-            foreach (var administeredDose in administeredDosesToChild)
+            _logger.LogInformation($"The Child with ID {childId} has {administeredDosesToChildFromDb.Count()} administered doses");
+
+            foreach (var administeredDose in administeredDosesToChildFromDb)
             {
                 AdministeredDoseDTO administeredDoseDTO = new AdministeredDoseDTO()
                 {
@@ -174,6 +181,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
 
                 administeredDosesToChildToReturn.Add(administeredDoseDTO);
             }
+
             return administeredDosesToChildToReturn;
         }
     }
