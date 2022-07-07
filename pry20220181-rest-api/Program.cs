@@ -1,10 +1,13 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using pry20220181_core_layer.Modules.Master.Models;
 using pry20220181_data_layer;
 using pry20220181_rest_api.Controllers;
+using pry20220181_rest_api.Security.Models;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -60,12 +63,16 @@ builder.Services
             ValidIssuer = configuration["Jwt:Issuer"],
             ValidAudience = configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"])),
-            // set ClockSkew is zero to anule the default value: 5 min
+// set ClockSkew is zero to anule the default value: 5 min
             ClockSkew = TimeSpan.Zero
-        };
+};
     });
 #endregion
 
+#region Configure App Settings Objects
+builder.Services.Configure<JwtSection>(configuration.GetSection("Jwt"));
+builder.Services.AddScoped(sp => sp.GetService<IOptionsSnapshot<JwtSection>>().Value);
+#endregion
 
 #region Configure my custom classes
 builder.Services.AddPRY20220181Repositories();
