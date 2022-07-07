@@ -30,10 +30,10 @@ namespace pry20220181_core_layer.Modules.Vaccination.Repositories
         public Task<Vaccine> GetByIdAsync(int id);
 
         /// <summary>
-        ///
+        /// Get the vaccine with its related info (Schemes and Doses)
         /// </summary>
         /// <param name="id">The id of the vaccine</param>
-        /// <returns></returns>
+        /// <returns>The Vaccine object with its Schemes and Doses</returns>
         public Task<Vaccine> GetByIdWithSchemesAndDosesAsync(int id);
 
         /// <summary>

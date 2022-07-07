@@ -44,11 +44,30 @@ namespace pry20220181_rest_api.Controllers
         }
 
         [HttpGet("{id}", Name = "GetVaccineById")]
-        public async Task<VaccineDTO> GetById(int id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [SwaggerResponse(200, "Vaccine", typeof(VaccineDTO))]
+        public async Task<IResult> GetById(int id)
         {
-            //var vaccine = await _vaccineService.GetVaccineByIdAsync(id);
-            var vaccine = await _vaccineService.GetVaccineCompleteInfoByIdAsync(id);
-            return vaccine;
+            try
+            {
+                var vaccine = await _vaccineService.GetVaccineCompleteInfoByIdAsync(id);
+
+                if(vaccine is null)
+                {
+                    return Results.NotFound();
+                }
+
+                return Results.Ok(new
+                {
+                    Vaccine = vaccine
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message + "\nStacktrace " + ex.StackTrace);
+                return Results.Problem("Internal error", statusCode: 500);
+            }
         }
 
         [HttpPost(Name = "CreateVaccine")]

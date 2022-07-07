@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static pry20220181_core_layer.Modules.Master.DTOs.Output.VaccinationCardDTO.VaccinationScheme.Vaccine;
 
 namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
 {
@@ -227,7 +228,19 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
 
         public async Task<VaccineDTO> GetVaccineCompleteInfoByIdAsync(int id)
         {
+            if(id < 1)
+            {
+                return null;
+            }
+
             var vaccineFromDb = await _vaccineRepository.GetByIdWithSchemesAndDosesAsync(id);
+
+            if(vaccineFromDb is null)
+            {
+                _logger.LogInformation($"The Vaccine with ID {id} does not exist");
+                return null;
+            }
+
             var vaccineToReturn = new VaccineDTO()
             {
                 Id = vaccineFromDb.VaccineId,
@@ -237,6 +250,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
                 MaxTemperature = vaccineFromDb.MaxTemperature
             };
 
+            _logger.LogInformation($"The Vaccine with ID {id} has {vaccineFromDb.VaccinationSchemeDetails.Count()} Schemes");
             foreach (var vaccinationScheme in vaccineFromDb.VaccinationSchemeDetails)
             {
                 var vaccinationSchemeToReturn = new VaccinationSchemeDTO()
@@ -249,17 +263,13 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
                     PossibleEffectsPostVaccine = vaccinationScheme.PossibleEffectsPostVaccine
                 };
 
-                foreach (var dose in vaccinationScheme.DosesDetails)
+                _logger.LogInformation($"The Vaccine with ID {id} in its Scheme {vaccinationScheme.VaccinationScheme.Name} has {vaccinationScheme.DosesDetails.Count()} doses");
+                vaccinationSchemeToReturn.VaccineDoses = vaccinationScheme.DosesDetails.Select(dose => new VaccineDoseDTO()
                 {
-                    var vaccineDose = new VaccineDoseDTO()
-                    {
-                        VaccineDoseId = dose.DoseDetailId,
-                        DoseNumber = dose.DoseNumber,
-                        PutWhen = WhenPutVaccine.ToString(dose),
-                    };
-
-                    vaccinationSchemeToReturn.VaccineDoses.Add(vaccineDose);
-                }
+                    VaccineDoseId = dose.DoseDetailId,
+                    DoseNumber = dose.DoseNumber,
+                    PutWhen = WhenPutVaccine.ToString(dose),
+                }).ToList();
 
                 vaccineToReturn.VaccinationSchemes.Add(vaccinationSchemeToReturn);
             };
