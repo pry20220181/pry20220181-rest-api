@@ -1,4 +1,5 @@
-﻿using pry20220181_core_layer.Modules.Campaigns.DTOs.Input;
+﻿using Microsoft.Extensions.Logging;
+using pry20220181_core_layer.Modules.Campaigns.DTOs.Input;
 using pry20220181_core_layer.Modules.Campaigns.DTOs.Output;
 using pry20220181_core_layer.Modules.Campaigns.Models;
 using pry20220181_core_layer.Modules.Campaigns.Repositories;
@@ -19,17 +20,31 @@ namespace pry20220181_core_layer.Modules.Campaigns.Services.Impl
         IVaccinationCampaignRepository _vaccinationCampaignRepository { get; set; }
         IParentRepository _parentRepository { get; set; }
         IReminderRepository _reminderRepository { get; set; }
+        ILogger<VaccinationCampaignsService> _logger { get; set; }
 
-        public VaccinationCampaignsService(IVaccinationCampaignRepository vaccinationCampaignRepository, IParentRepository parentRepository, IReminderRepository reminderRepository)
+        public VaccinationCampaignsService(IVaccinationCampaignRepository vaccinationCampaignRepository, IParentRepository parentRepository, IReminderRepository reminderRepository, ILogger<VaccinationCampaignsService> logger)
         {
             _vaccinationCampaignRepository = vaccinationCampaignRepository;
             _parentRepository = parentRepository;
             _reminderRepository = reminderRepository;
+            _logger = logger;
         }
 
         public async Task<VaccinationCampaignDetailDTO> GetVaccinationCampaignById(int vaccinationCampaignId)
         {
+            if(vaccinationCampaignId < 1)
+            {
+                return null;
+            }
+
             var vaccinationCampaignFromDb = await _vaccinationCampaignRepository.GetByIdWithLocationsAndVaccinesAsync(vaccinationCampaignId);
+
+            if(vaccinationCampaignFromDb is null)
+            {
+                _logger.LogInformation($"The Vaccination Campaign with ID {vaccinationCampaignId} does not exist");
+                return null;
+            }
+
             var vaccinationCampaignToReturn = new VaccinationCampaignDetailDTO()
             {
                 VaccinationCampaignId = vaccinationCampaignFromDb.VaccinationCampaignId,
@@ -39,26 +54,22 @@ namespace pry20220181_core_layer.Modules.Campaigns.Services.Impl
                 EndDateTime = vaccinationCampaignFromDb.EndDateTime
             };
 
-            foreach (var campaignDetail in vaccinationCampaignFromDb.VaccinationCampaignDetails)
-            {
-                vaccinationCampaignToReturn.Vaccines.Add(new VaccinationCampaignDetailDTO.Vaccine()
+            vaccinationCampaignToReturn.Vaccines = vaccinationCampaignFromDb.VaccinationCampaignDetails
+                .Select(campaignDetail => new VaccinationCampaignDetailDTO.Vaccine()
                 {
                     VaccineId = campaignDetail.Vaccine.VaccineId,
                     Name = campaignDetail.Vaccine.Name,
                     Description = campaignDetail.Vaccine.Description
-                });
-            }
+                }).ToList();
 
-            foreach (var location in vaccinationCampaignFromDb.VaccinationCampaignLocations)
-            {
-                vaccinationCampaignToReturn.HealthCenters.Add(new VaccinationCampaignDetailDTO.HealthCenter()
+            vaccinationCampaignToReturn.HealthCenters = vaccinationCampaignFromDb.VaccinationCampaignLocations
+                .Select(location => new VaccinationCampaignDetailDTO.HealthCenter()
                 {
                     HealthCenterId = location.HealthCenterId,
                     Name = location.HealthCenter.Name,
                     Address = location.HealthCenter.Address,
                     UbigeoId = location.HealthCenter.UbigeoId
-                });
-            }
+                }).ToList();
 
             return vaccinationCampaignToReturn;
         }
