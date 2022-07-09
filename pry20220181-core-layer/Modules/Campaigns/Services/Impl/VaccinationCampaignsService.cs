@@ -94,6 +94,11 @@ namespace pry20220181_core_layer.Modules.Campaigns.Services.Impl
 
         public async Task<int> CreateVaccinationCampaign(VaccinationCampaignCreateDTO vaccinationCampaignCreateDTO)
         {
+            if(vaccinationCampaignCreateDTO is null)
+            {
+                return 0;
+            }
+
             var vaccinationCampaignToCreate = new VaccinationCampaign()
             {
                 Name = vaccinationCampaignCreateDTO.Name,
@@ -103,6 +108,7 @@ namespace pry20220181_core_layer.Modules.Campaigns.Services.Impl
                 VaccinationCampaignDetails = new List<VaccinationCampaignDetail>(),
                 VaccinationCampaignLocations = new List<VaccinationCampaignLocation>()
             };
+
             foreach (var healthCenterForCampaign in vaccinationCampaignCreateDTO.CampaignHealthCenters)
             {
                 vaccinationCampaignToCreate.VaccinationCampaignLocations.Add(new VaccinationCampaignLocation()
@@ -120,21 +126,34 @@ namespace pry20220181_core_layer.Modules.Campaigns.Services.Impl
             }
 
             var createdCampaignId = await _vaccinationCampaignRepository.CreateVaccinationCampaign(vaccinationCampaignToCreate);
-            var ubigeoIds = await _vaccinationCampaignRepository.GetUbigeosByVaccinationCampaignId(createdCampaignId);
-            var parentsAbleToGoTheCampaign = await _parentRepository.GetAllByUbigeoIds(ubigeoIds);
-            var remindersToCreate = new List<Reminder>();
-            foreach (var parent in parentsAbleToGoTheCampaign)
+            
+            if(createdCampaignId > 0)
             {
-                Reminder reminder = new Reminder()
+                _logger.LogInformation($"A Vaccination campaign with ID {createdCampaignId} was created");
+                #region Create the reminders for the parents that could go to the campaing
+                var ubigeoIds = await _vaccinationCampaignRepository.GetUbigeosByVaccinationCampaignId(createdCampaignId);
+
+                if (!(ubigeoIds is null))
                 {
-                    ParentId = parent.ParentId,
-                    SendDate = vaccinationCampaignToCreate.StartDateTime.AddDays(-3),
-                    VaccinationCampaignId = createdCampaignId,
-                    Via = ReminderVias.SMS
-                };
-                remindersToCreate.Add(reminder);
+                    var parentsAbleToGoTheCampaign = await _parentRepository.GetAllByUbigeoIds(ubigeoIds);
+                    var remindersToCreate = new List<Reminder>();
+                    foreach (var parent in parentsAbleToGoTheCampaign)
+                    {
+                        Reminder reminder = new Reminder()
+                        {
+                            ParentId = parent.ParentId,
+                            SendDate = vaccinationCampaignToCreate.StartDateTime.AddDays(-3),
+                            VaccinationCampaignId = createdCampaignId,
+                            Via = ReminderVias.SMS
+                        };
+                        remindersToCreate.Add(reminder);
+                    }
+                    await _reminderRepository.CreateRangeAsync(remindersToCreate);
+                    _logger.LogInformation($"{remindersToCreate.Count()} reminders were created for this Vaccination Campaign");
+                }
+                #endregion
             }
-            await _reminderRepository.CreateRangeAsync(remindersToCreate);
+
             return createdCampaignId;
         }
     }
