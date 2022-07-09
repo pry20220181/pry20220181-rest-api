@@ -47,23 +47,43 @@ namespace pry20220181_rest_api.Controllers
         }
 
         [HttpGet("vaccination-campaigns", Name = "GetVaccinationCampaignsReminders")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [SwaggerResponse(200, "Get Vaccination Campaigns Reminders", typeof(List<VaccinationCampaignReminderDTO>))]
         public async Task<IResult> GetVaccinationCampaignsReminders()
         {
-            var remindersFromDb = await _reminderService.GetAllVaccinationCampaignRemindersAsync();
-            return Results.Ok(new
+            try
             {
-                VaccinationCampaignReminders = remindersFromDb
-            });
+                var remindersFromDb = await _reminderService.GetAllVaccinationCampaignRemindersAsync();
+                return Results.Ok(new
+                {
+                    VaccinationCampaignReminders = remindersFromDb
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message + "\nStacktrace " + ex.StackTrace);
+                return Results.Problem("Internal error", statusCode: 500);
+            }
         }
 
         [HttpGet("doses", Name = "GetDosesReminders")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [SwaggerResponse(200, "Get Doses Reminders", typeof(List<DoseReminderDTO>))]
         public async Task<IResult> GetDosesReminders([FromQuery] int parentId)
         {
-            var remindersFromDb = await _reminderService.GetAllDoseRemindersByParentIdAsync(parentId);
-            return Results.Ok(new
+            try
             {
-                DosesReminders = remindersFromDb
-            });
+                var remindersFromDb = await _reminderService.GetAllDoseRemindersByParentIdAsync(parentId);
+                return Results.Ok(new
+                {
+                    DosesReminders = remindersFromDb
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message + "\nStacktrace " + ex.StackTrace);
+                return Results.Problem("Internal error", statusCode: 500);
+            }
         }
     }
 }

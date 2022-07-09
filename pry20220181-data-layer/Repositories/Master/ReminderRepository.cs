@@ -39,8 +39,6 @@ namespace pry20220181_data_layer.Repositories.Master
         public async Task<List<Reminder>> GetAllVaccinationCampaignRemindersAsync()
         {
             return await _dbContext.Reminders
-                    .Include(r => r.Parent)
-                    .Include(r => r.VaccinationCampaign)
                     .Where(r => r.VaccinationCampaignId != 0).ToListAsync();
         }
 
@@ -78,7 +76,10 @@ namespace pry20220181_data_layer.Repositories.Master
 
         public async Task<List<Reminder>> GetAllDoseReminderByParentIdAsync(int parentId)
         {
-            return await _dbContext.Reminders.Where(r => r.ParentId == parentId).ToListAsync();
+            return await _dbContext
+                .Reminders
+                .Where(r => r.ParentId == parentId && r.DoseDetailId != 0)
+                .ToListAsync();
         }
 
         public async Task DeleteRemindersByDoseDetailAndChildIdAsync(int doseDetailId, int childId)

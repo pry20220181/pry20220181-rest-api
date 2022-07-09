@@ -61,7 +61,6 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
                 remindersToReturn.Add(new VaccinationCampaignReminderDTO()
                 {
                     ParentId = reminder.ParentId,
-                    //Parent = reminder.Parent,
                     ReminderId = reminder.ReminderId,
                     SendDate = reminder.SendDate,
                     VaccinationCampaignId = reminder.VaccinationCampaignId,
@@ -80,7 +79,6 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
                 remindersToReturn.Add(new DoseReminderDTO()
                 {
                     ParentId = reminder.ParentId,
-                    //Parent = reminder.Parent,
                     ReminderId = reminder.ReminderId,
                     SendDate = reminder.SendDate,
                     DoseDetailId = reminder.DoseDetailId,
