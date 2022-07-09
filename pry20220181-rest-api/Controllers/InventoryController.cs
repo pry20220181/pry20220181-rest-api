@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using pry20220181_core_layer.Modules.Inventory.DTOs.Input;
+using pry20220181_core_layer.Modules.Inventory.DTOs.Output;
 using pry20220181_core_layer.Modules.Inventory.Services;
+using pry20220181_core_layer.Modules.Master.DTOs.Output;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace pry20220181_rest_api.Controllers
 {
@@ -16,6 +19,10 @@ namespace pry20220181_rest_api.Controllers
         }
 
         [HttpGet(Name = "GetInventoryByHealthCenter")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [SwaggerResponse(200, "Get Inventory By HealthCenter and Vaccine", typeof(InventoryDTO))]
+        [SwaggerResponse(200, "Get Inventories By HealthCenter", typeof(List<InventoryDTO>))]
         public async Task<IResult> GetInventoryByHealthCenter([FromQuery] int healthCenterId = 0, [FromQuery] int vaccineId = 0)
         {
             if (healthCenterId == 0)
