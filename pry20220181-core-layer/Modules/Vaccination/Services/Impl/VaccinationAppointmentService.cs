@@ -1,4 +1,5 @@
-﻿using pry20220181_core_layer.Modules.Master.Models;
+﻿using Microsoft.Extensions.Logging;
+using pry20220181_core_layer.Modules.Master.Models;
 using pry20220181_core_layer.Modules.Master.Repositories;
 using pry20220181_core_layer.Modules.Vaccination.DTOs.Input;
 using pry20220181_core_layer.Modules.Vaccination.Models;
@@ -16,14 +17,21 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
     {
         private IVaccinationAppointmentRepository _vaccinationAppointmentRepository;
         private IReminderRepository _reminderRepository;
-        public VaccinationAppointmentService(IVaccinationAppointmentRepository vaccinationAppointmentRepository, IReminderRepository reminderRepository)
+        private ILogger<VaccinationAppointmentService> _logger { get; set; }
+        public VaccinationAppointmentService(IVaccinationAppointmentRepository vaccinationAppointmentRepository, IReminderRepository reminderRepository, ILogger<VaccinationAppointmentService> logger)
         {
             _vaccinationAppointmentRepository = vaccinationAppointmentRepository;
             _reminderRepository = reminderRepository;
+            _logger = logger;
         }
 
         public async Task<int> CreateVaccinationAppointmentAsync(VaccinationAppointmentCreationDTO vaccinationAppointmentCreationDTO)
         {
+            if(vaccinationAppointmentCreationDTO is null)
+            {
+                return 0;
+            }
+
             VaccinationAppointment vaccinationAppointment = new VaccinationAppointment()
             {
                 ParentId = vaccinationAppointmentCreationDTO.ParentId,
@@ -41,16 +49,22 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
                     VaccinationAppointmentId = vaccinationAppointment.VaccinationAppointmentId
                 });
             }
-            var createdAppointmentId = await _vaccinationAppointmentRepository.CreateAsync(vaccinationAppointment);
 
-            Reminder reminder = new Reminder()
+            var createdAppointmentId = await _vaccinationAppointmentRepository.CreateAsync(vaccinationAppointment);
+            _logger.LogInformation($"A appointment with ID {createdAppointmentId} was created for the parent with ID {vaccinationAppointment.ParentId}");
+
+            if (createdAppointmentId > 0)
             {
-                ParentId = vaccinationAppointment.ParentId,
-                SendDate = vaccinationAppointment.AppointmentDateTime.AddDays(-3),
-                VaccinationAppointmentId = vaccinationAppointment.VaccinationAppointmentId,
-                Via = ReminderVias.SMS
-            };
-            await _reminderRepository.CreateAsync(reminder);
+                Reminder reminder = new Reminder()
+                {
+                    ParentId = vaccinationAppointment.ParentId,
+                    SendDate = vaccinationAppointment.AppointmentDateTime.AddDays(-3),
+                    VaccinationAppointmentId = vaccinationAppointment.VaccinationAppointmentId,
+                    Via = ReminderVias.SMS
+                };
+                int createdReminderId = await _reminderRepository.CreateAsync(reminder);
+                _logger.LogInformation($"A Reminder with ID {createdReminderId} was created for the appointment with ID {createdAppointmentId}");
+            }
 
             return createdAppointmentId;
         }
