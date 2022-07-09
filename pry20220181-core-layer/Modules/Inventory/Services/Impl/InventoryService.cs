@@ -88,11 +88,21 @@ namespace pry20220181_core_layer.Modules.Inventory.Services.Impl
 
         public async Task<InventoryDTO> AddVaccineStock(AddVaccineStockDTO inventoryUpdateDTO)
         {
+            if(inventoryUpdateDTO.StockToAdd < 0)
+            {
+                return null;
+            }
             var updatedInventory = await _inventoryRepository.AddStock(new Models.VaccineInventory()
             {
                 VaccineInventoryId = inventoryUpdateDTO.InventoryId,
                 Stock = inventoryUpdateDTO.StockToAdd
             });
+
+            if(updatedInventory is null)
+            {
+                return null;
+            }
+
             return new InventoryDTO()
             {
                 InventoryId = updatedInventory.VaccineInventoryId,

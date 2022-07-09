@@ -3,6 +3,7 @@ using pry20220181_core_layer.Modules.Inventory.DTOs.Input;
 using pry20220181_core_layer.Modules.Inventory.DTOs.Output;
 using pry20220181_core_layer.Modules.Inventory.Services;
 using pry20220181_core_layer.Modules.Master.DTOs.Output;
+using pry20220181_core_layer.Modules.Master.Models;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace pry20220181_rest_api.Controllers
@@ -69,13 +70,37 @@ namespace pry20220181_rest_api.Controllers
         }
 
         [HttpPost(Name = "AddVaccineStock")]
-        public async Task<IResult> AddVaccineStock([FromBody]AddVaccineStockDTO inventoryUpdateDTO)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [SwaggerResponse(200, "Add Vaccine Stock", typeof(InventoryDTO))]
+        public async Task<IResult> AddVaccineStock([FromBody] AddVaccineStockDTO inventoryUpdateDTO)
         {
-            var updatedInventory = await _inventoryService.AddVaccineStock(inventoryUpdateDTO);
-            return Results.Ok(new
+            try
             {
-                Inventory = updatedInventory
-            });
+                if (inventoryUpdateDTO is null || inventoryUpdateDTO.StockToAdd < 0)
+                {
+                    return Results.BadRequest("Bad data");
+                }
+
+                var updatedInventory = await _inventoryService.AddVaccineStock(inventoryUpdateDTO);
+
+                if (updatedInventory is null)
+                {
+                    var errorMessage = $"Something was wrong when add stock to the inventory {inventoryUpdateDTO.InventoryId}";
+                    _logger.LogError(errorMessage);
+                    return Results.BadRequest(errorMessage);
+                }
+
+                return Results.Ok(new
+                {
+                    Inventory = updatedInventory
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message + "\nStacktrace " + ex.StackTrace);
+                return Results.Problem("Internal error", statusCode: 500);
+            }
         }
     }
 }
