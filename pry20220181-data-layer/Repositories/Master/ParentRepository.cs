@@ -21,7 +21,12 @@ namespace pry20220181_data_layer.Repositories.Master
 
         public async Task<int> CreateWithChildrenAsync(Parent parent)
         {
-            if((await _dbContext.Parents.FirstOrDefaultAsync(p=>p.DNI == parent.DNI)) is null)
+            if (parent.UserId is null)
+            {
+                throw new NotImplementedException("The userId field is not present");
+            }
+
+            if ((await _dbContext.Parents.FirstOrDefaultAsync(p=>p.DNI == parent.DNI)) is null)
             {
                 var newParent = await _dbContext.Parents.AddAsync(parent);
                 await _dbContext.SaveChangesAsync();
