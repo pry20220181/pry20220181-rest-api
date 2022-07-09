@@ -43,11 +43,9 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
                 remindersToReturn.Add(new VaccinationAppointmentReminderDTO()
                 {
                     ParentId = reminder.ParentId,
-                    //Parent = reminder.Parent,
                     ReminderId = reminder.ReminderId,
                     SendDate = reminder.SendDate,
                     VaccinationAppointmentId = reminder.VaccinationAppointmentId,
-                    //VaccinationAppointment = reminder.VaccinationAppointment
                     Via = reminder.Via
                 });
             }

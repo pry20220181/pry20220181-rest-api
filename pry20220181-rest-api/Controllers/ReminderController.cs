@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using pry20220181_core_layer.Modules.Master.DTOs.Input;
+using pry20220181_core_layer.Modules.Master.DTOs.Output;
 using pry20220181_core_layer.Modules.Master.Services;
 using pry20220181_core_layer.Modules.Master.Services.Impl;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace pry20220181_rest_api.Controllers
 {
@@ -11,10 +13,12 @@ namespace pry20220181_rest_api.Controllers
     public class ReminderController
     {
         private IReminderService _reminderService { get; set; }
+        private ILogger<ReminderController> _logger { get; set; }
 
-        public ReminderController(IReminderService reminderService)
+        public ReminderController(IReminderService reminderService, ILogger<ReminderController> logger)
         {
             _reminderService = reminderService;
+            _logger = logger;
         }
 
         //public async Task<IResult> CreateVaccinationAppointmentReminder(ReminderCreationDTO reminderCreationDTO)
@@ -23,13 +27,23 @@ namespace pry20220181_rest_api.Controllers
 
         //}
         [HttpGet("vaccination-appointments", Name = "GetVaccinationAppointmentReminders")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [SwaggerResponse(200, "Get Vaccination Appointment Reminders", typeof(List<VaccinationAppointmentReminderDTO>))]
         public async Task<IResult> GetVaccinationAppointmentReminders()
         {
-            var remindersFromDb = await _reminderService.GetAllVaccinationAppointmentRemindersAsync();
-            return Results.Ok(new
+            try
             {
-                VaccinationAppointmentReminders = remindersFromDb
-            });
+                var remindersFromDb = await _reminderService.GetAllVaccinationAppointmentRemindersAsync();
+                return Results.Ok(new
+                {
+                    VaccinationAppointmentReminders = remindersFromDb
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message + "\nStacktrace " + ex.StackTrace);
+                return Results.Problem("Internal error", statusCode: 500);
+            }
         }
 
         [HttpGet("vaccination-campaigns", Name = "GetVaccinationCampaignsReminders")]
