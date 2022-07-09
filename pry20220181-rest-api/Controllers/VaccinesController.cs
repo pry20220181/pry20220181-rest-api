@@ -71,9 +71,23 @@ namespace pry20220181_rest_api.Controllers
         }
 
         [HttpPost(Name = "CreateVaccine")]
-        public async Task<int> Create(VaccineCreationDTO vaccineCreationDTO)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [SwaggerResponse(200, "Create Vaccine", typeof(int))]
+        public async Task<IResult> Create(VaccineCreationDTO vaccineCreationDTO)
         {
-            return await _vaccineService.CreateVaccineAsync(vaccineCreationDTO);
+            try
+            {
+                var createdVaccineId = await _vaccineService.CreateVaccineAsync(vaccineCreationDTO);
+                return Results.Ok(new
+                {
+                    VaccineId = createdVaccineId
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message + "\nStacktrace " + ex.StackTrace);
+                return Results.Problem("Internal error", statusCode: 500);
+            }
         }
 
         [HttpPut("{id}", Name = "UpdateVaccine")]

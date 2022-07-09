@@ -59,6 +59,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
             };
 
             var vaccineId = await _vaccineRepository.CreateAsync(vaccineToCreate);
+            _logger.LogInformation($"The Vaccine with ID {vaccineId} was created");
             #endregion
 
             var registeredVaccinationSchemes = await _vaccinationSchemeRepository.GetAllAsync();
