@@ -12,10 +12,12 @@ namespace pry20220181_rest_api.Controllers
     public class InventoryController
     {
         private IInventoryService _inventoryService { get; set; }
+        private ILogger<InventoryController> _logger { get; set; }
 
-        public InventoryController(IInventoryService inventoryService)
+        public InventoryController(IInventoryService inventoryService, ILogger<InventoryController> logger)
         {
             _inventoryService = inventoryService;
+            _logger = logger;
         }
 
         [HttpGet(Name = "GetInventoryByHealthCenter")]
@@ -25,23 +27,31 @@ namespace pry20220181_rest_api.Controllers
         [SwaggerResponse(200, "Get Inventories By HealthCenter", typeof(List<InventoryDTO>))]
         public async Task<IResult> GetInventoryByHealthCenter([FromQuery] int healthCenterId = 0, [FromQuery] int vaccineId = 0)
         {
-            if (healthCenterId == 0)
+            try
             {
-                return Results.BadRequest("healthCenterId is required");
-            }
-            if (vaccineId > 0)
-            {
-                var inventoryToReturn = await _inventoryService.GetInventoryByHealthCenterAndVaccine(healthCenterId, vaccineId);
+                if (healthCenterId == 0)
+                {
+                    return Results.BadRequest("healthCenterId is required");
+                }
+                if (vaccineId > 0)
+                {
+                    var inventoryToReturn = await _inventoryService.GetInventoryByHealthCenterAndVaccine(healthCenterId, vaccineId);
+                    return Results.Ok(new
+                    {
+                        Inventory = inventoryToReturn
+                    });
+                }
+                var inventoriesToReturn = await _inventoryService.GetInventoriesByHealthCenter(healthCenterId);
                 return Results.Ok(new
                 {
-                    Inventory = inventoryToReturn
+                    Inventories = inventoriesToReturn
                 });
             }
-            var inventoriesToReturn = await _inventoryService.GetInventoriesByHealthCenter(healthCenterId);
-            return Results.Ok(new
+            catch (Exception ex)
             {
-                Inventories = inventoriesToReturn
-            });
+                _logger.LogError(ex.Message + "\nStacktrace " + ex.StackTrace);
+                return Results.Problem("Internal error", statusCode: 500);
+            }
         }
 
         [HttpGet("{inventoryId}", Name = "GetInventoryById")]

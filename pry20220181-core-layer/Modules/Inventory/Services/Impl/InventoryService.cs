@@ -20,7 +20,18 @@ namespace pry20220181_core_layer.Modules.Inventory.Services.Impl
 
         public async Task<InventoryDTO> GetInventoryByHealthCenterAndVaccine(int healthCenterId, int vaccineId = 0)
         {
+            if (healthCenterId < 1 || vaccineId < 1)
+            {
+                return null;
+            }
+
             var inventoryFromDb = await _inventoryRepository.GetByHealthCenterAndVaccineAsync(healthCenterId, vaccineId);
+
+            if(inventoryFromDb is null)
+            {
+                return null;
+            }
+
             var inventoryToReturn = new InventoryDTO()
             {
                 InventoryId = inventoryFromDb.VaccineInventoryId,
@@ -30,6 +41,7 @@ namespace pry20220181_core_layer.Modules.Inventory.Services.Impl
                 HealthCenterName = inventoryFromDb.HealthCenter.Name,
                 Stock = inventoryFromDb.Stock
             };
+
             return inventoryToReturn;
         }
 
@@ -50,21 +62,27 @@ namespace pry20220181_core_layer.Modules.Inventory.Services.Impl
 
         public async Task<List<InventoryDTO>> GetInventoriesByHealthCenter(int healthCenterId)
         {
-            var inventoriesFromDb = await _inventoryRepository.GetAllByHealthCenterAsync(healthCenterId);
-            List<InventoryDTO> inventoriesToReturn = new List<InventoryDTO>();
-            foreach (var inventory in inventoriesFromDb)
+            if (healthCenterId < 1)
             {
-                var inventoryToReturn = new InventoryDTO()
-                {
-                    InventoryId = inventory.VaccineInventoryId,
-                    HealthCenterId = inventory.HealthCenterId,
-                    VaccineId = inventory.VaccineId,
-                    VaccineName = inventory.Vaccine.Name,
-                    HealthCenterName = inventory.HealthCenter.Name,
-                    Stock = inventory.Stock
-                };
-                inventoriesToReturn.Add(inventoryToReturn);
+                return null;
             }
+            var inventoriesFromDb = await _inventoryRepository.GetAllByHealthCenterAsync(healthCenterId);
+
+            if(inventoriesFromDb is null)
+            {
+                return null;
+            }
+
+            List<InventoryDTO> inventoriesToReturn = inventoriesFromDb.Select(inventory => new InventoryDTO()
+            {
+                InventoryId = inventory.VaccineInventoryId,
+                HealthCenterId = inventory.HealthCenterId,
+                VaccineId = inventory.VaccineId,
+                VaccineName = inventory.Vaccine.Name,
+                HealthCenterName = inventory.HealthCenter.Name,
+                Stock = inventory.Stock
+            }).ToList();
+
             return inventoriesToReturn;
         }
 
