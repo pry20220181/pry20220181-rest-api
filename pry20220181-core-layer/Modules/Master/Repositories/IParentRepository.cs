@@ -11,7 +11,7 @@ namespace pry20220181_core_layer.Modules.Master.Repositories
     public interface IParentRepository
     {
         /// <summary>
-        /// Create the Parent record in the Database
+        /// Create the Parent record in the Database. Also create the Children and the records in intermediate table of the relation M:M of Child-Parent
         /// </summary>
         /// <param name="parent"></param>
         /// <returns>The id of the new Parent</returns>

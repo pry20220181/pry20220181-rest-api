@@ -23,4 +23,16 @@ namespace pry20220181_core_layer.Utils
         public const string WithAllInfo = "all";
         public const string OnlyIdAndName = "minimal";
     }
+
+    public static class Roles
+    {
+        public const string Parent = "Parent";
+        public const string HealthPersonnel = "HealthPersonnel";
+    }
+
+    public static class Relationship
+    {
+        public const char Father = 'F';
+        public const char Mother = 'M';
+    }
 }

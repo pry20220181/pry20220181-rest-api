@@ -1,4 +1,5 @@
-﻿using pry20220181_core_layer.Modules.Master.DTOs.Input;
+﻿using Microsoft.Extensions.Logging;
+using pry20220181_core_layer.Modules.Master.DTOs.Input;
 using pry20220181_core_layer.Modules.Master.DTOs.Output;
 using pry20220181_core_layer.Modules.Master.Models;
 using pry20220181_core_layer.Modules.Master.Repositories;
@@ -14,10 +15,12 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
     public class ParentService : IParentService
     {
         IParentRepository _parentRepository;
+        ILogger<ParentService> _logger;
 
-        public ParentService(IParentRepository parentRepository)
+        public ParentService(IParentRepository parentRepository, ILogger<ParentService> logger)
         {
             _parentRepository = parentRepository;
+            _logger = logger;
         }
 
         public async Task<List<ChildDTO>> GetChildrenAsync(int parentId)
@@ -56,6 +59,11 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
 
         public async Task<int> RegisterParentAndChildrenAsync(ParentCreateDTO parentCreateDTO)
         {
+            if(parentCreateDTO.DNI is null)
+            {
+                return 0;
+            }
+
             Parent parent = new Parent()
             {
                 DNI = parentCreateDTO.DNI,
@@ -64,6 +72,8 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
                 UserId = parentCreateDTO.UserId,
                 ChildParents = new List<ChildParent>()
             };
+
+            var relationship = parentCreateDTO.Relationship;
 
             foreach (var childItem in parentCreateDTO.Children)
             {
@@ -77,15 +87,18 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
                 };
                 parent.ChildParents.Add(new ChildParent()
                 {
-                    Relationship = parentCreateDTO.Relationship == "Father" ? 'F' : 'M',
+                    Relationship = (relationship == "Father" ? Relationship.Father : Relationship.Mother),
                     Parent = parent,
-                    ParentId = parent.ParentId,
+                    //ParentId = parent.ParentId,
                     Child = child,
-                    //ChildId = child.ChildId
                 });
             }
 
-            return await _parentRepository.CreateWithChildrenAsync(parent);
+            var createdParentId = await _parentRepository.CreateWithChildrenAsync(parent);
+
+            _logger.LogInformation($"The parent with ID {createdParentId} and DNI {parent.DNI} was created. Has {parent.ChildParents.Count()} children");
+
+            return createdParentId;
         }
     }
 }
