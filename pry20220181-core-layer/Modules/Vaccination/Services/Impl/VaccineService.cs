@@ -59,7 +59,17 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
             };
 
             var vaccineId = await _vaccineRepository.CreateAsync(vaccineToCreate);
-            _logger.LogInformation($"The Vaccine with ID {vaccineId} was created");
+
+            if(vaccineId > 0)
+            {
+                _logger.LogInformation($"The Vaccine with ID {vaccineId} was created");
+            }
+            else
+            {
+                _logger.LogInformation($"Something was wrong creating the vaccine {vaccineCreationDTO.Name}");
+                return 0;
+            }
+            
             #endregion
 
             var registeredVaccinationSchemes = await _vaccinationSchemeRepository.GetAllAsync();
@@ -91,6 +101,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
             vaccinationSchemesToCreate = vaccinationSchemes.Where(v => v.VaccinationSchemeId == 0).ToList();
             //Here the all the items of vaccinationSchemes has its Id.
             var createdVaccineSchemes = await _vaccinationSchemeRepository.CreateRangeAsync(vaccinationSchemesToCreate);
+            _logger.LogInformation($"{createdVaccineSchemes.Count()} vaccination schemes created for the Vaccine {vaccineCreationDTO.Name}");
             #endregion
 
             #region Assign the new Vaccine to its VaccinationScheme (The Table VaccinationSchemeDetail is the M:M table of the relationship between Vaccine and VaccinationScheme)
@@ -109,7 +120,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
                 vaccinatioSchemeDetailToCreate.Add(vaccinationSchemeDetailToCreate);
             }
             var createdVaccinationSchemeDetails = await _vaccinationSchemeDetailRepository.CreateRangeAsync(vaccinatioSchemeDetailToCreate);
-
+            _logger.LogInformation($"{createdVaccinationSchemeDetails.Count()} vaccination scheme details created for the Vaccine {vaccineCreationDTO.Name}");
             #endregion
 
             #region We register all the Details (Doses) about the vaccinationSchemeDetail of this Vaccine
@@ -135,6 +146,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
             }
 
             var createdDoseDetails = await _doseDetailRepository.CreateRangeAsync(vaccineDosesToCreate);
+            _logger.LogInformation($"{createdDoseDetails.Count()} doses created for the Vaccine {vaccineCreationDTO.Name}");
             #endregion
 
 

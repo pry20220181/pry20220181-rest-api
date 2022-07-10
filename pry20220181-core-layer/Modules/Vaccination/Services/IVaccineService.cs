@@ -34,7 +34,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services
         public Task<VaccineDTO> GetVaccineCompleteInfoByIdAsync(int id);
 
         /// <summary>
-        /// Create a Vaccine with the specified data        
+        /// Create a Vaccine with the info about the Vaccination Schemes where it is and what doses have in theses Schemes       
         /// </summary>
         /// <param name="vaccineCreationDTO">The vaccine to create</param>
         /// <returns>The id of the new Vaccine</returns>
