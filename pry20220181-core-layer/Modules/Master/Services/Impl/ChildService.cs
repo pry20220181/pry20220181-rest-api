@@ -30,6 +30,12 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
         public async Task<ChildDTO> GetChildByDniAsync(string DNI)
         {
             var childFromDb = await _childRepository.GetByDniAsync(DNI);
+
+            if(childFromDb is null)
+            {
+                return null;
+            }
+
             var childToReturn = new ChildDTO()
             {
                 ChildId = childFromDb.ChildId,

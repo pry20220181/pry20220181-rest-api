@@ -23,10 +23,36 @@ namespace pry20220181_rest_api.Controllers
         }
 
         [HttpGet(Name = "GetChildByDni")]
-        public async Task<ChildDTO> GetByDni([FromQuery] string dni)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [SwaggerResponse(200, "Get Child By Dni", typeof(ChildDTO))]
+        public async Task<IResult> GetByDni([FromQuery] string dni = "")
         {
-            var child = await _childService.GetChildByDniAsync(dni);
-            return child;
+            try
+            {
+                if(dni == "")
+                {
+                    return Results.BadRequest("DNI is required");
+                }
+
+                var child = await _childService.GetChildByDniAsync(dni);
+
+                if(child is null)
+                {
+                    return Results.NotFound();
+                }
+
+                return Results.Ok(new
+                {
+                    ChildId = child
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message + "\nStacktrace " + ex.StackTrace);
+                return Results.Problem("Internal error", statusCode: 500);
+            }
+
         }
 
 
