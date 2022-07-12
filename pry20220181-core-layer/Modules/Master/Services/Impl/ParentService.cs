@@ -26,6 +26,7 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
         public async Task<List<ChildDTO>> GetChildrenAsync(int parentId)
         {
             var children = await _parentRepository.GetChildrenAsync(parentId);
+
             var childrenToReturn = new List<ChildDTO>();
             foreach (var child in children)
             {
