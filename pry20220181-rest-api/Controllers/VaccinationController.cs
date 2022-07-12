@@ -22,14 +22,30 @@ namespace pry20220181_rest_api.Controllers
         }
 
         [HttpGet("remaining-doses", Name = "GetChildsRemainingDoses")]
-        public async Task<List<RemainingDoseDTO>> GetChildsRemainingDoses([FromQuery] int childId = 0)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [SwaggerResponse(200, "Child's Remaining Doses", typeof(List<RemainingDoseDTO>))]
+        public async Task<IResult> GetChildsRemainingDoses([FromQuery] int childId = 0)
         {
-            if (childId == 0)
+            try
             {
-                return null;
+                if (childId == 0)
+                {
+                    return Results.BadRequest("ChildId is required");
+                }
+                var remainingDoses = await _dosesService.GetRemainingDosesByChild(childId);
+
+                return Results.Ok(new
+                {
+                    RemainingDoses = remainingDoses
+                });
             }
-            var remainingDoses = await _dosesService.GetRemainingDosesByChild(childId);
-            return remainingDoses;
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message + "\nStacktrace " + ex.StackTrace);
+                return Results.Problem("Internal error", statusCode: 500);
+            }
+
         }
 
         [HttpPost("administered-doses", Name = "RegisterAdministeredDose")]

@@ -9,6 +9,11 @@ namespace pry20220181_core_layer.Modules.Vaccination.Repositories
 {
     public interface IAdministeredDoseRepository
     {
+        /// <summary>
+        /// Get the Administered Doses of the Specified Child
+        /// </summary>
+        /// <param name="childId"></param>
+        /// <returns>The List of Administered Dose</returns>
         public Task<List<AdministeredDose>> GetByChildIdAsync(int childId);
         /// <summary>
         /// Get the Administered Doses of the Specified Child with all its related Info (Doses, Schemes, Health Centers and Personnel)

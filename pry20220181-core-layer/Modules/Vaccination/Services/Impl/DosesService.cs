@@ -33,9 +33,19 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
 
         public async Task<List<RemainingDoseDTO>> GetRemainingDosesByChild(int childId)
         {
+            if(childId < 1)
+            {
+                return null;
+            }
             var allDosesFromDb = await _doseDetailRepository.GetAllWithSchemesAndVaccinesAsync();
             var administeredDosesToChild = await _administeredDoseRepository.GetByChildIdAsync(childId);
             var child = await _childRepository.GetByIdAsync(childId);
+
+            if(child is null)
+            {
+                return null;
+            }
+
             var remainingDosesToAdminister = allDosesFromDb
                 .Where(d => administeredDosesToChild
                 .Exists(ad => ad.DoseDetailId == d.DoseDetailId) == false)
