@@ -1,14 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using pry20220181_core_layer.Modules.Master.DTOs.Output;
 using pry20220181_core_layer.Modules.Master.Services;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace pry20220181_rest_api.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [ApiController]
     [Route("parents")]
-    public class ParentController
+    public class ParentController : ControllerBase
     {
         private readonly IParentService _parentService;
         private ILogger<ParentController> _logger { get; set; }
@@ -28,7 +29,8 @@ namespace pry20220181_rest_api.Controllers
         {
             try
             {
-                if(parentId == 0)
+                var user = HttpContext.User;
+                if (parentId == 0)
                 {
                     return Results.BadRequest();
                 }

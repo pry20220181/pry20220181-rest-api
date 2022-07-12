@@ -55,7 +55,7 @@ namespace pry20220181_core_layer.Modules.Campaigns.Services.Impl
             };
 
             vaccinationCampaignToReturn.Vaccines = vaccinationCampaignFromDb.VaccinationCampaignDetails
-                .Select(campaignDetail => new VaccinationCampaignDetailDTO.Vaccine()
+                .Select(campaignDetail => new VaccinationCampaignDetailDTO.VaccineForCampaign()
                 {
                     VaccineId = campaignDetail.Vaccine.VaccineId,
                     Name = campaignDetail.Vaccine.Name,
