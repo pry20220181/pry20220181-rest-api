@@ -24,5 +24,11 @@ namespace pry20220181_data_layer.Repositories.Master
                 .Where(h => ubigeoIds.Contains(h.UbigeoId))
                 .ToListAsync();
         }
+
+        public async Task<HealthCenter> GetHealthCenterById(int healthCenterId)
+        {
+            return await _dbContext.HealthCenters
+                .FirstOrDefaultAsync(h => h.HealthCenterId == healthCenterId);
+        }
     }
 }

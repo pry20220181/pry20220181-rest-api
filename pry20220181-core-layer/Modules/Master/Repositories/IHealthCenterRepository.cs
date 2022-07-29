@@ -9,6 +9,7 @@ namespace pry20220181_core_layer.Modules.Master.Repositories
 {
     public interface IHealthCenterRepository
     {
+        public Task<HealthCenter> GetHealthCenterById(int healthCenterId);
         public Task<List<HealthCenter>> GetHealthCentersByUbigeoIdsAsync(List<int> ubigeoIds);
     }
 }

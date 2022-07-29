@@ -9,6 +9,7 @@ namespace pry20220181_core_layer.Modules.Master.Services
 {
     public interface IHealthCenterService
     {
+        public Task<HealthCenterDTO> GetHealthCenterById(int healthCenterId);
         public Task<List<HealthCenterDTO>> GetHealthCentersByUbigeosAsync(List<int> UbigeoIds);
     }
 }
