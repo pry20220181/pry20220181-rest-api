@@ -67,6 +67,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
                     VaccinationSchemeName = remainingDose.VaccinationSchemeDetail.VaccinationScheme.Name,
                     VaccinationSchemeInitialAge = remainingDose.VaccinationSchemeDetail.VaccinationScheme.InitialAge,
                     VaccinationSchemeFinalAge = remainingDose.VaccinationSchemeDetail.VaccinationScheme.FinalAge,
+                    VaccineId = remainingDose.VaccinationSchemeDetail.VaccineId,
                     VaccineName = remainingDose.VaccinationSchemeDetail.Vaccine.Name,
                     CanBePut = remainingDose.CanBePut
                 };
