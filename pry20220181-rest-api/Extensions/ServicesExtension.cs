@@ -29,6 +29,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IAdministeredDoseRepository, AdministeredDoseRepository>();
             services.AddScoped<IChildRepository, ChildRepository>();
             services.AddScoped<IDoseDetailRepository, DoseDetailRepository>();
+            services.AddScoped<IHealthCenterRepository, HealthCenterRepository>();
             services.AddScoped<IHealthPersonnelRepository, HealthPersonnelRepository>();
             services.AddScoped<IInventoryRepository, InventoryRepository>();
             services.AddScoped<IParentRepository, ParentRepository>();
@@ -49,6 +50,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddScoped<IChildService, ChildService>();
             services.AddScoped<IDosesService, DosesService>();
+            services.AddScoped<IHealthCenterService, HealthCenterService>();
             services.AddScoped<IHealthPersonnelService, HealthPersonnelService>();
             services.AddScoped<IInventoryService, InventoryService>();
             services.AddScoped<IParentService, ParentService>();
