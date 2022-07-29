@@ -7,7 +7,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace pry20220181_rest_api.Controllers
 {
-    [Route("health-center")]
+    [Route("health-centers")]
     [ApiController]
     public class HealthCenterController : ControllerBase
     {
