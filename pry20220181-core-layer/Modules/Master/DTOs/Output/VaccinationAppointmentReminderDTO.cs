@@ -15,9 +15,11 @@ namespace pry20220181_core_layer.Modules.Master.DTOs.Output
         public string Via { get; set; }
         public DateTime SendDate { get; set; }
         public int ParentId { get; set; }
-        //public int VaccinationCampaignId { get; set; }
         public int VaccinationAppointmentId { get; set; }
-        //public int DoseDetailId { get; set; }
+
+        public int HealthCenterId { get; set; }
+        public string HealthCenterName { get; set; }
+        public DateTime AppointmentDateTime { get; set; }
 
         #region Relations with another tables
         //TODO: Create the regarding DTO

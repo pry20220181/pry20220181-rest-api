@@ -36,6 +36,15 @@ namespace pry20220181_data_layer.Repositories.Master
                 .Where(r => r.VaccinationAppointmentId != 0).ToListAsync();
         }
 
+        public async Task<Reminder> GetVaccinationAppointmentReminderByIdAsync(int reminderId)
+        {
+            return await _dbContext.Reminders
+                .Where(r => r.ReminderId == reminderId && r.VaccinationAppointmentId != 0)
+                .Include(r=>r.VaccinationAppointment)
+                    .ThenInclude(v=>v.HealthCenter)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<List<Reminder>> GetAllVaccinationCampaignRemindersAsync()
         {
             return await _dbContext.Reminders

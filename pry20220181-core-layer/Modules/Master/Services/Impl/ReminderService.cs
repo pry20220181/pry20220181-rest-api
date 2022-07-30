@@ -52,6 +52,25 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
             return remindersToReturn;
         }
 
+        public async Task<VaccinationAppointmentReminderDTO> GetVaccinationAppointmentReminderByIdAsync(int reminderId)
+        {
+            var appointmentReminderFromDb = await _reminderRepository.GetVaccinationAppointmentReminderByIdAsync(reminderId);
+            if(appointmentReminderFromDb is null)
+            {
+                return null;
+            }
+            return new VaccinationAppointmentReminderDTO() {
+                ReminderId = appointmentReminderFromDb.ReminderId,
+                VaccinationAppointmentId = appointmentReminderFromDb.VaccinationAppointmentId,
+                AppointmentDateTime = appointmentReminderFromDb.VaccinationAppointment.AppointmentDateTime,
+                Via = appointmentReminderFromDb.Via,
+                SendDate = appointmentReminderFromDb.SendDate,
+                ParentId = appointmentReminderFromDb.ParentId,
+                HealthCenterId = appointmentReminderFromDb.VaccinationAppointment.HealthCenterId,
+                HealthCenterName = appointmentReminderFromDb.VaccinationAppointment.HealthCenter.Name
+            };
+        }
+
         public async Task<List<VaccinationCampaignReminderDTO>> GetAllVaccinationCampaignRemindersAsync()
         {
             var campaignRemindersFromDb = await _reminderRepository.GetAllVaccinationCampaignRemindersAsync();
@@ -88,5 +107,6 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
             }
             return remindersToReturn;
         }
+
     }
 }
