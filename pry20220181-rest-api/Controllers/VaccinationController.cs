@@ -2,12 +2,14 @@
 using Microsoft.AspNetCore.Mvc;
 using pry20220181_core_layer.Modules.Vaccination.DTOs.Input;
 using pry20220181_core_layer.Modules.Vaccination.DTOs.Output;
+using pry20220181_core_layer.Modules.Vaccination.Models;
 using pry20220181_core_layer.Modules.Vaccination.Services;
+using pry20220181_rest_api.Utils;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace pry20220181_rest_api.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [ApiController]
     [Route("vaccination")]
     public class VaccinationController : ControllerBase
@@ -49,10 +51,33 @@ namespace pry20220181_rest_api.Controllers
         }
 
         [HttpPost("administered-doses", Name = "RegisterAdministeredDose")]
-        public async Task<int> RegisterAdministeredDose([FromBody] AdministeredDoseCreationDTO administeredDoseCreationDTO)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [SwaggerResponse(200, "Register an Administered Dose", typeof(List<AdministeredDoseDTO>))]
+        public async Task<IResult> RegisterAdministeredDose([FromBody] AdministeredDoseCreationDTO administeredDoseCreationDTO)
         {
-            var registeredAdministeredDoseId = await _dosesService.CreateAdministeredDose(administeredDoseCreationDTO);
-            return registeredAdministeredDoseId;
+            try
+            {
+                var user = HttpContext.User;
+                var healthPersonnelId = Convert.ToInt32(user.Claims.FirstOrDefault(c => c.Type == CustomClaimTypes.EntityId).Value);
+                if (healthPersonnelId == 0)
+                {
+                    return Results.BadRequest();
+                }
+
+                administeredDoseCreationDTO.HealthPersonnelId = healthPersonnelId;
+
+                var registeredAdministeredDoseId = await _dosesService.CreateAdministeredDose(administeredDoseCreationDTO);
+                return Results.Ok(new
+                {
+                    AdministeredDoseId = registeredAdministeredDoseId
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message + "\nStacktrace " + ex.StackTrace);
+                return Results.Problem("Internal error", statusCode: 500);
+            }
         }
 
         [HttpGet("administered-doses", Name = "GetChildsAdministeredDoses")]
