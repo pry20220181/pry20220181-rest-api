@@ -1,4 +1,6 @@
-﻿using pry20220181_core_layer.Modules.Master.DTOs.Output;
+﻿using Microsoft.Extensions.Logging;
+using pry20220181_core_layer.Modules.Master.DTOs.Output;
+using pry20220181_core_layer.Modules.Master.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,14 +11,33 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
 {
     public class UserService : IUserService
     {
-        public Task<HealthPersonnelDTO> GetHealthPersonnelByUserIdAsync(string userId)
+        IUserRepository _userRepository;
+        ILogger<UserService> _logger;
+
+        public UserService(IUserRepository userRepository, ILogger<UserService> logger)
         {
-            throw new NotImplementedException();
+            _userRepository = userRepository;
+            _logger = logger;
         }
 
-        public Task<ParentDTO> GetParentByUserIdAsync(string userId)
+        public async Task<HealthPersonnelDTO> GetHealthPersonnelByUserIdAsync(string userId)
         {
-            throw new NotImplementedException();
+            var healthPersonnelFromDb = await _userRepository.GetHealthPersonnelByUserIdAsync(userId);
+            return new HealthPersonnelDTO()
+            {
+                HealthPersonnelId = healthPersonnelFromDb.HealthPersonnelId,
+                DNI = healthPersonnelFromDb.DNI
+            };
+        }
+
+        public async Task<ParentDTO> GetParentByUserIdAsync(string userId)
+        {
+            var parentFromDb = await _userRepository.GetParentByUserIdAsync(userId);
+            return new ParentDTO()
+            {
+                ParentId = parentFromDb.ParentId,
+                DNI = parentFromDb.DNI
+            };
         }
     }
 }
