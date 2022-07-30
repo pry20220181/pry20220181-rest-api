@@ -48,7 +48,7 @@ namespace pry20220181_rest_api.Controllers
 
         [HttpGet("vaccination-appointments/{reminderId}", Name = "GetVaccinationAppointmentReminderById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [SwaggerResponse(200, "Get Vaccination Appointment Reminder By Id", typeof(List<VaccinationAppointmentReminderDTO>))]
+        [SwaggerResponse(200, "Get Vaccination Appointment Reminder By Id", typeof(VaccinationAppointmentReminderDTO))]
         public async Task<IResult> GetVaccinationAppointmentReminderById([FromRoute] int reminderId)
         {
             try
@@ -77,6 +77,26 @@ namespace pry20220181_rest_api.Controllers
                 return Results.Ok(new
                 {
                     VaccinationCampaignReminders = remindersFromDb
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message + "\nStacktrace " + ex.StackTrace);
+                return Results.Problem("Internal error", statusCode: 500);
+            }
+        }
+
+        [HttpGet("vaccination-campaigns/{reminderId}", Name = "GetVaccinationCampaignsReminderById")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [SwaggerResponse(200, "Get Vaccination Campaigns Reminder By Id", typeof(VaccinationCampaignReminderDTO))]
+        public async Task<IResult> GetVaccinationCampaignsReminderById([FromRoute] int reminderId)
+        {
+            try
+            {
+                var remindersFromDb = await _reminderService.GetVaccinationCampaignReminderByIdAsync(reminderId);
+                return Results.Ok(new
+                {
+                    VaccinationCampaignReminder = remindersFromDb
                 });
             }
             catch (Exception ex)

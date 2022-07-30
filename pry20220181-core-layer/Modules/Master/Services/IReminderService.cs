@@ -14,6 +14,7 @@ namespace pry20220181_core_layer.Modules.Master.Services
         public Task<List<VaccinationAppointmentReminderDTO>> GetAllVaccinationAppointmentRemindersAsync();
         public Task<VaccinationAppointmentReminderDTO> GetVaccinationAppointmentReminderByIdAsync(int reminderId);
         public Task<List<VaccinationCampaignReminderDTO>> GetAllVaccinationCampaignRemindersAsync();
+        public Task<VaccinationCampaignReminderDTO> GetVaccinationCampaignReminderByIdAsync(int reminderId);
         public Task<List<DoseReminderDTO>> GetAllDoseRemindersByParentIdAsync(int parentId);
     }
 }

@@ -51,6 +51,14 @@ namespace pry20220181_data_layer.Repositories.Master
                     .Where(r => r.VaccinationCampaignId != 0).ToListAsync();
         }
 
+        public async Task<Reminder> GetVaccinationCampaignReminderByIdAsync(int reminderId)
+        {
+            return await _dbContext.Reminders
+                .Where(r => r.ReminderId == reminderId && r.VaccinationCampaignId != 0)
+                .Include(r => r.VaccinationCampaign)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task CreateRangeAsync(List<Reminder> reminders)
         {
             await _dbContext.Reminders.AddRangeAsync(reminders);
@@ -98,5 +106,7 @@ namespace pry20220181_data_layer.Repositories.Master
             _logger.LogInformation($"{remindersToDelete.Count()} reminders removed");
             await _dbContext.SaveChangesAsync();
         }
+
+
     }
 }
