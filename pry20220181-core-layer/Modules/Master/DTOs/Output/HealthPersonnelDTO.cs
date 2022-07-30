@@ -8,6 +8,7 @@ namespace pry20220181_core_layer.Modules.Master.DTOs.Output
 {
     public class HealthPersonnelDTO
     {
+        public int HealthPersonnelId { get; set; }
         public string DNI { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
