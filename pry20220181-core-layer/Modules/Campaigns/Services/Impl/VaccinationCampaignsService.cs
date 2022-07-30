@@ -74,9 +74,9 @@ namespace pry20220181_core_layer.Modules.Campaigns.Services.Impl
             return vaccinationCampaignToReturn;
         }
 
-        public async Task<List<VaccinationCampaignDTO>> GetVaccinationCampaignsByHealthCenter(int healthCenterId)
+        public async Task<List<VaccinationCampaignDTO>> GetVaccinationCampaignsByHealthCenter(int healthCenterId, DateTime sinceDate)
         {
-            var vaccinationCampaignsFromDb = await _vaccinationCampaignRepository.GetByHealthCenterIdAsync(healthCenterId);
+            var vaccinationCampaignsFromDb = await _vaccinationCampaignRepository.GetByHealthCenterIdAsync(healthCenterId, sinceDate);
             var vaccinationCampaignsToReturn = new List<VaccinationCampaignDTO>();
             foreach (var vaccinationCampaign in vaccinationCampaignsFromDb)
             {

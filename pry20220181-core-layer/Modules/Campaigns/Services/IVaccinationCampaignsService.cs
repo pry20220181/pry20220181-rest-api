@@ -10,7 +10,7 @@ namespace pry20220181_core_layer.Modules.Campaigns.Services
 {
     public interface IVaccinationCampaignsService
     {
-        public Task<List<VaccinationCampaignDTO>> GetVaccinationCampaignsByHealthCenter(int healthCenterId);
+        public Task<List<VaccinationCampaignDTO>> GetVaccinationCampaignsByHealthCenter(int healthCenterId, DateTime sinceDate);
         /// <summary>
         /// Get the Vaccination Campaign with its related info (What vaccines would be put and Where would be)
         /// </summary>

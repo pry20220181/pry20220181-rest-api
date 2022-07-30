@@ -19,11 +19,11 @@ namespace pry20220181_data_layer.Repositories.Campaigns
             _dbContext = dbContext;
         }
 
-        public async Task<List<VaccinationCampaign>> GetByHealthCenterIdAsync(int healthCenterId)
+        public async Task<List<VaccinationCampaign>> GetByHealthCenterIdAsync(int healthCenterId, DateTime sinceDate)
         {
             var locations = await _dbContext.VaccinationCampaignLocations
                 .Include(l => l.VaccinationCampaign)
-                .Where(x => x.HealthCenterId == healthCenterId)
+                .Where(x => x.HealthCenterId == healthCenterId && x.VaccinationCampaign.EndDateTime >= DateTime.Parse(sinceDate.ToShortDateString()))
                 .ToListAsync();
             return locations.Select(l => l.VaccinationCampaign).ToList();
         }

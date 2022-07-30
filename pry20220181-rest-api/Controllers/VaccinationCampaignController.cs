@@ -25,13 +25,18 @@ namespace pry20220181_rest_api.Controllers
         }
 
         [HttpGet(Name = "GetCampaignsByHealthCenter")]
-        public async Task<IResult> GetByHealthCenterId([FromQuery] int healthCenterId = 0)
+        public async Task<IResult> GetByHealthCenterId([FromQuery] int healthCenterId = 0, [FromQuery] string? sinceDate = "None")
         {
             if (healthCenterId == 0)
             {
                 return Results.BadRequest("HealthCenterId is required");
             }
-            var vaccinationCampaigns = await _vaccinationCampaignsService.GetVaccinationCampaignsByHealthCenter(healthCenterId);
+            DateTime sinceDateParameter = DateTime.Now;
+            if(sinceDate != "None")
+            {
+                sinceDateParameter = DateTime.Parse(sinceDate);
+            }
+            var vaccinationCampaigns = await _vaccinationCampaignsService.GetVaccinationCampaignsByHealthCenter(healthCenterId, sinceDateParameter);
             return Results.Ok(new
             {
                 VaccinationCampaigns = vaccinationCampaigns
