@@ -69,9 +69,13 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
                 _logger.LogInformation($"Something was wrong creating the vaccine {vaccineCreationDTO.Name}");
                 return 0;
             }
-            
+
             #endregion
 
+            //TODO: Remove la logica de creacion de Vaccination Scheme, ya que este ya viene desde el front, lo unico que habria
+            // que crear aqui es la relacion Vac. Scheme con la nueva Vacuna, es decir el Vac. Scheme Detail
+            // OJO: se tiene que crear un metodo en el repository que traiga los esquemas en base a una lista de IDs (Guiarse de GetByDosesIdList)
+            // , esto ya que anteriormente se mandaba la info del Scheme desde el front
             var registeredVaccinationSchemes = await _vaccinationSchemeRepository.GetAllAsync();
             var vaccinationSchemes = new List<VaccinationScheme>();
             var vaccinationSchemesToCreate = new List<VaccinationScheme>();
