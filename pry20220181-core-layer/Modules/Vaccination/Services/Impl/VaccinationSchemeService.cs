@@ -1,4 +1,5 @@
 ﻿using pry20220181_core_layer.Modules.Vaccination.DTOs.Output;
+using pry20220181_core_layer.Modules.Vaccination.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,25 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
 {
     public class VaccinationSchemeService : IVaccinationSchemeService
     {
-        public List<VaccinationSchemeDTO> GetAllVaccinationSchemes()
+        private readonly IVaccinationSchemeRepository _vaccinationSchemeRepository;
+
+        public VaccinationSchemeService(IVaccinationSchemeRepository vaccinationSchemeRepository)
         {
-            throw new NotImplementedException();
+            _vaccinationSchemeRepository = vaccinationSchemeRepository;
+        }
+
+        public async Task<List<VaccinationSchemeDTO>> GetAllVaccinationSchemes()
+        {
+            var schemesFromDb = await _vaccinationSchemeRepository.GetAllAsync();
+
+            return schemesFromDb.Select(s => new VaccinationSchemeDTO()
+            {
+                VaccinationSchemeId = s.VaccinationSchemeId,
+                Name = s.Name,
+                Description = s.Name,
+                InitialAge = s.InitialAge,
+                FinalAge = s.FinalAge
+            }).ToList();
         }
     }
 }

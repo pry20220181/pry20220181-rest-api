@@ -59,6 +59,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IVaccinationAppointmentService, VaccinationAppointmentService>();
             services.AddScoped<IVaccinationCampaignsService, VaccinationCampaignsService>();
+            services.AddScoped<IVaccinationSchemeService, VaccinationSchemeService>();
             services.AddScoped<IVaccineService, VaccineService>();
         }
     }

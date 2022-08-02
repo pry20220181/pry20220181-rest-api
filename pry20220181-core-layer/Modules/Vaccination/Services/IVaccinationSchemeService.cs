@@ -9,6 +9,6 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services
 {
     public interface IVaccinationSchemeService
     {
-        public List<VaccinationSchemeDTO> GetAllVaccinationSchemes();
+        public Task<List<VaccinationSchemeDTO>> GetAllVaccinationSchemes();
     }
 }
