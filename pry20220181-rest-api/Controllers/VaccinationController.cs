@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using pry20220181_core_layer.Modules.Master.Models;
 using pry20220181_core_layer.Modules.Vaccination.DTOs.Input;
 using pry20220181_core_layer.Modules.Vaccination.DTOs.Output;
 using pry20220181_core_layer.Modules.Vaccination.Models;
 using pry20220181_core_layer.Modules.Vaccination.Services;
 using pry20220181_rest_api.Utils;
 using Swashbuckle.AspNetCore.Annotations;
+using static pry20220181_core_layer.Modules.Master.DTOs.Output.VaccinationCardDTO;
 
 namespace pry20220181_rest_api.Controllers
 {
@@ -15,12 +17,36 @@ namespace pry20220181_rest_api.Controllers
     public class VaccinationController : ControllerBase
     {
         private readonly IDosesService _dosesService;
+        private readonly IVaccinationSchemeService _vaccinationSchemeService;
         ILogger<VaccinationController> _logger;
 
-        public VaccinationController(IDosesService dosesService, ILogger<VaccinationController> logger)
+        public VaccinationController(IDosesService dosesService, ILogger<VaccinationController> logger, IVaccinationSchemeService vaccinationSchemeService)
         {
             _dosesService = dosesService;
             _logger = logger;
+            _vaccinationSchemeService = vaccinationSchemeService;
+        }
+
+        [HttpGet("schemes", Name = "GetVaccinationSchemes")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [SwaggerResponse(200, "Get Vaccination Schemes", typeof(List<VaccinationSchemeDTO>))]
+        public async Task<IResult> GetVaccinationSchemes()
+{
+            try
+            {
+                var vaccinationSchemes = await _vaccinationSchemeService.GetAllVaccinationSchemes();
+
+                return Results.Ok(new
+                {
+                    VaccinationSchemes = vaccinationSchemes
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message + "\nStacktrace " + ex.StackTrace);
+                return Results.Problem("Internal error", statusCode: 500);
+            }
         }
 
         [HttpGet("remaining-doses", Name = "GetChildsRemainingDoses")]
@@ -47,7 +73,6 @@ namespace pry20220181_rest_api.Controllers
                 _logger.LogError(ex.Message + "\nStacktrace " + ex.StackTrace);
                 return Results.Problem("Internal error", statusCode: 500);
             }
-
         }
 
         [HttpPost("administered-doses", Name = "RegisterAdministeredDose")]
