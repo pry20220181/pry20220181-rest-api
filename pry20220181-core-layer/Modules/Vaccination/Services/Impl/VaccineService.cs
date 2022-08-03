@@ -72,41 +72,9 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
 
             #endregion
 
-            //TODO: Remove la logica de creacion de Vaccination Scheme, ya que este ya viene desde el front, lo unico que habria
-            // que crear aqui es la relacion Vac. Scheme con la nueva Vacuna, es decir el Vac. Scheme Detail
-            // OJO: se tiene que crear un metodo en el repository que traiga los esquemas en base a una lista de IDs (Guiarse de GetByDosesIdList)
-            // , esto ya que anteriormente se mandaba la info del Scheme desde el front
-            var registeredVaccinationSchemes = await _vaccinationSchemeRepository.GetAllAsync();
             var vaccinationSchemes = new List<VaccinationScheme>();
-            var vaccinationSchemesToCreate = new List<VaccinationScheme>();
             var vaccinatioSchemeDetailToCreate = new List<VaccinationSchemeDetail>();
             var vaccineDosesToCreate = new List<DoseDetail>();
-
-            #region Create the VaccinationScheme if does not exist, and if exists, get its ID
-            //After saving in the DB, all the VaccinationSchemes has its Id.
-            foreach (var vaccinationSchemeItem in vaccineCreationDTO.VaccinationSchemes)
-            {
-                int vaccinationSchemeId = 0;
-                if (registeredVaccinationSchemes.Exists(v => v.Name == vaccinationSchemeItem.Name))
-                {
-                    vaccinationSchemeId = registeredVaccinationSchemes.First(v => v.Name == vaccinationSchemeItem.Name).VaccinationSchemeId;
-                }
-
-                VaccinationScheme vaccinationScheme = new VaccinationScheme()
-                {
-                    VaccinationSchemeId = vaccinationSchemeId,
-                    Name = vaccinationSchemeItem.Name,
-                    InitialAge = vaccinationSchemeItem.InitialAge,
-                    FinalAge = vaccinationSchemeItem.FinalAge
-                };
-
-                vaccinationSchemes.Add(vaccinationScheme);
-            }
-            vaccinationSchemesToCreate = vaccinationSchemes.Where(v => v.VaccinationSchemeId == 0).ToList();
-            //Here the all the items of vaccinationSchemes has its Id.
-            var createdVaccineSchemes = await _vaccinationSchemeRepository.CreateRangeAsync(vaccinationSchemesToCreate);
-            _logger.LogInformation($"{createdVaccineSchemes.Count()} vaccination schemes created for the Vaccine {vaccineCreationDTO.Name}");
-            #endregion
 
             #region Assign the new Vaccine to its VaccinationScheme (The Table VaccinationSchemeDetail is the M:M table of the relationship between Vaccine and VaccinationScheme)
             //One Vaccine can have many VaccinationSchemes and one VaccinationScheme can have many Vaccines.
@@ -119,7 +87,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
                     NumberOfDosesToAdminister = vaccinationSchemeItem.NumberOfDoses,
                     PossibleEffectsPostVaccine = vaccinationSchemeItem.PossibleEffectsPostVaccine,
                     VaccineId = vaccineId,
-                    VaccinationSchemeId = vaccinationSchemes.FirstOrDefault(v => v.Name == vaccinationSchemeItem.Name).VaccinationSchemeId
+                    VaccinationSchemeId = vaccinationSchemeItem.VaccinationSchemeId
                 };
                 vaccinatioSchemeDetailToCreate.Add(vaccinationSchemeDetailToCreate);
             }
@@ -130,8 +98,9 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
             #region We register all the Details (Doses) about the vaccinationSchemeDetail of this Vaccine
             foreach (var vaccinationSchemeItem in vaccineCreationDTO.VaccinationSchemes)
             {
-                var vaccinationSchemeId = vaccinationSchemes.FirstOrDefault(v => v.Name == vaccinationSchemeItem.Name).VaccinationSchemeId;
-                var vaccinationSchemeDetailId = createdVaccinationSchemeDetails.FirstOrDefault(v => v.VaccinationSchemeId == vaccinationSchemeId).VaccinationSchemeDetailId;
+                var vaccinationSchemeDetailId = createdVaccinationSchemeDetails
+                    .FirstOrDefault(v => v.VaccinationSchemeId == vaccinationSchemeItem.VaccinationSchemeId)
+                    .VaccinationSchemeDetailId;
                 foreach (var vaccineDose in vaccinationSchemeItem.VaccineDoses)
                 {
                     DoseDetail doseDetailToCreate = new DoseDetail()
