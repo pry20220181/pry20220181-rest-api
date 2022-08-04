@@ -40,16 +40,41 @@ namespace pry20220181_data_layer.Repositories.Vaccination
 
         public async Task<List<AdministeredDose>> GetByChildIdWithAllRelatedInfoAsync(int childId)
         {
-            return await _dbContext.AdministeredDoses   
-                .Include(a=>a.DoseDetail)
-                    .ThenInclude(d=>d.VaccinationSchemeDetail.VaccinationScheme)
-                .Include(a => a.DoseDetail)
-                    .ThenInclude(d => d.VaccinationSchemeDetail.Vaccine)
-                .Include(a=>a.HealthCenter)
-                .Include(a=>a.HealthPersonnel)
-                    .ThenInclude(h => h.User)
-                .Where(x => x.ChildId == childId)
+            var administeredDoses = await _blockchainClient.GetByChildIdAsync(childId);
+
+            var dosesDetailIds = administeredDoses.Select(d => d.DoseDetailId);
+            var dosesDetails = await _dbContext.DosesDetails
+                .Include(d => d.VaccinationSchemeDetail.VaccinationScheme)
+                .Include(d => d.VaccinationSchemeDetail.Vaccine)
+                .Where(d => dosesDetailIds.Contains(d.DoseDetailId))
                 .ToListAsync();
+
+            var healthCenterIds = administeredDoses.Select(d => d.HealthCenterId);
+            var healthCenters = await _dbContext.HealthCenters.Where(h => healthCenterIds.Contains(h.HealthCenterId)).ToListAsync();
+
+            var healthPersonnelIds = administeredDoses.Select(d => d.HealthPersonnelId);
+            var healthPersonnels = await _dbContext.HealthPersonnel
+                .Include(h => h.User)
+                .Where(h => healthPersonnelIds.Contains(h.HealthPersonnelId)).ToListAsync();
+
+            foreach (var administeredDose in administeredDoses)
+            {
+                administeredDose.DoseDetail = dosesDetails.FirstOrDefault(d => d.DoseDetailId == administeredDose.DoseDetailId);
+                administeredDose.HealthCenter = healthCenters.FirstOrDefault(h => h.HealthCenterId == administeredDose.HealthCenterId);
+                administeredDose.HealthPersonnel = healthPersonnels.FirstOrDefault(h => h.HealthPersonnelId == administeredDose.HealthPersonnelId);
+            }
+
+            return administeredDoses;
+            //return await _dbContext.AdministeredDoses   
+            //    .Include(a=>a.DoseDetail)
+            //        .ThenInclude(d=>d.VaccinationSchemeDetail.VaccinationScheme)
+            //    .Include(a => a.DoseDetail)
+            //        .ThenInclude(d => d.VaccinationSchemeDetail.Vaccine)
+            //    .Include(a=>a.HealthCenter)
+            //    .Include(a=>a.HealthPersonnel)
+            //        .ThenInclude(h => h.User)
+            //    .Where(x => x.ChildId == childId)
+            //    .ToListAsync();
         }
 
         public async Task<List<AdministeredDose>> GetByDosesIdList(List<int> doseDetailIds)
