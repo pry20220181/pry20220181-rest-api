@@ -77,7 +77,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
             return remainingDosesToAdministerToReturn;
         }
 
-        public async Task<int> CreateAdministeredDose(AdministeredDoseCreationDTO administeredDoseCreationDTO)
+        public async Task<string> CreateAdministeredDose(AdministeredDoseCreationDTO administeredDoseCreationDTO)
         {
             #region Register the administered dose
             int childId = administeredDoseCreationDTO.ChildId;
