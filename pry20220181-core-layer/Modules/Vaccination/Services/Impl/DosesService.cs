@@ -94,14 +94,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
             _logger.LogInformation($"Administered dose {adminesteredDoseId} created (DoseDetailId: {doseDetailid}, ChildId: {childId})");
             #endregion
 
-            #region Delete the reminder for this DoseDetail and Child if exists //TODO: Queda poner para eliminar varios reminder a la vez, porque puede haber mas deu n reminder creado para esta key
-            //var reminderIdToDelete = await _reminderRepository
-            //    .GetReminderByDoseDetailAndChildIdAsync(doseDetailid, childId);
-            //if (reminderIdToDelete > 0)
-            //{
-            //    _reminderRepository.DeleteReminderAsync(reminderIdToDelete);
-            //    _logger.LogInformation($"A reminder of the DoseDetail {doseDetailid} for the child {childId} existed. It has just removed");
-            //}
+            #region Delete the reminder for this DoseDetail and Child if exists
             await _reminderRepository.DeleteRemindersByDoseDetailAndChildIdAsync(doseDetailid, childId);
             #endregion
 
@@ -135,9 +128,14 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
             {
                 var parentId = child.ChildParents[0].ParentId;
                 var remindersToCreate = new List<Reminder>();
+                var remindersForThisParent = await _reminderRepository.GetAllDoseReminderByParentIdAsync(parentId);
 
                 foreach (var remainingDose in remainingDosesToAdministerThatCanBePut)
                 {
+                    if(remindersForThisParent.Exists(r=>r.DoseDetailId == doseDetailid && r.ChildId == childId))
+                    {//This for dont create a reminder of a doseDetailId-ChildId Pair more than once
+                        continue;
+                    }
                     remindersToCreate.Add(new Reminder()
                     {
                         ChildId = childId,
@@ -148,8 +146,6 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
                     });
                 }
                 await _reminderRepository.CreateRangeAsync(remindersToCreate);
-                //TODO> Queda ver un mecanismo para que no se registren recordatorios para pares Doses/Child repetidos, si existe un recordatorio para este par, deberia eliminarse
-                //Podria el metodo eliminar rango de reminder for Child y Dose Id, convertirlo a un ByDOSESIDSAndChildId, para asi eliminar todos los reminders del ni;o para las demas dosis
                 _logger.LogInformation($"{remindersToCreate.Count} reminders has been created for the parent {parentId} of their child about their reamining doses apt to administer");
             }
             #endregion
