@@ -132,7 +132,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
 
                 foreach (var remainingDose in remainingDosesToAdministerThatCanBePut)
                 {
-                    if(remindersForThisParent.Exists(r=>r.DoseDetailId == doseDetailid && r.ChildId == childId))
+                    if(remindersForThisParent.Exists(r=>r.DoseDetailId == remainingDose.DoseDetailId && r.ChildId == childId))
                     {//This for dont create a reminder of a doseDetailId-ChildId Pair more than once
                         continue;
                     }
