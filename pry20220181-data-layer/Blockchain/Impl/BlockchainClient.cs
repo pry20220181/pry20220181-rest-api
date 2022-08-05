@@ -40,11 +40,11 @@ namespace pry20220181_data_layer.Blockchain.Impl
                 });
 
                 StringContent httpContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
-                _logger.LogInformation("Llamada a API de Workata iniciada en " + DateTime.Now);
+                _logger.LogInformation("Llamada a API de Blockchain iniciada en " + DateTime.Now);
 
                 var response = await httpClient.PostAsync($"{_blockchainClientConfiguration.BlockchainServiceUrl}/administered-doses", httpContent);
                 var workatoResponse = await response.Content.ReadFromJsonAsync<BlockchainServiceResponse>();
-                _logger.LogInformation("Llamada a API de Workata finalizada en " + DateTime.Now);
+                _logger.LogInformation("Llamada a API de Blockchain finalizada en " + DateTime.Now);
                 _logger.LogInformation($"Respuesta del Servicio: ");
                 //return workatoResponse;
             }
@@ -54,6 +54,7 @@ namespace pry20220181_data_layer.Blockchain.Impl
             return "nuevoGuid";
         }
         //TODO: LOS ENDPOINTS HARDCODEADOS, LUEGO PARAMETRIZADOS
+        //TODO
         public async Task<List<AdministeredDose>> GetByChildIdAsync(int childId)
         {
             using (var httpClient = new HttpClient())
@@ -71,11 +72,11 @@ namespace pry20220181_data_layer.Blockchain.Impl
                 //});
 
                 //StringContent httpContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
-                _logger.LogInformation("Llamada a API de Workata iniciada en " + DateTime.Now);
+                _logger.LogInformation("Llamada a API de Blockchain iniciada en " + DateTime.Now);
 
                 var response = await httpClient.GetAsync($"{_blockchainClientConfiguration.BlockchainServiceUrl}/administered-doses?childId={childId}");
                 var workatoResponse = await response.Content.ReadFromJsonAsync<List<BlockchainServiceResponse>>();
-                _logger.LogInformation("Llamada a API de Workata finalizada en " + DateTime.Now);
+                _logger.LogInformation("Llamada a API de Blockchain finalizada en " + DateTime.Now);
                 _logger.LogInformation($"Respuesta del Servicio: ");
                 //return workatoResponse;
             }
