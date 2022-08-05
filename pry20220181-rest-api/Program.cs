@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using pry20220181_core_layer.Modules.Master.Models;
 using pry20220181_data_layer;
+using pry20220181_data_layer.Utils;
 using pry20220181_rest_api.Controllers;
 using pry20220181_rest_api.Security.Models;
 using System.Text;
@@ -72,6 +73,9 @@ builder.Services
 #region Configure App Settings Objects
 builder.Services.Configure<JwtSection>(configuration.GetSection("Jwt"));
 builder.Services.AddScoped(sp => sp.GetService<IOptionsSnapshot<JwtSection>>().Value);
+
+builder.Services.Configure<BlockchainClientConfiguration>(configuration.GetSection("BlockchainService"));
+builder.Services.AddScoped(sp => sp.GetService<IOptionsSnapshot<BlockchainClientConfiguration>>().Value);
 #endregion
 
 #region Configure my custom classes
