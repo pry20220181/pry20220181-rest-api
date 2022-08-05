@@ -10,7 +10,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Models
 {
     public class AdministeredDose
     {
-        public int AdministeredDoseId { get; set; }
+        public string AdministeredDoseId { get; set; }
         public int DoseDetailId { get; set; }
         public int ChildId { get; set; }
         public int HealthCenterId { get; set; }

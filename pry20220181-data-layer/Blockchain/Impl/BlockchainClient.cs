@@ -43,15 +43,15 @@ namespace pry20220181_data_layer.Blockchain.Impl
                 _logger.LogInformation("Llamada a API de Blockchain iniciada en " + DateTime.Now);
 
                 var response = await httpClient.PostAsync($"{_blockchainClientConfiguration.BlockchainServiceUrl}/administered-doses", httpContent);
-                var workatoResponse = await response.Content.ReadFromJsonAsync<BlockchainServiceResponse>();
+                var blockchainResponse = await response.Content.ReadFromJsonAsync<BlockchainServiceResponse>();
                 _logger.LogInformation("Llamada a API de Blockchain finalizada en " + DateTime.Now);
                 _logger.LogInformation($"Respuesta del Servicio: ");
-                //return workatoResponse;
+                return blockchainResponse.administeredDoseId;
             }
 
-            BlockchainInMemory.AdministeredDoses.Add(administeredDose);
+            //BlockchainInMemory.AdministeredDoses.Add(administeredDose);
 
-            return "nuevoGuid";
+            //return "nuevoGuid";
         }
         //TODO: LOS ENDPOINTS HARDCODEADOS, LUEGO PARAMETRIZADOS
         //TODO
@@ -60,28 +60,26 @@ namespace pry20220181_data_layer.Blockchain.Impl
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Add("Api-Key", _blockchainClientConfiguration.BlockchainServiceKey);
-                //string json = JsonConvert.SerializeObject(new
-                //{
-                //    doseId = administeredDose.DoseDetailId,
-                //    childId = administeredDose.ChildId,
-                //    healthCenterId = administeredDose.HealthCenterId,
-                //    healthPersonnelId = administeredDose.HealthPersonnelId,
-                //    doseDate = administeredDose.DoseDate,
-                //    vaccinationCampaignId = administeredDose.VaccinationCampaignId,
-                //    vaccinationAppointmentId = administeredDose.VaccinationAppointmentId
-                //});
 
-                //StringContent httpContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
                 _logger.LogInformation("Llamada a API de Blockchain iniciada en " + DateTime.Now);
 
                 var response = await httpClient.GetAsync($"{_blockchainClientConfiguration.BlockchainServiceUrl}/administered-doses?childId={childId}");
-                var workatoResponse = await response.Content.ReadFromJsonAsync<List<BlockchainServiceResponse>>();
+                var blockchainResponse = await response.Content.ReadFromJsonAsync<List<BlockchainServiceResponse>>();
                 _logger.LogInformation("Llamada a API de Blockchain finalizada en " + DateTime.Now);
-                _logger.LogInformation($"Respuesta del Servicio: ");
-                //return workatoResponse;
+                return blockchainResponse.Select(r => new AdministeredDose()
+                {
+                    AdministeredDoseId = r.administeredDoseId,
+                    DoseDetailId = r.doseId,
+                    ChildId = r.childId,
+                    DoseDate = r.doseDate,
+                    HealthCenterId = r.healthCenterId,
+                    HealthPersonnelId = r.healthPersonnelId,
+                    VaccinationAppointmentId = r.vaccinationAppointmentId,
+                    VaccinationCampaignId = r.vaccinationCampaignId
+                }).ToList();
             }
 
-            return BlockchainInMemory.AdministeredDoses.Where(d => d.ChildId == childId).ToList();
+            //return BlockchainInMemory.AdministeredDoses.Where(d => d.ChildId == childId).ToList();
         }
     }
 }
