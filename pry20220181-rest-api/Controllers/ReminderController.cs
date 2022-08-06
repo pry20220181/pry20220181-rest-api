@@ -38,7 +38,7 @@ namespace pry20220181_rest_api.Controllers
                 {
                     sendDateParameter = DateTime.Parse(sendDate);
                 }
-                var remindersFromDb = await _reminderService.GetAllVaccinationAppointmentRemindersAsync();
+                var remindersFromDb = await _reminderService.GetAllVaccinationAppointmentRemindersAsync(sendDateParameter);
                 return Results.Ok(new
                 {
                     VaccinationAppointmentReminders = remindersFromDb
@@ -84,7 +84,7 @@ namespace pry20220181_rest_api.Controllers
                     sendDateParameter = DateTime.Parse(sendDate);
                 }
 
-                var remindersFromDb = await _reminderService.GetAllVaccinationCampaignRemindersAsync();
+                var remindersFromDb = await _reminderService.GetAllVaccinationCampaignRemindersAsync(sendDateParameter);
                 return Results.Ok(new
                 {
                     VaccinationCampaignReminders = remindersFromDb
@@ -150,6 +150,17 @@ namespace pry20220181_rest_api.Controllers
                 _logger.LogError(ex.Message + "\nStacktrace " + ex.StackTrace);
                 return Results.Problem("Internal error", statusCode: 500);
             }
+        }
+
+        [HttpDelete("doses", Name = "DeleteAlreadySentReminders")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [SwaggerResponse(200, "Delete Already Sent Reminders", typeof(int))]
+        public async Task<IResult> DeleteAlreadySentReminders([FromBody] List<int> AlreadySentReminders)
+        {
+            return Results.Ok(new
+            {
+                DeletedReminders = AlreadySentReminders.Count
+            });
         }
     }
 }

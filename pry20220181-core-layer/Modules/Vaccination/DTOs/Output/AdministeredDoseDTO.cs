@@ -8,7 +8,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.DTOs.Output
 {
     public class AdministeredDoseDTO
     {
-        public int AdministeredDoseId { get; set; }
+        public string AdministeredDoseId { get; set; }
         public string VaccineName { get; set; }
         public int DoseNumber { get; set; }
         public DateTime AdministrationDate { get; set; }

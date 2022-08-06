@@ -17,5 +17,6 @@ namespace pry20220181_core_layer.Modules.Master.Services
         public Task<VaccinationCampaignReminderDTO> GetVaccinationCampaignReminderByIdAsync(int reminderId);
         public Task<List<DoseReminderDTO>> GetAllDoseRemindersByParentIdAsync(int parentId);
         public Task<List<DoseReminderDTO>> GetAllDoseRemindersAsync(DateTime sendDate);
+        public Task<int> DeleteAlreadySentReminders(List<int> AlreadySentReminders);
     }
 }

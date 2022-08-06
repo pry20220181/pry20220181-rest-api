@@ -12,7 +12,7 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
 {
     public class ReminderService : IReminderService
     {
-    private IReminderRepository _reminderRepository { get; set; }
+        private IReminderRepository _reminderRepository { get; set; }
 
         public ReminderService(IReminderRepository reminderRepository)
         {
@@ -55,11 +55,12 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
         public async Task<VaccinationAppointmentReminderDTO> GetVaccinationAppointmentReminderByIdAsync(int reminderId)
         {
             var appointmentReminderFromDb = await _reminderRepository.GetVaccinationAppointmentReminderByIdAsync(reminderId);
-            if(appointmentReminderFromDb is null)
+            if (appointmentReminderFromDb is null)
             {
                 return null;
             }
-            return new VaccinationAppointmentReminderDTO() {
+            return new VaccinationAppointmentReminderDTO()
+            {
                 ReminderId = appointmentReminderFromDb.ReminderId,
                 VaccinationAppointmentId = appointmentReminderFromDb.VaccinationAppointmentId,
                 AppointmentDateTime = appointmentReminderFromDb.VaccinationAppointment.AppointmentDateTime,
@@ -145,6 +146,11 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
                 });
             }
             return remindersToReturn;
+        }
+
+        public Task<int> DeleteAlreadySentReminders(List<int> AlreadySentReminders)
+        {
+            throw new NotImplementedException();
         }
     }
 }

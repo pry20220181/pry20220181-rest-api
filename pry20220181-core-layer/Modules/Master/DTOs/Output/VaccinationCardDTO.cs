@@ -39,7 +39,7 @@ namespace pry20220181_core_layer.Modules.Master.DTOs.Output
                     public int DoseId { get; set; }
                     public int DoseNumber { get; set; }
                     public bool Administered { get; set; }
-                    public int AdministeredDoseId { get; set; }
+                    public string AdministeredDoseId { get; set; }
                     public DateTime? AdministrationDate { get; set; }
                     public string PutWhen { get; set; }
                 }
