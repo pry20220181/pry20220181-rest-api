@@ -34,9 +34,9 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
             return await _reminderRepository.CreateAsync(reminderToCreate);
         }
 
-        public async Task<List<VaccinationAppointmentReminderDTO>> GetAllVaccinationAppointmentRemindersAsync()
+        public async Task<List<VaccinationAppointmentReminderDTO>> GetAllVaccinationAppointmentRemindersAsync(DateTime sendDate)
         {
-            var appointmentRemindersFromDb = await _reminderRepository.GetAllVaccinationAppointmentRemindersAsync();
+            var appointmentRemindersFromDb = await _reminderRepository.GetAllVaccinationAppointmentRemindersAsync(sendDate);
             List<VaccinationAppointmentReminderDTO> remindersToReturn = new List<VaccinationAppointmentReminderDTO>();
             foreach (var reminder in appointmentRemindersFromDb)
             {
@@ -71,9 +71,9 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
             };
         }
 
-        public async Task<List<VaccinationCampaignReminderDTO>> GetAllVaccinationCampaignRemindersAsync()
+        public async Task<List<VaccinationCampaignReminderDTO>> GetAllVaccinationCampaignRemindersAsync(DateTime sendDate)
         {
-            var campaignRemindersFromDb = await _reminderRepository.GetAllVaccinationCampaignRemindersAsync();
+            var campaignRemindersFromDb = await _reminderRepository.GetAllVaccinationCampaignRemindersAsync(sendDate);
             List<VaccinationCampaignReminderDTO> remindersToReturn = new List<VaccinationCampaignReminderDTO>();
             foreach (var reminder in campaignRemindersFromDb)
             {
@@ -112,6 +112,25 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
         public async Task<List<DoseReminderDTO>> GetAllDoseRemindersByParentIdAsync(int parentId)
         {
             var doseRemindersFromDb = await _reminderRepository.GetAllDoseReminderByParentIdAsync(parentId);
+            List<DoseReminderDTO> remindersToReturn = new List<DoseReminderDTO>();
+            foreach (var reminder in doseRemindersFromDb)
+            {
+                remindersToReturn.Add(new DoseReminderDTO()
+                {
+                    ParentId = reminder.ParentId,
+                    ReminderId = reminder.ReminderId,
+                    SendDate = reminder.SendDate,
+                    DoseDetailId = reminder.DoseDetailId,
+                    ChildId = reminder.ChildId,
+                    Via = reminder.Via
+                });
+            }
+            return remindersToReturn;
+        }
+
+        public async Task<List<DoseReminderDTO>> GetAllDoseRemindersAsync(DateTime sendDate)
+        {
+            var doseRemindersFromDb = await _reminderRepository.GetAllDoseReminderAsync(sendDate);
             List<DoseReminderDTO> remindersToReturn = new List<DoseReminderDTO>();
             foreach (var reminder in doseRemindersFromDb)
             {

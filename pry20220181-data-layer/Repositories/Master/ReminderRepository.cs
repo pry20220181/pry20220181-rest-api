@@ -30,10 +30,12 @@ namespace pry20220181_data_layer.Repositories.Master
             return createdReminderId;
         }
 
-        public async Task<List<Reminder>> GetAllVaccinationAppointmentRemindersAsync()
+        public async Task<List<Reminder>> GetAllVaccinationAppointmentRemindersAsync(DateTime sendDate)
         {
             return await _dbContext.Reminders
-                .Where(r => r.VaccinationAppointmentId != 0).ToListAsync();
+                .Where(r => r.VaccinationAppointmentId != 0 
+                    && (r.SendDate.Year == sendDate.Year && r.SendDate.Month == sendDate.Month && r.SendDate.Day == sendDate.Day))
+                .ToListAsync();
         }
 
         public async Task<Reminder> GetVaccinationAppointmentReminderByIdAsync(int reminderId)
@@ -45,10 +47,12 @@ namespace pry20220181_data_layer.Repositories.Master
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<List<Reminder>> GetAllVaccinationCampaignRemindersAsync()
+        public async Task<List<Reminder>> GetAllVaccinationCampaignRemindersAsync(DateTime sendDate)
         {
             return await _dbContext.Reminders
-                    .Where(r => r.VaccinationCampaignId != 0).ToListAsync();
+                    .Where(r => r.VaccinationCampaignId != 0
+                        && (r.SendDate.Year == sendDate.Year && r.SendDate.Month == sendDate.Month && r.SendDate.Day == sendDate.Day))
+                    .ToListAsync();
         }
 
         public async Task<Reminder> GetVaccinationCampaignReminderByIdAsync(int reminderId)
@@ -107,6 +111,13 @@ namespace pry20220181_data_layer.Repositories.Master
             await _dbContext.SaveChangesAsync();
         }
 
-
+        public async Task<List<Reminder>> GetAllDoseReminderAsync(DateTime sendDate)
+        {
+            return await _dbContext
+                    .Reminders
+                    .Where(r =>  r.DoseDetailId != 0 
+                        && (r.SendDate.Year == sendDate.Year && r.SendDate.Month == sendDate.Month && r.SendDate.Day == sendDate.Day))
+                    .ToListAsync();
+        }
     }
 }

@@ -29,10 +29,15 @@ namespace pry20220181_rest_api.Controllers
         [HttpGet("vaccination-appointments", Name = "GetVaccinationAppointmentReminders")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [SwaggerResponse(200, "Get Vaccination Appointment Reminders", typeof(List<VaccinationAppointmentReminderDTO>))]
-        public async Task<IResult> GetVaccinationAppointmentReminders()
+        public async Task<IResult> GetVaccinationAppointmentReminders([FromQuery] string? sendDate = "None")
         {
             try
             {
+                DateTime sendDateParameter = DateTime.Now;
+                if (sendDate != "None")
+                {
+                    sendDateParameter = DateTime.Parse(sendDate);
+                }
                 var remindersFromDb = await _reminderService.GetAllVaccinationAppointmentRemindersAsync();
                 return Results.Ok(new
                 {
@@ -69,10 +74,16 @@ namespace pry20220181_rest_api.Controllers
         [HttpGet("vaccination-campaigns", Name = "GetVaccinationCampaignsReminders")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [SwaggerResponse(200, "Get Vaccination Campaigns Reminders", typeof(List<VaccinationCampaignReminderDTO>))]
-        public async Task<IResult> GetVaccinationCampaignsReminders()
+        public async Task<IResult> GetVaccinationCampaignsReminders([FromQuery] string? sendDate = "None")
         {
             try
             {
+                DateTime sendDateParameter = DateTime.Now;
+                if (sendDate != "None")
+                {
+                    sendDateParameter = DateTime.Parse(sendDate);
+                }
+
                 var remindersFromDb = await _reminderService.GetAllVaccinationCampaignRemindersAsync();
                 return Results.Ok(new
                 {
@@ -109,11 +120,26 @@ namespace pry20220181_rest_api.Controllers
         [HttpGet("doses", Name = "GetDosesReminders")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [SwaggerResponse(200, "Get Doses Reminders", typeof(List<DoseReminderDTO>))]
-        public async Task<IResult> GetDosesReminders([FromQuery] int parentId)
+        public async Task<IResult> GetDosesReminders([FromQuery] int? parentId = 0, [FromQuery] string? sendDate = "None")
         {
             try
             {
-                var remindersFromDb = await _reminderService.GetAllDoseRemindersByParentIdAsync(parentId);
+                DateTime sendDateParameter = DateTime.Now;
+                if (sendDate != "None")
+                {
+                    sendDateParameter = DateTime.Parse(sendDate);
+                }
+
+                if(parentId == 0)
+                {
+                    var allRemindersFromDb = await _reminderService.GetAllDoseRemindersAsync(sendDateParameter);
+                    return Results.Ok(new
+                    {
+                        DosesReminders = allRemindersFromDb
+                    });
+                }
+                //TODO: Si no viene parentId trae todos pero filtrando por fecha nada mas
+                var remindersFromDb = await _reminderService.GetAllDoseRemindersByParentIdAsync(parentId.Value);
                 return Results.Ok(new
                 {
                     DosesReminders = remindersFromDb
