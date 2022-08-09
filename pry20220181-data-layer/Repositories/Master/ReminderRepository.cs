@@ -119,5 +119,10 @@ namespace pry20220181_data_layer.Repositories.Master
                         && (r.SendDate.Year == sendDate.Year && r.SendDate.Month == sendDate.Month && r.SendDate.Day == sendDate.Day))
                     .ToListAsync();
         }
+
+        public Task<int> DeleteAlreadySentReminders(List<int> AlreadySentReminders)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

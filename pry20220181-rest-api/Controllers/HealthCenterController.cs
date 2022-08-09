@@ -24,7 +24,7 @@ namespace pry20220181_rest_api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [SwaggerResponse(200, "Get Health Centers By Ubigeos", typeof(List<HealthCenterDTO>))]
-        public async Task<IResult> GetChildsRemainingDoses([FromQuery] string ubigeoIds = "")
+        public async Task<IResult> GetHealthCentersByUbigeos([FromQuery] string ubigeoIds = "")
         {
             try
             {
