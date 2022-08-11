@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using pry20220181_core_layer.Modules.Master.Models;
 using pry20220181_core_layer.Modules.Master.Repositories;
+using pry20220181_core_layer.Modules.Vaccination.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -120,9 +121,13 @@ namespace pry20220181_data_layer.Repositories.Master
                     .ToListAsync();
         }
 
-        public Task<int> DeleteAlreadySentReminders(List<int> AlreadySentReminders)
-        {
-            throw new NotImplementedException();
+        public async Task<int> DeleteAlreadySentReminders(List<int> AlreadySentReminders)
+{
+            var remindersToDelete = _dbContext.Reminders.Where(r => AlreadySentReminders.Contains(r.ReminderId));
+            _dbContext.Reminders.RemoveRange(remindersToDelete);
+            _logger.LogInformation($"{remindersToDelete.Count()} reminders removed");
+            await _dbContext.SaveChangesAsync();
+            return AlreadySentReminders.Count;
         }
     }
 }

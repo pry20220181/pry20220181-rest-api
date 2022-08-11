@@ -157,9 +157,10 @@ namespace pry20220181_rest_api.Controllers
         [SwaggerResponse(200, "Delete Already Sent Reminders", typeof(int))]
         public async Task<IResult> DeleteAlreadySentReminders([FromBody] List<int> AlreadySentReminders)
         {
+            var response = await _reminderService.DeleteAlreadySentReminders(AlreadySentReminders);
             return Results.Ok(new
             {
-                DeletedReminders = AlreadySentReminders.Count
+                DeletedReminders = response
             });
         }
     }

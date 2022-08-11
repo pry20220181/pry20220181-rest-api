@@ -148,9 +148,9 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
             return remindersToReturn;
         }
 
-        public Task<int> DeleteAlreadySentReminders(List<int> AlreadySentReminders)
+        public async Task<int> DeleteAlreadySentReminders(List<int> AlreadySentReminders)
         {
-            throw new NotImplementedException();
+            return await _reminderRepository.DeleteAlreadySentReminders(AlreadySentReminders);
         }
     }
 }
