@@ -36,6 +36,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IInventoryRepository, InventoryRepository>();
             services.AddScoped<IParentRepository, ParentRepository>();
             services.AddScoped<IReminderRepository, ReminderRepository>();
+            services.AddScoped<IUbigeoRepository, UbigeoRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IVaccinationAppointmentRepository, VaccinationAppointmentRepository>();
             services.AddScoped<IVaccinationCampaignRepository, VaccinationCampaignRepository>();
@@ -61,6 +62,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IInventoryService, InventoryService>();
             services.AddScoped<IParentService, ParentService>();
             services.AddScoped<IReminderService, ReminderService>();
+            services.AddScoped<IUbigeoService, UbigeoService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IVaccinationAppointmentService, VaccinationAppointmentService>();
             services.AddScoped<IVaccinationCampaignsService, VaccinationCampaignsService>();
