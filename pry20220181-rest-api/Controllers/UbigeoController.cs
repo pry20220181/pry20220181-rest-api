@@ -28,7 +28,7 @@ namespace pry20220181_rest_api.Controllers
         {
             try
             {
-                var ubigeos = _ubigeoService.GetUbigeosAsync();
+                var ubigeos = await _ubigeoService.GetUbigeosAsync();
 
                 return Results.Ok(new {
                     Ubigeos = ubigeos
