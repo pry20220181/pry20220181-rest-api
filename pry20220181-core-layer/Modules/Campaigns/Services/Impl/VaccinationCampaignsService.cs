@@ -147,6 +147,17 @@ namespace pry20220181_core_layer.Modules.Campaigns.Services.Impl
                             Via = ReminderVias.SMS
                         };
                         remindersToCreate.Add(reminder);
+
+                        #region For testing purposes create a reminder for today
+                        Reminder reminderToday = new Reminder()
+                        {
+                            ParentId = parent.ParentId,
+                            SendDate = DateTime.Now,
+                            VaccinationCampaignId = createdCampaignId,
+                            Via = ReminderVias.SMS
+                        };    
+                        remindersToCreate.Add(reminderToday);                       
+                        #endregion
                     }
                     await _reminderRepository.CreateRangeAsync(remindersToCreate);
                     _logger.LogInformation($"{remindersToCreate.Count()} reminders were created for this Vaccination Campaign");

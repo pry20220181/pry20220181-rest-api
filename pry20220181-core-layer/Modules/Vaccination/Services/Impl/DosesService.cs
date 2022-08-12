@@ -33,7 +33,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
 
         public async Task<List<RemainingDoseDTO>> GetRemainingDosesByChild(int childId)
         {
-            if(childId < 1)
+            if (childId < 1)
             {
                 return null;
             }
@@ -41,7 +41,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
             var administeredDosesToChild = await _administeredDoseRepository.GetByChildIdAsync(childId);
             var child = await _childRepository.GetByIdAsync(childId);
 
-            if(child is null)
+            if (child is null)
             {
                 return null;
             }
@@ -132,7 +132,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
 
                 foreach (var remainingDose in remainingDosesToAdministerThatCanBePut)
                 {
-                    if(remindersForThisParent.Exists(r=>r.DoseDetailId == remainingDose.DoseDetailId && r.ChildId == childId))
+                    if (remindersForThisParent.Exists(r => r.DoseDetailId == remainingDose.DoseDetailId && r.ChildId == childId))
                     {//This for dont create a reminder of a doseDetailId-ChildId Pair more than once
                         continue;
                     }
@@ -144,6 +144,18 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
                         SendDate = DateTime.UtcNow.AddHours(-5).AddDays(7),
                         Via = ReminderVias.SMS
                     });
+
+                    #region For testing purposes create a reminder for today
+                    Reminder reminderToday = new Reminder()
+                    {
+                        ChildId = childId,
+                        DoseDetailId = remainingDose.DoseDetailId,
+                        ParentId = parentId,
+                        SendDate = DateTime.Now,
+                        Via = ReminderVias.SMS
+                    };
+                    remindersToCreate.Add(reminderToday);
+                    #endregion
                 }
                 await _reminderRepository.CreateRangeAsync(remindersToCreate);
                 _logger.LogInformation($"{remindersToCreate.Count} reminders has been created for the parent {parentId} of their child about their reamining doses apt to administer");
@@ -160,7 +172,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
 
         public async Task<List<AdministeredDoseDTO>> GetAdministeredDosesByChild(int childId)
         {
-            if(childId < 1)
+            if (childId < 1)
             {
                 return null;
             }

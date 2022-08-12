@@ -64,6 +64,17 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
                 };
                 int createdReminderId = await _reminderRepository.CreateAsync(reminder);
                 _logger.LogInformation($"A Reminder with ID {createdReminderId} was created for the appointment with ID {createdAppointmentId}");
+                
+                #region For testing purposes create a reminder for today
+                Reminder reminderToday = new Reminder()
+                {
+                    ParentId = vaccinationAppointment.ParentId,
+                    SendDate = DateTime.Now,
+                    VaccinationAppointmentId = vaccinationAppointment.VaccinationAppointmentId,
+                    Via = ReminderVias.SMS
+                };    
+                await _reminderRepository.CreateAsync(reminderToday);                  
+                #endregion
             }
 
             return createdAppointmentId;
