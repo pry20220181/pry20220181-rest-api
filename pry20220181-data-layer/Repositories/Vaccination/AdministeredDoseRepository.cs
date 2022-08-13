@@ -23,18 +23,11 @@ namespace pry20220181_data_layer.Repositories.Vaccination
 
         public async Task<List<AdministeredDose>> GetByChildIdAsync(int childId)
         {
-            //return await _dbContext.AdministeredDoses
-            //    .Include(x => x.Child)
-            //    .Where(x => x.ChildId == childId)
-            //    .ToListAsync();
             return await _blockchainClient.GetByChildIdAsync(childId);
         }
 
         public async Task<string> CreateAsync(AdministeredDose administeredDose)
         {
-            //var registeredAdministeredDose = await _dbContext.AdministeredDoses.AddAsync(administeredDose);
-            //await _dbContext.SaveChangesAsync();
-            //return registeredAdministeredDose.Entity.AdministeredDoseId;
             return await _blockchainClient.CreateAsync(administeredDose);
         }
 
@@ -65,24 +58,13 @@ namespace pry20220181_data_layer.Repositories.Vaccination
             }
 
             return administeredDoses;
-            //return await _dbContext.AdministeredDoses   
-            //    .Include(a=>a.DoseDetail)
-            //        .ThenInclude(d=>d.VaccinationSchemeDetail.VaccinationScheme)
-            //    .Include(a => a.DoseDetail)
-            //        .ThenInclude(d => d.VaccinationSchemeDetail.Vaccine)
-            //    .Include(a=>a.HealthCenter)
-            //    .Include(a=>a.HealthPersonnel)
-            //        .ThenInclude(h => h.User)
-            //    .Where(x => x.ChildId == childId)
-            //    .ToListAsync();
         }
 
-        public async Task<List<AdministeredDose>> GetByDosesIdList(List<int> doseDetailIds)
+        public async Task<List<AdministeredDose>> GetByDosesIdList(int childId, List<int> doseDetailIds)
         {
-            var administeredDoses = await _dbContext.AdministeredDoses
-                .Where(a => doseDetailIds.Contains(a.DoseDetailId))
-                .ToListAsync();
-            return administeredDoses;
+            var administeredDoses = await _blockchainClient.GetByChildIdAsync(childId);
+
+            return administeredDoses.Where(a => doseDetailIds.Contains(a.DoseDetailId)).ToList();
         }
     }
 }

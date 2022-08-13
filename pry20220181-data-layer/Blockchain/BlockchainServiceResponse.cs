@@ -16,5 +16,6 @@ namespace pry20220181_data_layer.Blockchain
         public DateTime doseDate { get; set; }
         public int vaccinationCampaignId { get; set; }
         public int vaccinationAppointmentId { get; set; }
+        public string observations { get; set; }
     }
 }

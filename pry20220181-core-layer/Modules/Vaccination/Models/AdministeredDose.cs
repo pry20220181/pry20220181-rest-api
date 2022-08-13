@@ -18,6 +18,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Models
         public DateTime DoseDate { get; set; }
         public int VaccinationCampaignId { get; set; }
         public int VaccinationAppointmentId { get; set; }
+        public string Observations { get; set; }
 
         #region Relations with another tables
         public DoseDetail DoseDetail { get; set; }

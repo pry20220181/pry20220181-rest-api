@@ -88,7 +88,8 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
                 ChildId = childId,
                 HealthCenterId = administeredDoseCreationDTO.HealthCenterId,
                 HealthPersonnelId = administeredDoseCreationDTO.HealthPersonnelId,
-                DoseDate = administeredDoseCreationDTO.DoseDate
+                DoseDate = administeredDoseCreationDTO.DoseDate,
+                Observations = administeredDoseCreationDTO.Observations
             };
             var adminesteredDoseId = await _administeredDoseRepository.CreateAsync(administeredDose);
             _logger.LogInformation($"Administered dose {adminesteredDoseId} created (DoseDetailId: {doseDetailid}, ChildId: {childId})");
@@ -110,7 +111,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
                 dosesDetailIds.AddRange(vaccinationSchemeDetail.DosesDetails.Select(d => d.DoseDetailId));
             }
 
-            var administeredDosesOfCurrentVaccinationScheme = await _administeredDoseRepository.GetByDosesIdList(dosesDetailIds);
+            var administeredDosesOfCurrentVaccinationScheme = await _administeredDoseRepository.GetByDosesIdList(childId, dosesDetailIds);
 
             var child = await _childRepository.GetByIdWithParentsIdAsync(childId);
             var remainingDosesToAdminister = currentDosesDetails
@@ -183,6 +184,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
 
             foreach (var administeredDose in administeredDosesToChildFromDb)
             {
+              
                 AdministeredDoseDTO administeredDoseDTO = new AdministeredDoseDTO()
                 {
                     AdministeredDoseId = administeredDose.AdministeredDoseId,
@@ -196,6 +198,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
                     WhenShouldBePut = WhenPutVaccine.ToString(administeredDose.DoseDetail),
                     VaccinationSchemeDetailId = administeredDose.DoseDetail.VaccinationSchemeDetailId,
                     VaccinationSchemeId = administeredDose.DoseDetail.VaccinationSchemeDetail.VaccinationSchemeId,
+                    DoseId = administeredDose.DoseDetailId
                 };
 
                 administeredDosesToChildToReturn.Add(administeredDoseDTO);

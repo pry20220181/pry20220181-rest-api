@@ -13,5 +13,6 @@ namespace pry20220181_core_layer.Modules.Vaccination.DTOs.Input
         public int HealthCenterId { get; set; }
         public int HealthPersonnelId { get; set; }
         public DateTime DoseDate { get; set; } = DateTime.UtcNow.AddHours(-5);
+        public string Observations { get; set; }
     }
 }

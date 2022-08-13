@@ -82,43 +82,43 @@ namespace pry20220181_data_layer
                 .HasForeignKey(v => v.VaccinationSchemeDetailId);
             #endregion
 
-            #region AdministeredDose
-            modelBuilder.Entity<AdministeredDose>()
-                .Property(a => a.AdministeredDoseId)
-                .ValueGeneratedOnAdd();
-            modelBuilder.Entity<AdministeredDose>()
-                .HasKey(a => a.AdministeredDoseId);
+            // #region AdministeredDose
+            // modelBuilder.Entity<AdministeredDose>()
+            //     .Property(a => a.AdministeredDoseId)
+            //     .ValueGeneratedOnAdd();
+            // modelBuilder.Entity<AdministeredDose>()
+            //     .HasKey(a => a.AdministeredDoseId);
 
-            modelBuilder.Entity<AdministeredDose>()
-                .HasOne(a => a.Child)
-                .WithMany(c => c.AdministeredDoses)
-                .HasForeignKey(a => a.ChildId);
+            // modelBuilder.Entity<AdministeredDose>()
+            //     .HasOne(a => a.Child)
+            //     .WithMany(c => c.AdministeredDoses)
+            //     .HasForeignKey(a => a.ChildId);
 
-            modelBuilder.Entity<AdministeredDose>()
-                .HasOne(a => a.DoseDetail)
-                .WithMany()
-                .HasForeignKey(a => a.DoseDetailId);
+            // modelBuilder.Entity<AdministeredDose>()
+            //     .HasOne(a => a.DoseDetail)
+            //     .WithMany()
+            //     .HasForeignKey(a => a.DoseDetailId);
 
-            modelBuilder.Entity<AdministeredDose>()
-                .HasOne(a => a.HealthCenter)
-                .WithMany()
-                .HasForeignKey(a => a.HealthCenterId);
+            // modelBuilder.Entity<AdministeredDose>()
+            //     .HasOne(a => a.HealthCenter)
+            //     .WithMany()
+            //     .HasForeignKey(a => a.HealthCenterId);
 
-            modelBuilder.Entity<AdministeredDose>()
-                .HasOne(a => a.HealthPersonnel)
-                .WithMany()
-                .HasForeignKey(a => a.HealthPersonnelId);
+            // modelBuilder.Entity<AdministeredDose>()
+            //     .HasOne(a => a.HealthPersonnel)
+            //     .WithMany()
+            //     .HasForeignKey(a => a.HealthPersonnelId);
 
-            modelBuilder.Entity<AdministeredDose>()
-                .HasOne(a => a.VaccinationCampaign)
-                .WithMany()
-                .HasForeignKey(a => a.VaccinationCampaignId);
+            // modelBuilder.Entity<AdministeredDose>()
+            //     .HasOne(a => a.VaccinationCampaign)
+            //     .WithMany()
+            //     .HasForeignKey(a => a.VaccinationCampaignId);
 
-            modelBuilder.Entity<AdministeredDose>()
-                .HasOne(a => a.VaccinationAppointment)
-                .WithMany()
-                .HasForeignKey(a => a.VaccinationAppointmentId);
-            #endregion
+            // modelBuilder.Entity<AdministeredDose>()
+            //     .HasOne(a => a.VaccinationAppointment)
+            //     .WithMany()
+            //     .HasForeignKey(a => a.VaccinationAppointmentId);
+            // #endregion
 
             #region Vaccination Appointment
             //VaccinationAppointment
@@ -342,7 +342,7 @@ namespace pry20220181_data_layer
         private static bool Initialized = false;
         #region DbSets
         public DbSet<Vaccine> Vaccines { get; set; }
-        public DbSet<AdministeredDose> AdministeredDoses { get; set; }
+        // public DbSet<AdministeredDose> AdministeredDoses { get; set; }
         public DbSet<DoseDetail> DosesDetails { get; set; }
         public DbSet<VaccinationSchemeDetail> VaccinationSchemeDetails { get; set; }
         public DbSet<VaccinationScheme> VaccinationSchemes { get; set; }

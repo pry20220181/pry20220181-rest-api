@@ -36,7 +36,8 @@ namespace pry20220181_data_layer.Blockchain.Impl
                     healthPersonnelId = administeredDose.HealthPersonnelId,
                     doseDate = administeredDose.DoseDate,
                     vaccinationCampaignId = administeredDose.VaccinationCampaignId,
-                    vaccinationAppointmentId = administeredDose.VaccinationAppointmentId
+                    vaccinationAppointmentId = administeredDose.VaccinationAppointmentId,
+                    observations = administeredDose.Observations
                 });
 
                 StringContent httpContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
@@ -45,16 +46,10 @@ namespace pry20220181_data_layer.Blockchain.Impl
                 var response = await httpClient.PostAsync($"{_blockchainClientConfiguration.BlockchainServiceUrl}/administered-doses", httpContent);
                 var blockchainResponse = await response.Content.ReadFromJsonAsync<BlockchainServiceResponse>();
                 _logger.LogInformation("Llamada a API de Blockchain finalizada en " + DateTime.Now);
-                _logger.LogInformation($"Respuesta del Servicio: ");
                 return blockchainResponse.administeredDoseId;
             }
-
-            //BlockchainInMemory.AdministeredDoses.Add(administeredDose);
-
-            //return "nuevoGuid";
         }
-        //TODO: LOS ENDPOINTS HARDCODEADOS, LUEGO PARAMETRIZADOS
-        //TODO
+
         public async Task<List<AdministeredDose>> GetByChildIdAsync(int childId)
         {
             using (var httpClient = new HttpClient())
@@ -75,11 +70,10 @@ namespace pry20220181_data_layer.Blockchain.Impl
                     HealthCenterId = r.healthCenterId,
                     HealthPersonnelId = r.healthPersonnelId,
                     VaccinationAppointmentId = r.vaccinationAppointmentId,
-                    VaccinationCampaignId = r.vaccinationCampaignId
+                    VaccinationCampaignId = r.vaccinationCampaignId,
+                    Observations = r.observations
                 }).ToList();
             }
-
-            //return BlockchainInMemory.AdministeredDoses.Where(d => d.ChildId == childId).ToList();
         }
     }
 }
