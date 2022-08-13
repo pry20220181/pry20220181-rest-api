@@ -401,19 +401,87 @@ namespace pry20220181_data_layer
             Vaccine BCG = new Vaccine { Name = "BCG", MinTemperature = 2, MaxTemperature = 8, Description = "Vacuna para la BCG" };
             Vaccine HVB = new Vaccine { Name = "HVB", MinTemperature = 2, MaxTemperature = 8, Description = "Vacuna para la HVB" };
             Vaccine VacunaPentavalente = new Vaccine { Name = "Vacuna Pentavalente", MinTemperature = 2, MaxTemperature = 8, Description = "Vacuna para la Pentavalente" };
+            Vaccine VacunaAntipolioInactivadaInyectable = new Vaccine
+            {
+                Name = "Vacuna Antipolio Inactivada Inyectable (IPV)",
+                MinTemperature = 2,
+                MaxTemperature = 8,
+                Description = "Vacuna Antipolio Inactivada Inyectable (IPV)"
+            };
+            Vaccine VacunaAntipolioOral = new Vaccine
+            {
+                Name = "Vacuna Antipolio oral (APO)",
+                MinTemperature = 2,
+                MaxTemperature = 8,
+                Description = "Vacuna Antipolio oral (APO)"
+            };
+            Vaccine VacunaAntineumococica = new Vaccine
+            {
+                Name = "Vacuna Antineumococica",
+                MinTemperature = 2,
+                MaxTemperature = 8,
+                Description = "Vacuna Antineumococica"
+            };
+            Vaccine VacunaContraElRotavirus = new Vaccine
+            {
+                Name = "Vacuna contra el Rotavirus",
+                MinTemperature = 2,
+                MaxTemperature = 8,
+                Description = "Vacuna contra el Rotavirus"
+            };
+            Vaccine VacunaContraLaInfluenzaPediatrica = new Vaccine
+            {
+                Name = "Vacuna contra la Influenza Pediátrica",
+                MinTemperature = 2,
+                MaxTemperature = 8,
+                Description = "Vacuna contra la Influenza Pediátrica"
+            };
+            Vaccine VacunaDTPediátricaHIBHepatitisB = new Vaccine
+            {
+                Name = "Vacuna DT pediátrica, HIB y Hepatitis B",
+                MinTemperature = 2,
+                MaxTemperature = 8,
+                Description = "Vacuna DT pediátrica, HIB y Hepatitis B"
+            };
             #endregion
 
             #region Esquema Vacunación Niño 1 Año
-            Vaccine VacunaAntineumococica = new Vaccine { Name = "Vacuna Antineumococica", MinTemperature = 2, MaxTemperature = 8, Description = "Vacuna Antineumococica" };
             Vaccine VacunaContraLaVaricela = new Vaccine { Name = "Vacuna Contra La Varicela", MinTemperature = 2, MaxTemperature = 8, Description = "Vacuna Contra La Varicela" };
+            Vaccine VacunaSPR = new Vaccine { Name = "Vacuna SPR", MinTemperature = 2, MaxTemperature = 8, Description = "Vacuna SPR" };
+            Vaccine VacunaAntiamarilica = new Vaccine { Name = "Vacuna Antiamarílica", MinTemperature = 2, MaxTemperature = 8, Description = "Vacuna Antiamarílica (AMA)" };
+            Vaccine VacunaDPT = new Vaccine { Name = "Vacuna DPT", MinTemperature = 2, MaxTemperature = 8, Description = "Vacuna DPT" };
+            #endregion
+
+            #region Esquema Vacunacion Niño 2,3 y 4 años
+            //Already registered: Varicela, Influenza Pediatrica, DPT, Antipolio Oral
+            #endregion
+
+            #region Esquema Vacunacion Adolescente
+            Vaccine VacunaContraVirusPapilomaHumano = new Vaccine
+            {
+                Name = "Vacuna contra el virus del Papiloma Humano",
+                MinTemperature = 2,
+                MaxTemperature = 8,
+                Description = "Vacuna contra el virus del Papiloma Humano"
+            };
+            Vaccine VacunaContraInfluenzaAdulto = new Vaccine { Name = "Vacuna contra la Influenza Adulto", MinTemperature = 2, MaxTemperature = 8, Description = "Vacuna contra la Influenza Adulto" };
+            //VacunaAntiamarilica
+            Vaccine VacunaContraDTAdulto = new Vaccine { Name = "Vacuna contra DT Adulto", MinTemperature = 2, MaxTemperature = 8, Description = "Vacuna contra DT Adulto" };
+            Vaccine VacunaContraHepatitisB = new Vaccine { Name = "Vacuna contra la Hepatitis B (HvB)", MinTemperature = 2, MaxTemperature = 8, Description = "Vacuna contra la Hepatitis B (HvB)" };
+            //VacunaSPR
+
             #endregion
 
             if (!Vaccines.Any())
             {
-                Vaccines.AddRange(new List<Vaccine>() {
-                    BCG, HVB, VacunaPentavalente, VacunaAntineumococica, VacunaContraLaVaricela
-                });
-                _logger.LogInformation("5 Vacunadas Creadas");
+                var vaccinesToAdd = new List<Vaccine>() {
+                    BCG, HVB, VacunaPentavalente, VacunaAntipolioInactivadaInyectable, VacunaAntipolioOral, VacunaAntineumococica,
+                    VacunaContraElRotavirus, VacunaContraLaInfluenzaPediatrica, VacunaDTPediátricaHIBHepatitisB, VacunaContraLaVaricela,
+                    VacunaSPR, VacunaAntiamarilica, VacunaDPT,
+                    VacunaContraVirusPapilomaHumano, VacunaContraInfluenzaAdulto, VacunaContraDTAdulto, VacunaContraHepatitisB
+                };
+                Vaccines.AddRange(vaccinesToAdd);
+                _logger.LogInformation($"{vaccinesToAdd.Count} Vacunadas Creadas");
             }
             #endregion
 
@@ -434,28 +502,44 @@ namespace pry20220181_data_layer
             #region VaccinationSchemes
             VaccinationScheme vaccinationScheme1 = new VaccinationScheme
             {
-                Name = "Esquema Vacunacion Niño Menor 1 Año",
+                Name = "Esquema de Vacunacion para el Niño Menor de 1 Año",
                 InitialAge = 0,
                 FinalAge = 1,
             };
 
             VaccinationScheme vaccinationScheme2 = new VaccinationScheme
             {
-                Name = "Esquema Vacunación Niño 1 Año",
+                Name = "Esquema de Vacunacion para el Niño de 1 Año",
                 InitialAge = 1,
                 FinalAge = 1,
             };
 
+            VaccinationScheme vaccinationScheme3 = new VaccinationScheme
+            {
+                Name = "Esquema de Vacunacion para el Niño de 2, 3 y 4 Años",
+                InitialAge = 2,
+                FinalAge = 4,
+            };
+
+            VaccinationScheme vaccinationScheme4 = new VaccinationScheme
+            {
+                Name = "Esquema de Vacunacion para el Adolescente",
+                InitialAge = 9,
+                FinalAge = 17,
+            };
+
             if (!VaccinationSchemes.Any())
             {
-                VaccinationSchemes.AddRange(new List<VaccinationScheme>() {
-                    vaccinationScheme1, vaccinationScheme2
-                });
-                _logger.LogInformation("2 Esquemas de Vacunaciones Creados");
+                var schemesToAdd = new List<VaccinationScheme>() {
+                    vaccinationScheme1, vaccinationScheme2, vaccinationScheme3, vaccinationScheme4
+                };
+                VaccinationSchemes.AddRange(schemesToAdd);
+                _logger.LogInformation($"{schemesToAdd.Count} Esquemas de Vacunaciones Creados");
             }
             #endregion
 
             #region VaccinationSchemeDetails
+            //13/08 Me quede registrando por aqui
             #region Esquema 1
             VaccinationSchemeDetail vaccinationSchemeDetail1A = new VaccinationSchemeDetail
             {
@@ -502,10 +586,11 @@ namespace pry20220181_data_layer
 
             if (!VaccinationSchemeDetails.Any())
             {
-                VaccinationSchemeDetails.AddRange(new List<VaccinationSchemeDetail>() {
+                var schemeDetailsToAdd = new List<VaccinationSchemeDetail>() {
                     vaccinationSchemeDetail1A, vaccinationSchemeDetail1B, vaccinationSchemeDetail1C, vaccinationSchemeDetail2A, vaccinationSchemeDetail2B
-                });
-                _logger.LogInformation("5 Detalles de Esquemas de Vacunación Creados");
+                };
+                VaccinationSchemeDetails.AddRange(schemeDetailsToAdd);
+                _logger.LogInformation($"{schemeDetailsToAdd.Count} Detalles de Esquemas de Vacunación Creados");
             }
             #endregion
 
@@ -573,6 +658,8 @@ namespace pry20220181_data_layer
                 _logger.LogInformation("7 Doses Detail Creados");
             }
             #endregion
+
+
 
             #region Childs
             Child child1 = new Child()
