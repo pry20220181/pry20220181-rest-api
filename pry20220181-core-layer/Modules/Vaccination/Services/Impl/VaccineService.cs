@@ -106,12 +106,12 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
                     DoseDetail doseDetailToCreate = new DoseDetail()
                     {
                         DoseNumber = vaccineDose.DoseNumber,
-                        PutWhenNewBorn = vaccineDose.PutWhenNewBorn,
+                        // PutWhenNewBorn = vaccineDose.PutWhenNewBorn,
                         PutWhenHasMonths = vaccineDose.PutWhenHasMonths,
-                        PutMonthsAfterPreviousDosis = vaccineDose.PutMonthsAfterPreviousDosis,
-                        PutBetweenStartMonth = vaccineDose.PutBetweenStartMonth,
-                        PutBetweenEndMonth = vaccineDose.PutBetweenEndMonth,
-                        PutEveryYear = vaccineDose.PutEveryYear,
+                        // PutMonthsAfterPreviousDosis = vaccineDose.PutMonthsAfterPreviousDosis,
+                        // PutBetweenStartMonth = vaccineDose.PutBetweenStartMonth,
+                        // PutBetweenEndMonth = vaccineDose.PutBetweenEndMonth,
+                        // PutEveryYear = vaccineDose.PutEveryYear,
                         VaccinationSchemeDetailId = vaccinationSchemeDetailId
                     };
                     vaccineDosesToCreate.Add(doseDetailToCreate);

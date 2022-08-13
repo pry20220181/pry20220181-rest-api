@@ -25,6 +25,9 @@ namespace pry20220181_rest_api.Controllers
         }
 
         [HttpGet(Name = "GetCampaignsByHealthCenter")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [SwaggerResponse(200, "Get Campaigns By Health Center", typeof(List<VaccinationCampaignDTO>))]
         public async Task<IResult> GetByHealthCenterId([FromQuery] int healthCenterId = 0, [FromQuery] string? sinceDate = "None")
         {
             if (healthCenterId == 0)
