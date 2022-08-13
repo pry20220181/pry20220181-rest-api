@@ -198,7 +198,8 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
                     WhenShouldBePut = WhenPutVaccine.ToString(administeredDose.DoseDetail),
                     VaccinationSchemeDetailId = administeredDose.DoseDetail.VaccinationSchemeDetailId,
                     VaccinationSchemeId = administeredDose.DoseDetail.VaccinationSchemeDetail.VaccinationSchemeId,
-                    DoseId = administeredDose.DoseDetailId
+                    DoseId = administeredDose.DoseDetailId,
+                    Observations = administeredDose.Observations
                 };
 
                 administeredDosesToChildToReturn.Add(administeredDoseDTO);
