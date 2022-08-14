@@ -674,6 +674,30 @@ namespace pry20220181_data_layer
                 NumberOfDosesToAdminister = 1,
                 PossibleEffectsPostVaccine = "Dolor en la zona. A partir 5to día irritabilidad, alza térmica, reacción cutánea , somnolencia, pérdida de apetito"
             };
+
+            VaccinationSchemeDetail vaccinationSchemeDetail3B = new VaccinationSchemeDetail
+            {
+                VaccinationSchemeId = vaccinationScheme3.VaccinationSchemeId,
+                VaccineId = VacunaContraLaInfluenzaPediatrica.VaccineId,
+                NumberOfDosesToAdminister = 1,
+                PossibleEffectsPostVaccine = "Local: dolor, eritema, edema e induración. Sistémico alza térmica, malestar general, mialgias"
+            };
+
+            VaccinationSchemeDetail vaccinationSchemeDetail3C = new VaccinationSchemeDetail
+            {
+                VaccinationSchemeId = vaccinationScheme3.VaccinationSchemeId,
+                VaccineId = VacunaDPT.VaccineId,
+                NumberOfDosesToAdminister = 1,
+                PossibleEffectsPostVaccine = "Enrojecimiento, edema e induración en sitio de vacunación, fiebre, irritabilidad, llanto persistente"
+            };
+
+            VaccinationSchemeDetail vaccinationSchemeDetail3D = new VaccinationSchemeDetail
+            {
+                VaccinationSchemeId = vaccinationScheme3.VaccinationSchemeId,
+                VaccineId = VacunaAntipolioOral.VaccineId,
+                NumberOfDosesToAdminister = 1,
+                PossibleEffectsPostVaccine = "Vacuna segura; raras ocasiones eventos adversos"
+            };
             #endregion
 
             #region Esquema 4
