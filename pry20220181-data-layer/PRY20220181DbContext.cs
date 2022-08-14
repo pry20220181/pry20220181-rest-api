@@ -564,6 +564,48 @@ namespace pry20220181_data_layer
                 NumberOfDosesToAdminister = 3,
                 PossibleEffectsPostVaccine = "Enrojecimiento, edema e induración en sitio de vacunación, llanto persistente, irritabilidad, fiebre, en raras ocasiones convulsiones"
             };
+
+            VaccinationSchemeDetail vaccinationSchemeDetail1D = new VaccinationSchemeDetail {
+                VaccinationSchemeId = vaccinationScheme1.VaccinationSchemeId,
+                VaccineId = VacunaAntipolioInactivadaInyectable.VaccineId,
+                NumberOfDosesToAdminister = 2,
+                PossibleEffectsPostVaccine = "Dolor en el sitio de vacunación"
+            };
+
+            VaccinationSchemeDetail vaccinationSchemeDetail1E = new VaccinationSchemeDetail {
+                VaccinationSchemeId = vaccinationScheme1.VaccinationSchemeId,
+                VaccineId = VacunaAntipolioOral.VaccineId,
+                NumberOfDosesToAdminister = 1,
+                PossibleEffectsPostVaccine = "Vacuna segura; raras ocasiones eventos adversos"
+            };
+
+            VaccinationSchemeDetail vaccinationSchemeDetail1F = new VaccinationSchemeDetail {
+                VaccinationSchemeId = vaccinationScheme1.VaccinationSchemeId,
+                VaccineId = VacunaAntineumococica.VaccineId,
+                NumberOfDosesToAdminister = 2,
+                PossibleEffectsPostVaccine = "Local: dolor, eritema, edema e induración. Sistémico alza térmica, irritabilidad, reacción cutánea"
+            };
+
+            VaccinationSchemeDetail vaccinationSchemeDetail1G = new VaccinationSchemeDetail {
+                VaccinationSchemeId = vaccinationScheme1.VaccinationSchemeId,
+                VaccineId = VacunaContraElRotavirus.VaccineId,
+                NumberOfDosesToAdminister = 2,
+                PossibleEffectsPostVaccine = "Puede presentarse alza térmica, diarrea, vómitos, irritabilidad, vómitos, pérdida de apetito etc"
+            };
+
+            VaccinationSchemeDetail vaccinationSchemeDetail1H = new VaccinationSchemeDetail {
+                VaccinationSchemeId = vaccinationScheme1.VaccinationSchemeId,
+                VaccineId = VacunaContraLaInfluenzaPediatrica.VaccineId,
+                NumberOfDosesToAdminister = 2,
+                PossibleEffectsPostVaccine = "Local: dolor, eritema, edema e induración. Sistémico alza térmica, malestar general, mialgias"
+            };
+
+            VaccinationSchemeDetail vaccinationSchemeDetail1I = new VaccinationSchemeDetail {
+                VaccinationSchemeId = vaccinationScheme1.VaccinationSchemeId,
+                VaccineId = VacunaDTPediátricaHIBHepatitisB.VaccineId,
+                NumberOfDosesToAdminister = 2,
+                PossibleEffectsPostVaccine = ""
+            };
             #endregion
 
             #region Esquema 2
@@ -582,6 +624,60 @@ namespace pry20220181_data_layer
                 NumberOfDosesToAdminister = 1,
                 PossibleEffectsPostVaccine = "Dolor en la zona. A partir 5to día: irritabilidad, alza térmica, reacción cutánea, somnolencia, pérdida de apetito"
             };
+
+            VaccinationSchemeDetail vaccinationSchemeDetail2C = new VaccinationSchemeDetail
+            {
+                VaccinationSchemeId = vaccinationScheme2.VaccinationSchemeId,
+                VaccineId = VacunaSPR.VaccineId,
+                NumberOfDosesToAdminister = 2,
+                PossibleEffectsPostVaccine = "Alza térmica, exantema, tos, coriza, conjuntivitis (ASA) Fiebre, exantema, linfoadenopatias y artralgias (Rubeola) fiebre, hipertrofia parotídea, a partir del 7mo día post vacunación. (antiparotidico)"
+            };
+            
+            VaccinationSchemeDetail vaccinationSchemeDetail2D = new VaccinationSchemeDetail
+            {
+                VaccinationSchemeId = vaccinationScheme2.VaccinationSchemeId,
+                VaccineId = VacunaAntiamarilica.VaccineId,
+                NumberOfDosesToAdminister = 1,
+                PossibleEffectsPostVaccine = "Local: dolor, eritema, e induración. Sistémico cefalea. Mialgias, malestar Raro anafilaxia y encefalitis (mayores 60ª)"
+            };
+
+            VaccinationSchemeDetail vaccinationSchemeDetail2E = new VaccinationSchemeDetail
+            {
+                VaccinationSchemeId = vaccinationScheme2.VaccinationSchemeId,
+                VaccineId = VacunaAntipolioOral.VaccineId,
+                NumberOfDosesToAdminister = 1,
+                PossibleEffectsPostVaccine = "Vacuna segura; raras ocasiones eventos adversos"
+            };
+
+            VaccinationSchemeDetail vaccinationSchemeDetail2F = new VaccinationSchemeDetail
+            {
+                VaccinationSchemeId = vaccinationScheme2.VaccinationSchemeId,
+                VaccineId = VacunaContraLaInfluenzaPediatrica.VaccineId,
+                NumberOfDosesToAdminister = 1,
+                PossibleEffectsPostVaccine = "Local: dolor, eritema, edema e induración. Sistémico alza térmica, malestar general, mialgias"
+            };
+
+            VaccinationSchemeDetail vaccinationSchemeDetail2G = new VaccinationSchemeDetail
+            {
+                VaccinationSchemeId = vaccinationScheme2.VaccinationSchemeId,
+                VaccineId = VacunaDPT.VaccineId,
+                NumberOfDosesToAdminister = 1,
+                PossibleEffectsPostVaccine = "Enrojecimiento, edema e induración en sitio de vacunación"
+            };
+            #endregion
+
+            #region Esquema 3
+            VaccinationSchemeDetail vaccinationSchemeDetail3A = new VaccinationSchemeDetail
+            {
+                VaccinationSchemeId = vaccinationScheme3.VaccinationSchemeId,
+                VaccineId = VacunaContraLaVaricela.VaccineId,
+                NumberOfDosesToAdminister = 1,
+                PossibleEffectsPostVaccine = "Dolor en la zona. A partir 5to día irritabilidad, alza térmica, reacción cutánea , somnolencia, pérdida de apetito"
+            };
+            #endregion
+
+            #region Esquema 4
+                
             #endregion
 
             if (!VaccinationSchemeDetails.Any())
