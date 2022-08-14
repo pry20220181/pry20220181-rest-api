@@ -701,13 +701,62 @@ namespace pry20220181_data_layer
             #endregion
 
             #region Esquema 4
-                
+            VaccinationSchemeDetail vaccinationSchemeDetail4A = new VaccinationSchemeDetail
+            {
+                VaccinationSchemeId = vaccinationScheme4.VaccinationSchemeId,
+                VaccineId = VacunaContraVirusPapilomaHumano.VaccineId,
+                NumberOfDosesToAdminister = 2,
+                PossibleEffectsPostVaccine = "Enrojecimientos, adormecimientos de zona de inyección, alza térmica y sensación de fatiga"
+            };
+
+            VaccinationSchemeDetail vaccinationSchemeDetail4B = new VaccinationSchemeDetail
+            {
+                VaccinationSchemeId = vaccinationScheme4.VaccinationSchemeId,
+                VaccineId = VacunaContraInfluenzaAdulto.VaccineId,
+                NumberOfDosesToAdminister = 1,
+                PossibleEffectsPostVaccine = "Local: dolor, eritema, edema e induración. Sistémico alza térmica, malestar general, mialgias"
+            };
+
+            VaccinationSchemeDetail vaccinationSchemeDetail4C = new VaccinationSchemeDetail
+            {
+                VaccinationSchemeId = vaccinationScheme4.VaccinationSchemeId,
+                VaccineId = VacunaAntiamarilica.VaccineId,
+                NumberOfDosesToAdminister = 1,
+                PossibleEffectsPostVaccine = "Local: dolor, eritema, e induración. Sistémico cefalea. Mialgias, malestar Raro anafilaxia y encefalitis (mayores 60ª)"
+            };
+
+            VaccinationSchemeDetail vaccinationSchemeDetail4D = new VaccinationSchemeDetail
+            {
+                VaccinationSchemeId = vaccinationScheme4.VaccinationSchemeId,
+                VaccineId = VacunaContraDTAdulto.VaccineId,
+                NumberOfDosesToAdminister = 3,
+                PossibleEffectsPostVaccine = "Local: dolor, eritema, e induración. Sistémica: malestar general"
+            };
+
+            VaccinationSchemeDetail vaccinationSchemeDetail4E = new VaccinationSchemeDetail
+            {
+                VaccinationSchemeId = vaccinationScheme4.VaccinationSchemeId,
+                VaccineId = VacunaContraHepatitisB.VaccineId,
+                NumberOfDosesToAdminister = 3,
+                PossibleEffectsPostVaccine = "Local: dolor, eritema, edema e induración. Sistémico malestar general, cefalea, fatiga o irritabilidad"
+            };
+
+            VaccinationSchemeDetail vaccinationSchemeDetail4F = new VaccinationSchemeDetail
+            {
+                VaccinationSchemeId = vaccinationScheme4.VaccinationSchemeId,
+                VaccineId = VacunaSPR.VaccineId,
+                NumberOfDosesToAdminister = 1,
+                PossibleEffectsPostVaccine = "Alza térmica, exantema, tos, coriza, conjuntivitis (ASA) Fiebre, exantema, linfoadenopatias y artralgias (Rubeola) fiebre, hipertrofia parotídea, entre el día 7mo día post vacunación. (antiparotidico)"
+            };
             #endregion
 
             if (!VaccinationSchemeDetails.Any())
             {
                 var schemeDetailsToAdd = new List<VaccinationSchemeDetail>() {
-                    vaccinationSchemeDetail1A, vaccinationSchemeDetail1B, vaccinationSchemeDetail1C, vaccinationSchemeDetail2A, vaccinationSchemeDetail2B
+                    vaccinationSchemeDetail1A, vaccinationSchemeDetail1B, vaccinationSchemeDetail1C, vaccinationSchemeDetail1D, vaccinationSchemeDetail1E, vaccinationSchemeDetail1F, vaccinationSchemeDetail1G, vaccinationSchemeDetail1H, vaccinationSchemeDetail1I 
+                    vaccinationSchemeDetail2A, vaccinationSchemeDetail2B, vaccinationSchemeDetail2C, vaccinationSchemeDetail2D, vaccinationSchemeDetail2E, vaccinationSchemeDetail2F, vaccinationSchemeDetail2G,
+                    vaccinationSchemeDetail3A, vaccinationSchemeDetail3B, vaccinationSchemeDetail3C, vaccinationSchemeDetail3D,
+                    vaccinationSchemeDetail4A, vaccinationSchemeDetail4B, vaccinationSchemeDetail4C, vaccinationSchemeDetail4D, vaccinationSchemeDetail4E, vaccinationSchemeDetail4F
                 };
                 VaccinationSchemeDetails.AddRange(schemeDetailsToAdd);
                 _logger.LogInformation($"{schemeDetailsToAdd.Count} Detalles de Esquemas de Vacunación Creados");
