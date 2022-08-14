@@ -17,5 +17,12 @@ namespace pry20220181_core_layer.Modules.Master.DTOs.Output
         public string Description { get; set; }
         public DateTime StartDateTime { get; set; }
         public DateTime EndDateTime { get; set; }
+        public List<HealthCenter> HealthCenters {get;set;}
+        public List<string> Vaccines {get;set;}
+        public class HealthCenter {
+            public int HealthCenterId { get; set; }
+            public string Name { get; set; }
+            public string Address { get; set; }
+        }
     }
 }

@@ -52,7 +52,7 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
                     ChildDNI = "Remaining...",
                     ChildFullname = "Remaining...",
                     HealthCenterName = reminder.VaccinationAppointment.HealthCenter.Name,
-                    Vaccines = reminder.VaccinationAppointment.VaccinesForAppointment.Select(v=>v.Vaccine.Name).ToList()
+                    Vaccines = reminder.VaccinationAppointment.VaccinesForAppointment.Select(v => v.Vaccine.Name).ToList()
                 });
             }
             return remindersToReturn;
@@ -90,7 +90,19 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
                     ReminderId = reminder.ReminderId,
                     SendDate = reminder.SendDate,
                     VaccinationCampaignId = reminder.VaccinationCampaignId,
-                    Via = reminder.Via
+                    Via = reminder.Via,
+                    Name = reminder.VaccinationCampaign.Name,
+                    Description =reminder.VaccinationCampaign.Description,
+                    EndDateTime = reminder.VaccinationCampaign.EndDateTime,
+                    StartDateTime = reminder.VaccinationCampaign.StartDateTime,
+                    HealthCenters = reminder.VaccinationCampaign.VaccinationCampaignLocations
+                        .Select(l => new VaccinationCampaignReminderDTO.HealthCenter
+                        {
+                            HealthCenterId = l.HealthCenter.HealthCenterId,
+                            Name = l.HealthCenter.Name,
+                            Address = l.HealthCenter.Address
+                        }).ToList(),
+                    Vaccines = reminder.VaccinationCampaign.VaccinationCampaignDetails.Select(d => d.Vaccine.Name).ToList()
                 });
             }
             return remindersToReturn;

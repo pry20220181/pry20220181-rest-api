@@ -58,6 +58,12 @@ namespace pry20220181_data_layer.Repositories.Master
             return await _dbContext.Reminders
                     .Where(r => r.VaccinationCampaignId != 0
                         && (r.SendDate.Year == sendDate.Year && r.SendDate.Month == sendDate.Month && r.SendDate.Day == sendDate.Day))
+                    .Include(r=>r.VaccinationCampaign)
+                        .ThenInclude(r=>r.VaccinationCampaignLocations)
+                            .ThenInclude(l=>l.HealthCenter)
+                    .Include(r=>r.VaccinationCampaign)
+                        .ThenInclude(r=>r.VaccinationCampaignDetails)
+                            .ThenInclude(d=>d.Vaccine)
                     .ToListAsync();
         }
 
