@@ -92,7 +92,7 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
                     VaccinationCampaignId = reminder.VaccinationCampaignId,
                     Via = reminder.Via,
                     Name = reminder.VaccinationCampaign.Name,
-                    Description =reminder.VaccinationCampaign.Description,
+                    Description = reminder.VaccinationCampaign.Description,
                     EndDateTime = reminder.VaccinationCampaign.EndDateTime,
                     StartDateTime = reminder.VaccinationCampaign.StartDateTime,
                     HealthCenters = reminder.VaccinationCampaign.VaccinationCampaignLocations
@@ -134,13 +134,24 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
             List<DoseReminderDTO> remindersToReturn = new List<DoseReminderDTO>();
             foreach (var reminder in doseRemindersFromDb)
             {
+                var child = reminder.Parent.ChildParents.Where(c=>c.ChildId == reminder.ChildId).FirstOrDefault().Child;
                 remindersToReturn.Add(new DoseReminderDTO()
                 {
                     ParentId = reminder.ParentId,
                     ReminderId = reminder.ReminderId,
                     SendDate = reminder.SendDate,
-                    DoseDetailId = reminder.DoseDetailId,
-                    ChildId = reminder.ChildId,
+                    Dose = new DoseReminderDTO.DoseDTO
+                    {
+                        DoseDetailId = reminder.DoseDetailId,
+                        VaccineName = reminder.DoseDetail.VaccinationSchemeDetail.Vaccine.Name,
+                        DoseNumber = reminder.DoseDetail.DoseNumber
+                    },
+                    Child = new DoseReminderDTO.ChildDTO
+                    {
+                        ChildId = reminder.ChildId,
+                        Name = child.Firstname + " " + child.Lastname,
+                        DNI = child.DNI
+                    },
                     Via = reminder.Via
                 });
             }
@@ -153,13 +164,24 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
             List<DoseReminderDTO> remindersToReturn = new List<DoseReminderDTO>();
             foreach (var reminder in doseRemindersFromDb)
             {
+                var child = reminder.Parent.ChildParents.Where(c=>c.ChildId == reminder.ChildId).FirstOrDefault().Child;
                 remindersToReturn.Add(new DoseReminderDTO()
                 {
                     ParentId = reminder.ParentId,
                     ReminderId = reminder.ReminderId,
                     SendDate = reminder.SendDate,
-                    DoseDetailId = reminder.DoseDetailId,
-                    ChildId = reminder.ChildId,
+                    Dose = new DoseReminderDTO.DoseDTO
+                    {
+                        DoseDetailId = reminder.DoseDetailId,
+                        VaccineName = reminder.DoseDetail.VaccinationSchemeDetail.Vaccine.Name,
+                        DoseNumber = reminder.DoseDetail.DoseNumber
+                    },
+                    Child = new DoseReminderDTO.ChildDTO
+                    {
+                        ChildId = reminder.ChildId,
+                        Name = child.Firstname + " " + child.Lastname,
+                        DNI = child.DNI
+                    },
                     Via = reminder.Via
                 });
             }

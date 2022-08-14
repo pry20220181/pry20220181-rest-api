@@ -12,7 +12,18 @@ namespace pry20220181_core_layer.Modules.Master.DTOs.Output
         public string Via { get; set; }
         public DateTime SendDate { get; set; }
         public int ParentId { get; set; }
-        public int DoseDetailId { get; set; }
-        public int ChildId { get; set; }
+        public ChildDTO Child { get; set; }
+        public DoseDTO Dose { get; set; }
+        public class ChildDTO
+        {
+            public int ChildId { get; set; }
+            public string DNI { get; set; }
+            public string Name { get; set; }
+        }
+        public class DoseDTO {
+            public int DoseDetailId { get; set; }
+            public string VaccineName { get; set; }
+            public int DoseNumber {get;set;}
+        }
     }
 }

@@ -34,13 +34,13 @@ namespace pry20220181_data_layer.Repositories.Master
         public async Task<List<Reminder>> GetAllVaccinationAppointmentRemindersAsync(DateTime sendDate)
         {
             return await _dbContext.Reminders
-                .Where(r => r.VaccinationAppointmentId != 0 
+                .Where(r => r.VaccinationAppointmentId != 0
                     && (r.SendDate.Year == sendDate.Year && r.SendDate.Month == sendDate.Month && r.SendDate.Day == sendDate.Day))
-                .Include(r=>r.VaccinationAppointment)
-                    .ThenInclude(V=>V.HealthCenter)
-                .Include(r=>r.VaccinationAppointment)
-                    .ThenInclude(v=>v.VaccinesForAppointment)
-                    .ThenInclude(v=>v.Vaccine)
+                .Include(r => r.VaccinationAppointment)
+                    .ThenInclude(V => V.HealthCenter)
+                .Include(r => r.VaccinationAppointment)
+                    .ThenInclude(v => v.VaccinesForAppointment)
+                    .ThenInclude(v => v.Vaccine)
                 .ToListAsync();
         }
 
@@ -48,8 +48,8 @@ namespace pry20220181_data_layer.Repositories.Master
         {
             return await _dbContext.Reminders
                 .Where(r => r.ReminderId == reminderId && r.VaccinationAppointmentId != 0)
-                .Include(r=>r.VaccinationAppointment)
-                    .ThenInclude(v=>v.HealthCenter)
+                .Include(r => r.VaccinationAppointment)
+                    .ThenInclude(v => v.HealthCenter)
                 .FirstOrDefaultAsync();
         }
 
@@ -58,12 +58,12 @@ namespace pry20220181_data_layer.Repositories.Master
             return await _dbContext.Reminders
                     .Where(r => r.VaccinationCampaignId != 0
                         && (r.SendDate.Year == sendDate.Year && r.SendDate.Month == sendDate.Month && r.SendDate.Day == sendDate.Day))
-                    .Include(r=>r.VaccinationCampaign)
-                        .ThenInclude(r=>r.VaccinationCampaignLocations)
-                            .ThenInclude(l=>l.HealthCenter)
-                    .Include(r=>r.VaccinationCampaign)
-                        .ThenInclude(r=>r.VaccinationCampaignDetails)
-                            .ThenInclude(d=>d.Vaccine)
+                    .Include(r => r.VaccinationCampaign)
+                        .ThenInclude(r => r.VaccinationCampaignLocations)
+                            .ThenInclude(l => l.HealthCenter)
+                    .Include(r => r.VaccinationCampaign)
+                        .ThenInclude(r => r.VaccinationCampaignDetails)
+                            .ThenInclude(d => d.Vaccine)
                     .ToListAsync();
         }
 
@@ -87,7 +87,7 @@ namespace pry20220181_data_layer.Repositories.Master
             var reminder = await _dbContext.Reminders
                 .Where(r => r.DoseDetailId == doseDetailId && r.ChildId == childId)
                 .FirstOrDefaultAsync();
-            if(reminder is null)
+            if (reminder is null)
             {
                 return 0;
             }
@@ -97,7 +97,7 @@ namespace pry20220181_data_layer.Repositories.Master
         public async Task DeleteReminderAsync(int reminderId)
         {
             var reminderToDelete = await _dbContext.Reminders.FindAsync(reminderId);
-            if(reminderToDelete is null)
+            if (reminderToDelete is null)
             {
                 _logger.LogWarning($"Removing reminder {reminderId} failed. That reminder does not exist");
                 return;
@@ -112,6 +112,12 @@ namespace pry20220181_data_layer.Repositories.Master
             return await _dbContext
                 .Reminders
                 .Where(r => r.ParentId == parentId && r.DoseDetailId != 0)
+                .Include(r => r.DoseDetail)
+                    .ThenInclude(r => r.VaccinationSchemeDetail)
+                        .ThenInclude(d => d.Vaccine)
+                .Include(r => r.Parent)
+                    .ThenInclude(p => p.ChildParents)
+                        .ThenInclude(c => c.Child)
                 .ToListAsync();
         }
 
@@ -127,13 +133,19 @@ namespace pry20220181_data_layer.Repositories.Master
         {
             return await _dbContext
                     .Reminders
-                    .Where(r =>  r.DoseDetailId != 0 
+                    .Where(r => r.DoseDetailId != 0
                         && (r.SendDate.Year == sendDate.Year && r.SendDate.Month == sendDate.Month && r.SendDate.Day == sendDate.Day))
+                    .Include(r => r.DoseDetail)
+                        .ThenInclude(r => r.VaccinationSchemeDetail)
+                            .ThenInclude(d => d.Vaccine)
+                    .Include(r => r.Parent)
+                        .ThenInclude(p => p.ChildParents)
+                            .ThenInclude(c => c.Child)
                     .ToListAsync();
         }
 
         public async Task<int> DeleteAlreadySentReminders(List<int> AlreadySentReminders)
-{
+        {
             var remindersToDelete = _dbContext.Reminders.Where(r => AlreadySentReminders.Contains(r.ReminderId));
             _dbContext.Reminders.RemoveRange(remindersToDelete);
             _logger.LogInformation($"{remindersToDelete.Count()} reminders removed");
