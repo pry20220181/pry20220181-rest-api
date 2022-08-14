@@ -46,7 +46,13 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
                     ReminderId = reminder.ReminderId,
                     SendDate = reminder.SendDate,
                     VaccinationAppointmentId = reminder.VaccinationAppointmentId,
-                    Via = reminder.Via
+                    Via = reminder.Via,
+                    AppointmentDateTime = reminder.VaccinationAppointment.AppointmentDateTime,
+                    ChildId = 0,
+                    ChildDNI = "Remaining...",
+                    ChildFullname = "Remaining...",
+                    HealthCenterName = reminder.VaccinationAppointment.HealthCenter.Name,
+                    Vaccines = reminder.VaccinationAppointment.VaccinesForAppointment.Select(v=>v.Vaccine.Name).ToList()
                 });
             }
             return remindersToReturn;

@@ -539,7 +539,6 @@ namespace pry20220181_data_layer
             #endregion
 
             #region VaccinationSchemeDetails
-            //13/08 Me quede registrando por aqui
             #region Esquema 1
             VaccinationSchemeDetail vaccinationSchemeDetail1A = new VaccinationSchemeDetail
             {
@@ -753,7 +752,7 @@ namespace pry20220181_data_layer
             if (!VaccinationSchemeDetails.Any())
             {
                 var schemeDetailsToAdd = new List<VaccinationSchemeDetail>() {
-                    vaccinationSchemeDetail1A, vaccinationSchemeDetail1B, vaccinationSchemeDetail1C, vaccinationSchemeDetail1D, vaccinationSchemeDetail1E, vaccinationSchemeDetail1F, vaccinationSchemeDetail1G, vaccinationSchemeDetail1H, vaccinationSchemeDetail1I 
+                    vaccinationSchemeDetail1A, vaccinationSchemeDetail1B, vaccinationSchemeDetail1C, vaccinationSchemeDetail1D, vaccinationSchemeDetail1E, vaccinationSchemeDetail1F, vaccinationSchemeDetail1G, vaccinationSchemeDetail1H, vaccinationSchemeDetail1I, 
                     vaccinationSchemeDetail2A, vaccinationSchemeDetail2B, vaccinationSchemeDetail2C, vaccinationSchemeDetail2D, vaccinationSchemeDetail2E, vaccinationSchemeDetail2F, vaccinationSchemeDetail2G,
                     vaccinationSchemeDetail3A, vaccinationSchemeDetail3B, vaccinationSchemeDetail3C, vaccinationSchemeDetail3D,
                     vaccinationSchemeDetail4A, vaccinationSchemeDetail4B, vaccinationSchemeDetail4C, vaccinationSchemeDetail4D, vaccinationSchemeDetail4E, vaccinationSchemeDetail4F
@@ -764,6 +763,7 @@ namespace pry20220181_data_layer
             #endregion
 
             #region DosesDetails
+            //13/08 Me quede registrando por aqui
             #region Esquema 1
             DoseDetail dosis1VacunaBCG = new DoseDetail()
             {

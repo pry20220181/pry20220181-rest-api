@@ -21,11 +21,6 @@ namespace pry20220181_rest_api.Controllers
             _logger = logger;
         }
 
-        //public async Task<IResult> CreateVaccinationAppointmentReminder(ReminderCreationDTO reminderCreationDTO)
-        //{
-        //    var reminderId = await _reminderService.CreateReminderAsync(reminderCreationDTO);
-
-        //}
         [HttpGet("vaccination-appointments", Name = "GetVaccinationAppointmentReminders")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [SwaggerResponse(200, "Get Vaccination Appointment Reminders", typeof(List<VaccinationAppointmentReminderDTO>))]
