@@ -12,9 +12,9 @@ namespace pry20220181_core_layer.Modules.Master.DTOs.Output
         public string Via { get; set; }
         public DateTime SendDate { get; set; }
         public int ParentId { get; set; }
-        public ChildDTO Child { get; set; }
+        public DoseReminderChildDTO Child { get; set; }
         public DoseDTO Dose { get; set; }
-        public class ChildDTO
+        public class DoseReminderChildDTO
         {
             public int ChildId { get; set; }
             public string DNI { get; set; }

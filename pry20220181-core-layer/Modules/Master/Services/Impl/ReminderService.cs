@@ -96,7 +96,7 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
                     EndDateTime = reminder.VaccinationCampaign.EndDateTime,
                     StartDateTime = reminder.VaccinationCampaign.StartDateTime,
                     HealthCenters = reminder.VaccinationCampaign.VaccinationCampaignLocations
-                        .Select(l => new VaccinationCampaignReminderDTO.HealthCenter
+                        .Select(l => new VaccinationCampaignReminderDTO.VaccinationCampaignReminderHealthCenter
                         {
                             HealthCenterId = l.HealthCenter.HealthCenterId,
                             Name = l.HealthCenter.Name,
@@ -146,7 +146,7 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
                         VaccineName = reminder.DoseDetail.VaccinationSchemeDetail.Vaccine.Name,
                         DoseNumber = reminder.DoseDetail.DoseNumber
                     },
-                    Child = new DoseReminderDTO.ChildDTO
+                    Child = new DoseReminderDTO.DoseReminderChildDTO
                     {
                         ChildId = reminder.ChildId,
                         Name = child.Firstname + " " + child.Lastname,
@@ -176,7 +176,7 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
                         VaccineName = reminder.DoseDetail.VaccinationSchemeDetail.Vaccine.Name,
                         DoseNumber = reminder.DoseDetail.DoseNumber
                     },
-                    Child = new DoseReminderDTO.ChildDTO
+                    Child = new DoseReminderDTO.DoseReminderChildDTO
                     {
                         ChildId = reminder.ChildId,
                         Name = child.Firstname + " " + child.Lastname,
