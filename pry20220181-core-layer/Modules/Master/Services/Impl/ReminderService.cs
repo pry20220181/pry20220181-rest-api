@@ -42,16 +42,26 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
             {
                 remindersToReturn.Add(new VaccinationAppointmentReminderDTO()
                 {
-                    ParentId = reminder.ParentId,
-                    ChildId = reminder.ChildId,
+                    Parent = new VaccinationAppointmentReminderDTO.VAReminderParentDTO()
+                    {
+                        ParentId = reminder.ParentId
+                    },
+                    Child = new VaccinationAppointmentReminderDTO.VAReminderChildDTO()
+                    {
+                        ChildId = reminder.ChildId,
+                        DNI = reminder.Child.DNI,
+                        Fullname = reminder.Child.Firstname + " " + reminder.Child.Lastname
+                    },
+                    HealthCenter = new VaccinationAppointmentReminderDTO.VAReminderHealthCenterDTO()
+                    {
+                        HealthCenterId = reminder.VaccinationAppointment.HealthCenterId,
+                        Name = reminder.VaccinationAppointment.HealthCenter.Name,
+                    },
                     ReminderId = reminder.ReminderId,
                     SendDate = reminder.SendDate,
                     VaccinationAppointmentId = reminder.VaccinationAppointmentId,
                     Via = reminder.Via,
                     AppointmentDateTime = reminder.VaccinationAppointment.AppointmentDateTime,
-                    ChildDNI = reminder.Child.DNI,
-                    ChildFullname = reminder.Child.Firstname + " " + reminder.Child.Lastname,
-                    HealthCenterName = reminder.VaccinationAppointment.HealthCenter.Name,
                     Vaccines = reminder.VaccinationAppointment.VaccinesForAppointment.Select(v => v.Vaccine.Name).ToList()
                 });
             }
@@ -72,9 +82,15 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
                 AppointmentDateTime = appointmentReminderFromDb.VaccinationAppointment.AppointmentDateTime,
                 Via = appointmentReminderFromDb.Via,
                 SendDate = appointmentReminderFromDb.SendDate,
-                ParentId = appointmentReminderFromDb.ParentId,
-                HealthCenterId = appointmentReminderFromDb.VaccinationAppointment.HealthCenterId,
-                HealthCenterName = appointmentReminderFromDb.VaccinationAppointment.HealthCenter.Name
+                Parent = new VaccinationAppointmentReminderDTO.VAReminderParentDTO()
+                {
+                    ParentId = appointmentReminderFromDb.ParentId
+                },
+                HealthCenter = new VaccinationAppointmentReminderDTO.VAReminderHealthCenterDTO()
+                {
+                    HealthCenterId = appointmentReminderFromDb.VaccinationAppointment.HealthCenterId,
+                    Name = appointmentReminderFromDb.VaccinationAppointment.HealthCenter.Name,
+                },
             };
         }
 
@@ -134,7 +150,7 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
             List<DoseReminderDTO> remindersToReturn = new List<DoseReminderDTO>();
             foreach (var reminder in doseRemindersFromDb)
             {
-                var child = reminder.Parent.ChildParents.Where(c=>c.ChildId == reminder.ChildId).FirstOrDefault().Child;
+                var child = reminder.Parent.ChildParents.Where(c => c.ChildId == reminder.ChildId).FirstOrDefault().Child;
                 remindersToReturn.Add(new DoseReminderDTO()
                 {
                     ParentId = reminder.ParentId,
@@ -164,7 +180,7 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
             List<DoseReminderDTO> remindersToReturn = new List<DoseReminderDTO>();
             foreach (var reminder in doseRemindersFromDb)
             {
-                var child = reminder.Parent.ChildParents.Where(c=>c.ChildId == reminder.ChildId).FirstOrDefault().Child;
+                var child = reminder.Parent.ChildParents.Where(c => c.ChildId == reminder.ChildId).FirstOrDefault().Child;
                 remindersToReturn.Add(new DoseReminderDTO()
                 {
                     ParentId = reminder.ParentId,
