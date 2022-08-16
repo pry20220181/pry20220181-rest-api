@@ -41,6 +41,7 @@ namespace pry20220181_data_layer.Repositories.Master
                 .Include(r => r.VaccinationAppointment)
                     .ThenInclude(v => v.VaccinesForAppointment)
                     .ThenInclude(v => v.Vaccine)
+                .Include(r=>r.Child)
                 .ToListAsync();
         }
 

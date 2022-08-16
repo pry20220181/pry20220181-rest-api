@@ -43,12 +43,12 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
                 remindersToReturn.Add(new VaccinationAppointmentReminderDTO()
                 {
                     ParentId = reminder.ParentId,
+                    ChildId = reminder.ChildId,
                     ReminderId = reminder.ReminderId,
                     SendDate = reminder.SendDate,
                     VaccinationAppointmentId = reminder.VaccinationAppointmentId,
                     Via = reminder.Via,
                     AppointmentDateTime = reminder.VaccinationAppointment.AppointmentDateTime,
-                    ChildId = 0,
                     ChildDNI = "Remaining...",
                     ChildFullname = "Remaining...",
                     HealthCenterName = reminder.VaccinationAppointment.HealthCenter.Name,

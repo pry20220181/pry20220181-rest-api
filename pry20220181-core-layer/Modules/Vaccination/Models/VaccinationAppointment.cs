@@ -12,12 +12,14 @@ namespace pry20220181_core_layer.Modules.Vaccination.Models
         public int VaccinationAppointmentId { get; set; }
         public int HealthCenterId { get; set; }
         public int ParentId { get; set; }
+        public int ChildId { get; set; }
         public DateTime AppointmentDateTime { get; set; }
 
         #region Relations with another tables
         public HealthCenter HealthCenter { get; set; }
         public List<VaccineForAppointment> VaccinesForAppointment { get; set; }
         public Parent Parent { get; set; }
+        public Child Child { get; set; }
         #endregion
     }
 }

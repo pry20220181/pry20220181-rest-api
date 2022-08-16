@@ -35,6 +35,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
             VaccinationAppointment vaccinationAppointment = new VaccinationAppointment()
             {
                 ParentId = vaccinationAppointmentCreationDTO.ParentId,
+                ChildId = vaccinationAppointmentCreationDTO.ChildId,
                 HealthCenterId = vaccinationAppointmentCreationDTO.HealthCenterId,
                 AppointmentDateTime = vaccinationAppointmentCreationDTO.AppointmentDateTime,
                 VaccinesForAppointment = new List<VaccineForAppointment>()
@@ -58,6 +59,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
                 Reminder reminder = new Reminder()
                 {
                     ParentId = vaccinationAppointment.ParentId,
+                    ChildId = vaccinationAppointment.ChildId,
                     SendDate = vaccinationAppointment.AppointmentDateTime.AddDays(-3),
                     VaccinationAppointmentId = vaccinationAppointment.VaccinationAppointmentId,
                     Via = ReminderVias.SMS
@@ -69,6 +71,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
                 Reminder reminderToday = new Reminder()
                 {
                     ParentId = vaccinationAppointment.ParentId,
+                    ChildId = vaccinationAppointment.ChildId,
                     SendDate = DateTime.Now,
                     VaccinationAppointmentId = vaccinationAppointment.VaccinationAppointmentId,
                     Via = ReminderVias.SMS

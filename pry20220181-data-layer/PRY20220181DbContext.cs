@@ -132,6 +132,11 @@ namespace pry20220181_data_layer
                 .HasOne(v => v.Parent)
                 .WithMany(p => p.VaccinationAppointments)
                 .HasForeignKey(v => v.ParentId);
+            
+            modelBuilder.Entity<VaccinationAppointment>()
+                .HasOne(v => v.Child)
+                .WithMany()
+                .HasForeignKey(v => v.ChildId);
             #endregion
 
             #region VaccineForAppointment
@@ -319,6 +324,11 @@ namespace pry20220181_data_layer
                 .HasOne(r => r.Parent)
                 .WithMany(p => p.Reminders)
                 .HasForeignKey(r => r.ParentId);
+
+            modelBuilder.Entity<Reminder>()
+                .HasOne(r => r.Child)
+                .WithMany()
+                .HasForeignKey(r => r.ChildId);
 
             modelBuilder.Entity<Reminder>()
                 .HasOne(r => r.VaccinationCampaign)

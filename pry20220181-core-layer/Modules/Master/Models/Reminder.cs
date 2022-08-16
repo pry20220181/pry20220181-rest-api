@@ -21,6 +21,7 @@ namespace pry20220181_core_layer.Modules.Master.Models
 
         #region Relations with another tables
         public Parent Parent { get; set; }
+        public Child Child { get; set; }
         public VaccinationCampaign VaccinationCampaign { get; set; }
         public VaccinationAppointment VaccinationAppointment { get; set; }
         public DoseDetail DoseDetail { get; set; }
