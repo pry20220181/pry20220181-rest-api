@@ -49,8 +49,8 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
                     VaccinationAppointmentId = reminder.VaccinationAppointmentId,
                     Via = reminder.Via,
                     AppointmentDateTime = reminder.VaccinationAppointment.AppointmentDateTime,
-                    ChildDNI = "Remaining...",
-                    ChildFullname = "Remaining...",
+                    ChildDNI = reminder.Child.DNI,
+                    ChildFullname = reminder.Child.Firstname + " " + reminder.Child.Lastname,
                     HealthCenterName = reminder.VaccinationAppointment.HealthCenter.Name,
                     Vaccines = reminder.VaccinationAppointment.VaccinesForAppointment.Select(v => v.Vaccine.Name).ToList()
                 });
