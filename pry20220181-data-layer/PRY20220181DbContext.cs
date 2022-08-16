@@ -809,6 +809,71 @@ namespace pry20220181_data_layer
                 DoseNumber = 3,
                 PutWhenHasMonths = 6,
             };
+
+            DoseDetail dosis1VacunaIPV = new DoseDetail(){
+                VaccinationSchemeDetailId = vaccinationSchemeDetail1D.VaccinationSchemeDetailId,
+                DoseNumber = 1,
+                PutWhenHasMonths = 2
+            };
+
+            DoseDetail dosis2VacunaIPV = new DoseDetail(){
+                VaccinationSchemeDetailId = vaccinationSchemeDetail1D.VaccinationSchemeDetailId,
+                DoseNumber = 2,
+                PutWhenHasMonths = 4
+            };
+
+            DoseDetail dosis1VacunaAPO = new DoseDetail(){
+                VaccinationSchemeDetailId = vaccinationSchemeDetail1E.VaccinationSchemeDetailId,
+                DoseNumber = 1,
+                PutWhenHasMonths = 6
+            };
+
+            DoseDetail dosis1VacunaAntineumococica = new DoseDetail(){
+                VaccinationSchemeDetailId = vaccinationSchemeDetail1F.VaccinationSchemeDetailId,
+                DoseNumber = 1,
+                PutWhenHasMonths = 2
+            };
+
+            DoseDetail dosis2VacunaAntineumococica = new DoseDetail(){
+                VaccinationSchemeDetailId = vaccinationSchemeDetail1F.VaccinationSchemeDetailId,
+                DoseNumber = 2,
+                PutWhenHasMonths = 4
+            };
+
+            DoseDetail dosis1VacunaRotavirus = new DoseDetail(){
+                VaccinationSchemeDetailId = vaccinationSchemeDetail1G.VaccinationSchemeDetailId,
+                DoseNumber = 1,
+                PutWhenHasMonths = 2
+            };
+
+            DoseDetail dosis2VacunaRotavirus = new DoseDetail(){
+                VaccinationSchemeDetailId = vaccinationSchemeDetail1G.VaccinationSchemeDetailId,
+                DoseNumber = 2,
+                PutWhenHasMonths = 4
+            };
+
+            DoseDetail dosis1VacunaInfluenzaPediatrica = new DoseDetail(){
+                VaccinationSchemeDetailId = vaccinationSchemeDetail1H.VaccinationSchemeDetailId,
+                DoseNumber = 1, 
+                PutWhenHasMonths = 6
+            };
+
+            DoseDetail dosis2VacunaInfluenzaPediatrica = new DoseDetail(){
+                VaccinationSchemeDetailId = vaccinationSchemeDetail1H.VaccinationSchemeDetailId,
+                DoseNumber = 2, 
+                PutWhenHasMonths = 7
+            };
+
+            DoseDetail dosis1VacunaDTPediatricaHIBHepatitis = new DoseDetail(){
+                VaccinationSchemeDetailId = vaccinationSchemeDetail1I.VaccinationSchemeDetailId,
+                DoseNumber = 1, 
+                PutWhenHasMonths = 0
+            };
+            DoseDetail dosis2VacunaDTPediatricaHIBHepatitis = new DoseDetail(){
+                VaccinationSchemeDetailId = vaccinationSchemeDetail1I.VaccinationSchemeDetailId,
+                DoseNumber = 2, 
+                PutWhenHasMonths = 0
+            };
             #endregion
 
             #region Esquema 2
