@@ -62,7 +62,7 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
             var allVaccinationSchemesFromDb = await _vaccinationSchemeDetailRepository.GetAllWithVaccinesAndDosesAsync();
             _logger.LogInformation($"Got {allVaccinationSchemesFromDb.Count} Vaccination Schemes from DB (with its related info: Vaccines and Doses)");
 
-            var administeredDosesToChildFromDb = await _administeredDoseRepository.GetByChildIdAsync(childId);
+            var administeredDosesToChildFromDb = await _administeredDoseRepository.GetByChildIdWithAllRelatedInfoAsync(childId);
             _logger.LogInformation($"The Child with ID {childId} has {administeredDosesToChildFromDb} administered doses");
 
             var vaccinationSchemesToReturn = new List<VaccinationCardDTO.VaccinationScheme>();
@@ -120,6 +120,11 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
                                 vaccineDoseToReturn.Administered = true;
                                 vaccineDoseToReturn.AdministeredDoseId = administeredDose.AdministeredDoseId;
                                 vaccineDoseToReturn.AdministrationDate = administeredDose.DoseDate;
+                                vaccineDoseToReturn.HealthPersonnel = new VaccinationCardDTO.VaccinationScheme.Vaccine.HealthPersonnel(){
+                                    HealthPersonnelId = administeredDose.HealthPersonnelId,
+                                    Fullname = administeredDose.HealthPersonnel.User.FirstName + " " + administeredDose.HealthPersonnel.User.LastName
+                                };
+                                vaccineDoseToReturn.Observations = administeredDose.Observations;
                                 vaccineToReturn.NumberOfDosesAdministered++;
                             }
 

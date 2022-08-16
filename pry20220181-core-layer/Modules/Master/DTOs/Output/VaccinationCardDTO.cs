@@ -41,7 +41,15 @@ namespace pry20220181_core_layer.Modules.Master.DTOs.Output
                     public bool Administered { get; set; }
                     public string AdministeredDoseId { get; set; }
                     public DateTime? AdministrationDate { get; set; }
+                    public HealthPersonnel? HealthPersonnel { get; set; }
+                    public string? Observations { get; set; }
                     public string PutWhen { get; set; }
+                }
+
+                public class HealthPersonnel
+                {
+                    public int HealthPersonnelId { get; set; }
+                    public string Fullname { get; set; }
                 }
             }
         }
