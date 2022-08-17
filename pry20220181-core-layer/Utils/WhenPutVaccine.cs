@@ -16,7 +16,7 @@ namespace pry20220181_core_layer.Utils
             {
                 return "Recien Nacido (24h)";
             }
-            if (doseDetail.PutWhenHasMonths > 0)
+            if (doseDetail.PutWhenHasMonths >= 0)
             {
                 if (doseDetail.PutWhenHasMonths == 1)
                 {

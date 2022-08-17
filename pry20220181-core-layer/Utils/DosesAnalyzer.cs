@@ -21,7 +21,7 @@ namespace pry20220181_core_layer.Utils
                 {
                     dose.CanBePut = true;
                 }
-                if (dose.PutWhenHasMonths > 0)
+                if (dose.PutWhenHasMonths >= 0)
                 {
                     
                     if(childAgeInMonth >= dose.PutWhenHasMonths)

@@ -981,9 +981,90 @@ namespace pry20220181_data_layer
             };
             #endregion
 
+            #region Esquema 4
+            DoseDetail dosis1S4VacunaPapiloma = new DoseDetail()
+            {
+                VaccinationSchemeDetailId = vaccinationSchemeDetail4A.VaccinationSchemeDetailId,
+                DoseNumber = 1,
+                PutBetweenStartMonth = 108,
+                PutBetweenEndMonth = 156
+            };
+
+            DoseDetail dosis2S4VacunaPapiloma = new DoseDetail()
+            {
+                VaccinationSchemeDetailId = vaccinationSchemeDetail4A.VaccinationSchemeDetailId,
+                DoseNumber = 2,
+                PutMonthsAfterPreviousDosis= 6,
+            };
+
+            DoseDetail dosis1S4VacunaInfluenzaAdulto = new DoseDetail()
+            {
+                VaccinationSchemeDetailId = vaccinationSchemeDetail4B.VaccinationSchemeDetailId,
+                DoseNumber = 1,
+                PutEveryYear = 1,
+            };
+
+            DoseDetail dosis1S4VacunaAMA = new DoseDetail()
+            {
+                VaccinationSchemeDetailId = vaccinationSchemeDetail4C.VaccinationSchemeDetailId,
+                DoseNumber = 1,
+                PutWhenHasMonths = 0
+            };
+
+            DoseDetail dosis1S4VacunaDTAdulto = new DoseDetail()
+            {
+                VaccinationSchemeDetailId = vaccinationSchemeDetail4D.VaccinationSchemeDetailId,
+                DoseNumber = 1,
+                PutWhenHasMonths = 0
+            };
+
+            DoseDetail dosis2S4VacunaDTAdulto = new DoseDetail()
+            {
+                VaccinationSchemeDetailId = vaccinationSchemeDetail4D.VaccinationSchemeDetailId,
+                DoseNumber = 2,
+                PutMonthsAfterPreviousDosis = 2
+            };
+
+            DoseDetail dosis3S4VacunaDTAdulto = new DoseDetail()
+            {
+                VaccinationSchemeDetailId = vaccinationSchemeDetail4D.VaccinationSchemeDetailId,
+                DoseNumber = 3,
+                PutMonthsAfterPreviousDosis = 4
+            };
+
+            DoseDetail dosis1S4VacunaHvB = new DoseDetail()
+            {
+                VaccinationSchemeDetailId = vaccinationSchemeDetail4E.VaccinationSchemeDetailId,
+                DoseNumber = 1,
+                PutWhenHasMonths = 0
+            };
+
+            DoseDetail dosis2S4VacunaHvB = new DoseDetail()
+            {
+                VaccinationSchemeDetailId = vaccinationSchemeDetail4E.VaccinationSchemeDetailId,
+                DoseNumber = 2,
+                PutMonthsAfterPreviousDosis = 1
+            };
+
+            DoseDetail dosis3S4VacunaHvB = new DoseDetail()
+            {
+                VaccinationSchemeDetailId = vaccinationSchemeDetail4E.VaccinationSchemeDetailId,
+                DoseNumber = 3,
+                PutMonthsAfterPreviousDosis = 1
+            };
+
+            DoseDetail dosis3S4VacunaSPR= new DoseDetail()
+            {
+                VaccinationSchemeDetailId = vaccinationSchemeDetail4F.VaccinationSchemeDetailId,
+                DoseNumber = 1,
+                PutBetweenStartMonth = 144,
+                PutBetweenEndMonth = 204
+            };
+            #endregion
+
             if (!DosesDetails.Any())
             {
-                DosesDetails.AddRange(new List<DoseDetail>()
+                var dosesDetailToAdd = new List<DoseDetail>()
                 {
                     dosis1VacunaBCG, dosis1VacunaHVB, dosis1VacunaPentavalente, dosis2VacunaPentavalente, dosis3VacunaPentavalente, dosis1VacunaIPV, dosis2VacunaIPV,
                     dosis1VacunaAPO, dosis1VacunaAntineumococica, dosis2VacunaAntineumococica, dosis1VacunaRotavirus, dosis2VacunaRotavirus, dosis1VacunaInfluenzaPediatrica,
@@ -993,9 +1074,11 @@ namespace pry20220181_data_layer
 
                     dosis1S3VacunaVaricela, dosis1S3VacunaInfluenzaPediatrica, dosis1S3VacunaDPT, dosis1S3VacunaAPO,
 
-                    
-                });
-                _logger.LogInformation("7 Doses Detail Creados");
+                    dosis1S4VacunaPapiloma, dosis2S4VacunaPapiloma, dosis1S4VacunaInfluenzaAdulto, dosis1S4VacunaAMA, dosis1S4VacunaDTAdulto, dosis2S4VacunaDTAdulto,
+                    dosis3S4VacunaDTAdulto, dosis1S4VacunaHvB, dosis2S4VacunaHvB, dosis3S4VacunaHvB, dosis3S4VacunaSPR
+                };
+                DosesDetails.AddRange(dosesDetailToAdd);
+                _logger.LogInformation($"{dosesDetailToAdd.Count} Doses Detail Creados");
             }
             #endregion
 
@@ -1088,26 +1171,6 @@ namespace pry20220181_data_layer
                 _logger.LogInformation("1 Personal de Salud Creado");
             }
             #endregion
-
-            //COMENTADO PARA TENER LIMPIA LA DATA TRANSACCIONAL
-            //#region AdministeredDoses
-            //AdministeredDose administeredDose1 = new AdministeredDose()
-            //{
-            //    DoseDetailId = dosis1VacunaBCG.DoseDetailId,
-            //    ChildId = child1.ChildId,
-            //    HealthCenterId = TumbesCS.HealthCenterId,
-            //    HealthPersonnelId = 1,
-            //    DoseDate = DateTime.UtcNow.AddHours(-5)
-            //};
-
-            //if (!AdministeredDoses.Any())
-            //{
-            //    AdministeredDoses.AddRange(new List<AdministeredDose>()
-            //    {
-            //        administeredDose1
-            //    });
-            //}
-            //#endregion
  
             #region VaccinationCampaign
             VaccinationCampaign vaccinationCampaign1 = new VaccinationCampaign()
