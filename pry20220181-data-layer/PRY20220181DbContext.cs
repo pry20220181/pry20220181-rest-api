@@ -950,6 +950,37 @@ namespace pry20220181_data_layer
             };
             #endregion
 
+            #region Esquema 3
+            DoseDetail dosis1S3VacunaVaricela = new DoseDetail()
+            {
+                VaccinationSchemeDetailId = vaccinationSchemeDetail3A.VaccinationSchemeDetailId,
+                DoseNumber = 1,
+                PutWhenHasMonths = 24,
+            };
+
+            DoseDetail dosis1S3VacunaInfluenzaPediatrica = new DoseDetail()
+            {
+                VaccinationSchemeDetailId = vaccinationSchemeDetail3B.VaccinationSchemeDetailId,
+                DoseNumber = 1,
+                PutBetweenStartMonth = 24,
+                PutBetweenEndMonth = 48
+            };
+
+            DoseDetail dosis1S3VacunaDPT = new DoseDetail()
+            {
+                VaccinationSchemeDetailId = vaccinationSchemeDetail3C.VaccinationSchemeDetailId,
+                DoseNumber = 1,
+                PutWhenHasMonths= 48
+            };
+
+            DoseDetail dosis1S3VacunaAPO = new DoseDetail()
+            {
+                VaccinationSchemeDetailId = vaccinationSchemeDetail3D.VaccinationSchemeDetailId,
+                DoseNumber = 1,
+                PutWhenHasMonths= 48
+            };
+            #endregion
+
             if (!DosesDetails.Any())
             {
                 DosesDetails.AddRange(new List<DoseDetail>()
@@ -959,6 +990,8 @@ namespace pry20220181_data_layer
                     dosis2VacunaInfluenzaPediatrica, dosis1VacunaDTPediatricaHIBHepatitis, dosis2VacunaDTPediatricaHIBHepatitis,
 
                     dosis1S2VacunaAntineumococica, dosis1VacunaContraVaricela, dosis1S2VacunaSPR, dosis2S2VacunaSPR, dosis1S2VacunaAMA, dosis1S2VacunaOPA,dosis1S2VacunaInfluenzaPediatrica, dosis1S2VacunaDPT,
+
+                    dosis1S3VacunaVaricela, dosis1S3VacunaInfluenzaPediatrica, dosis1S3VacunaDPT, dosis1S3VacunaAPO,
 
                     
                 });
@@ -1075,8 +1108,7 @@ namespace pry20220181_data_layer
             //    });
             //}
             //#endregion
-
-            //TODO: Aca meter Datar
+ 
             #region VaccinationCampaign
             VaccinationCampaign vaccinationCampaign1 = new VaccinationCampaign()
             {
