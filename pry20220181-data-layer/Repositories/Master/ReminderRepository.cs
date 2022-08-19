@@ -65,6 +65,8 @@ namespace pry20220181_data_layer.Repositories.Master
                     .Include(r => r.VaccinationCampaign)
                         .ThenInclude(r => r.VaccinationCampaignDetails)
                             .ThenInclude(d => d.Vaccine)
+                    .Include(r=>r.Parent)
+                        .ThenInclude(p=>p.User)
                     .ToListAsync();
         }
 

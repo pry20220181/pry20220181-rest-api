@@ -7,6 +7,7 @@ using pry20220181_core_layer.Modules.Campaigns.Models;
 using pry20220181_core_layer.Modules.Inventory.Models;
 using pry20220181_core_layer.Modules.Master.Models;
 using pry20220181_core_layer.Modules.Vaccination.Models;
+using pry20220181_core_layer.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
@@ -970,14 +971,14 @@ namespace pry20220181_data_layer
             {
                 VaccinationSchemeDetailId = vaccinationSchemeDetail3C.VaccinationSchemeDetailId,
                 DoseNumber = 1,
-                PutWhenHasMonths= 48
+                PutWhenHasMonths = 48
             };
 
             DoseDetail dosis1S3VacunaAPO = new DoseDetail()
             {
                 VaccinationSchemeDetailId = vaccinationSchemeDetail3D.VaccinationSchemeDetailId,
                 DoseNumber = 1,
-                PutWhenHasMonths= 48
+                PutWhenHasMonths = 48
             };
             #endregion
 
@@ -994,7 +995,7 @@ namespace pry20220181_data_layer
             {
                 VaccinationSchemeDetailId = vaccinationSchemeDetail4A.VaccinationSchemeDetailId,
                 DoseNumber = 2,
-                PutMonthsAfterPreviousDosis= 6,
+                PutMonthsAfterPreviousDosis = 6,
             };
 
             DoseDetail dosis1S4VacunaInfluenzaAdulto = new DoseDetail()
@@ -1053,7 +1054,7 @@ namespace pry20220181_data_layer
                 PutMonthsAfterPreviousDosis = 1
             };
 
-            DoseDetail dosis3S4VacunaSPR= new DoseDetail()
+            DoseDetail dosis3S4VacunaSPR = new DoseDetail()
             {
                 VaccinationSchemeDetailId = vaccinationSchemeDetail4F.VaccinationSchemeDetailId,
                 DoseNumber = 1,
@@ -1171,7 +1172,7 @@ namespace pry20220181_data_layer
                 _logger.LogInformation("1 Personal de Salud Creado");
             }
             #endregion
- 
+
             #region VaccinationCampaign
             VaccinationCampaign vaccinationCampaign1 = new VaccinationCampaign()
             {
@@ -1283,6 +1284,30 @@ namespace pry20220181_data_layer
             _logger.LogInformation("6 Detalle de Campaña de Vacunación Creados");
             #endregion
 
+            #region VaccinationCampaignReminders
+            Reminder reminderCampaign1 = new Reminder()
+            {
+                ParentId = parent1.ParentId,
+                SendDate = DateTime.Now,
+                VaccinationCampaignId = vaccinationCampaign1.VaccinationCampaignId,
+                Via = ReminderVias.Email
+            };
+            Reminder reminderCampaign2 = new Reminder()
+            {
+                ParentId = parent1.ParentId,
+                SendDate = DateTime.Now,
+                VaccinationCampaignId = vaccinationCampaign2.VaccinationCampaignId,
+                Via = ReminderVias.Email
+            };
+            if (!Reminders.Any())
+            {
+                Reminders.AddRange(new List<Reminder>()
+                {
+                    reminderCampaign1, reminderCampaign2
+                });
+                _logger.LogInformation("2 Recordatorios de Campañas de Vacunación Creadas");
+            }
+            #endregion
             SaveChanges();
         }
     }

@@ -102,23 +102,33 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
             {
                 remindersToReturn.Add(new VaccinationCampaignReminderDTO()
                 {
-                    ParentId = reminder.ParentId,
+                    Parent = new VaccinationCampaignReminderDTO.VaccinationCampaignReminderParent
+                    {
+                        ParentId = reminder.ParentId,
+                        Firstname = reminder.Parent.User.FirstName,
+                        Lastname = reminder.Parent.User.LastName,
+                        Email = reminder.Parent.User.Email
+                    },
                     ReminderId = reminder.ReminderId,
                     SendDate = reminder.SendDate,
-                    VaccinationCampaignId = reminder.VaccinationCampaignId,
                     Via = reminder.Via,
-                    Name = reminder.VaccinationCampaign.Name,
-                    Description = reminder.VaccinationCampaign.Description,
-                    EndDateTime = reminder.VaccinationCampaign.EndDateTime,
-                    StartDateTime = reminder.VaccinationCampaign.StartDateTime,
-                    HealthCenters = reminder.VaccinationCampaign.VaccinationCampaignLocations
+                    VaccinationCampaign = new VaccinationCampaignReminderDTO.VaccinationCampaignPayload
+                    {
+                        VaccinationCampaignId = reminder.VaccinationCampaignId,
+
+                        Name = reminder.VaccinationCampaign.Name,
+                        Description = reminder.VaccinationCampaign.Description,
+                        EndDateTime = reminder.VaccinationCampaign.EndDateTime,
+                        StartDateTime = reminder.VaccinationCampaign.StartDateTime,
+                        HealthCenters = reminder.VaccinationCampaign.VaccinationCampaignLocations
                         .Select(l => new VaccinationCampaignReminderDTO.VaccinationCampaignReminderHealthCenter
                         {
                             HealthCenterId = l.HealthCenter.HealthCenterId,
                             Name = l.HealthCenter.Name,
                             Address = l.HealthCenter.Address
                         }).ToList(),
-                    Vaccines = reminder.VaccinationCampaign.VaccinationCampaignDetails.Select(d => d.Vaccine.Name).ToList()
+                        Vaccines = reminder.VaccinationCampaign.VaccinationCampaignDetails.Select(d => d.Vaccine.Name).ToList()
+                    }
                 });
             }
             return remindersToReturn;
@@ -132,15 +142,30 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
             }
             return new VaccinationCampaignReminderDTO()
             {
+                Parent = new VaccinationCampaignReminderDTO.VaccinationCampaignReminderParent
+                {
+                    ParentId = campaignReminderFromDb.ParentId,
+                },
                 ReminderId = campaignReminderFromDb.ReminderId,
-                VaccinationCampaignId = campaignReminderFromDb.VaccinationCampaignId,
-                StartDateTime = campaignReminderFromDb.VaccinationCampaign.StartDateTime,
-                EndDateTime = campaignReminderFromDb.VaccinationCampaign.EndDateTime,
-                Via = campaignReminderFromDb.Via,
                 SendDate = campaignReminderFromDb.SendDate,
-                ParentId = campaignReminderFromDb.ParentId,
-                Name = campaignReminderFromDb.VaccinationCampaign.Name,
-                Description = campaignReminderFromDb.VaccinationCampaign.Description
+                Via = campaignReminderFromDb.Via,
+                VaccinationCampaign = new VaccinationCampaignReminderDTO.VaccinationCampaignPayload
+                {
+                    VaccinationCampaignId = campaignReminderFromDb.VaccinationCampaignId,
+
+                    Name = campaignReminderFromDb.VaccinationCampaign.Name,
+                    Description = campaignReminderFromDb.VaccinationCampaign.Description,
+                    EndDateTime = campaignReminderFromDb.VaccinationCampaign.EndDateTime,
+                    StartDateTime = campaignReminderFromDb.VaccinationCampaign.StartDateTime,
+                    HealthCenters = campaignReminderFromDb.VaccinationCampaign.VaccinationCampaignLocations
+                        .Select(l => new VaccinationCampaignReminderDTO.VaccinationCampaignReminderHealthCenter
+                        {
+                            HealthCenterId = l.HealthCenter.HealthCenterId,
+                            Name = l.HealthCenter.Name,
+                            Address = l.HealthCenter.Address
+                        }).ToList(),
+                    Vaccines = campaignReminderFromDb.VaccinationCampaign.VaccinationCampaignDetails.Select(d => d.Vaccine.Name).ToList()
+                }
             };
         }
 
