@@ -1,0 +1,1 @@
+dotnet publish --configuration RELEASE --output "G:\VNAJ Programs\PRY20220181-Rest-Api" --runtime win10-x64 /p:PublishSingleFile=true
