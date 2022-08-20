@@ -156,5 +156,20 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
                 VaccinationSchemes = vaccinationSchemesToReturn
             };
         }
+
+        public async Task<List<ChildDTO>> GetChildren()
+        {
+            var childrenFromDb = await _childRepository.GetChildrenAsync();
+
+            return childrenFromDb.Select(c=> new ChildDTO(){
+                ChildId = c.ChildId,
+                DNI = c.DNI,
+                Firstname = c.Firstname,
+                Lastname = c.Lastname,
+                Birthdate = c.Birthdate,
+                Gender = c.Gender,
+                Age = GetAgeFromBirthdate.GetAge(c.Birthdate)
+            }).ToList();
+        }
     }
 }

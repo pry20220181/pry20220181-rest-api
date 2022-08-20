@@ -22,7 +22,7 @@ namespace pry20220181_rest_api.Controllers
         }
 
 
-        [HttpGet("children", Name = "GetChildren")]
+        [HttpGet("children", Name = "GetChildrenByParent")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [SwaggerResponse(200, "Get Children by Parent", typeof(List<ChildDTO>))]

@@ -35,5 +35,10 @@ namespace pry20220181_data_layer.Repositories.Master
                 .Include(c => c.ChildParents)
                 .FirstOrDefaultAsync(c => c.ChildId == childId);
         }
+
+        public async Task<List<Child>> GetChildrenAsync()
+        {
+            return await _dbContext.Children.ToListAsync();
+        }
     }
 }

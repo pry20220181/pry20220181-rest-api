@@ -22,30 +22,38 @@ namespace pry20220181_rest_api.Controllers
             _logger = logger;
         }
 
-        [HttpGet(Name = "GetChildByDni")]
+        [HttpGet(Name = "GetChildren")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [SwaggerResponse(200, "Get Child By Dni", typeof(ChildDTO))]
-        public async Task<IResult> GetByDni([FromQuery] string dni = "")
+        [SwaggerResponse(200, "Get Children by DNI", typeof(ChildDTO))]
+        [SwaggerResponse(200, "Get Children", typeof(List<ChildDTO>))]
+        public async Task<IResult> GetChildren([FromQuery] string? dni = "")
         {
             try
             {
-                if(dni == "")
+                if (dni == "")
                 {
-                    return Results.BadRequest("DNI is required");
+                    var children = await _childService.GetChildren();
+
+                    return Results.Ok(new
+                    {
+                        Children = children
+                    });
                 }
-
-                var child = await _childService.GetChildByDniAsync(dni);
-
-                if(child is null)
+                else
                 {
-                    return Results.NotFound();
+                    var child = await _childService.GetChildByDniAsync(dni);
+
+                    if (child is null)
+                    {
+                        return Results.NotFound();
+                    }
+
+                    return Results.Ok(new
+                    {
+                        Child = child
+                    });
                 }
-
-                return Results.Ok(new
-                {
-                    ChildId = child
-                });
             }
             catch (Exception ex)
             {
