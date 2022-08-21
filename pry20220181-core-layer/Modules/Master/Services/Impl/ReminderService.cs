@@ -145,6 +145,9 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
                 Parent = new VaccinationCampaignReminderDTO.VaccinationCampaignReminderParent
                 {
                     ParentId = campaignReminderFromDb.ParentId,
+                    Email = campaignReminderFromDb.Parent.User.Email,
+                    Firstname = campaignReminderFromDb.Parent.User.FirstName,
+                    Lastname = campaignReminderFromDb.Parent.User.LastName
                 },
                 ReminderId = campaignReminderFromDb.ReminderId,
                 SendDate = campaignReminderFromDb.SendDate,

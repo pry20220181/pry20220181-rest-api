@@ -1111,7 +1111,8 @@ namespace pry20220181_data_layer
             {
                 Id = Guid.NewGuid().ToString(),
                 FirstName = "Arthur",
-                LastName = "Valladares"
+                LastName = "Valladares",
+                Email = "arthur1610@live.com"
             };
             base.Users.Add(userParent);
             Parent parent1 = new Parent()
