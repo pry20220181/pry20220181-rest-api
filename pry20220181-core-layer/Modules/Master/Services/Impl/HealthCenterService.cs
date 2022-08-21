@@ -47,5 +47,17 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
 
             return healthCenter;
         }
+
+        public async Task<List<HealthCenterDTO>> GetHealthCenters()
+        {
+            var healthCentersFromDb = await _healthCenterRepository.GetHealthCenters();
+
+            return healthCentersFromDb.Select(h=> new HealthCenterDTO(){
+                HealthCenterId = h.HealthCenterId,
+                Name = h.Name,
+                UbigeoId = h.UbigeoId,
+                Address = h.Address
+            }).ToList();
+        }
     }
 }

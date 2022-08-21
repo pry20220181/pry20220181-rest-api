@@ -24,30 +24,37 @@ namespace pry20220181_rest_api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [SwaggerResponse(200, "Get Health Centers By Ubigeos", typeof(List<HealthCenterDTO>))]
-        public async Task<IResult> GetHealthCentersByUbigeos([FromQuery] string ubigeoIds = "")
+        public async Task<IResult> GetHealthCentersByUbigeos([FromQuery] string? ubigeoIds = "")
         {
             try
             {
                 if (ubigeoIds == "")
                 {
-                    return Results.BadRequest("UbigeoIds is required");
+                    var healthCenters = await _healthCenterService.GetHealthCenters();
+                    return Results.Ok(new
+                    {
+                        HealthCenters = healthCenters
+                    });
                 }
-                List<int> ubigeoIdsList = new List<int>();
-                try
+                else
                 {
-                    ubigeoIdsList =  ubigeoIds.Split(',').Select(c => Convert.ToInt32(c.Trim())).ToList();
-                }
-                catch (Exception)
-                {
-                    return Results.BadRequest("UbigeoIds has not the right format (numbers in csv: 1,2,3)");
-                }
+                    List<int> ubigeoIdsList = new List<int>();
+                    try
+                    {
+                        ubigeoIdsList = ubigeoIds.Split(',').Select(c => Convert.ToInt32(c.Trim())).ToList();
+                    }
+                    catch (Exception)
+                    {
+                        return Results.BadRequest("UbigeoIds has not the right format (numbers in csv: 1,2,3)");
+                    }
 
-                var healthCenters = await _healthCenterService.GetHealthCentersByUbigeosAsync(ubigeoIdsList);
+                    var healthCenters = await _healthCenterService.GetHealthCentersByUbigeosAsync(ubigeoIdsList);
 
-                return Results.Ok(new
-                {
-                    HealthCenters = healthCenters
-                });
+                    return Results.Ok(new
+                    {
+                        HealthCenters = healthCenters
+                    });
+                }
             }
             catch (Exception ex)
             {
