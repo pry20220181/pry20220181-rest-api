@@ -30,5 +30,11 @@ namespace pry20220181_data_layer.Repositories.Master
             return await _dbContext.HealthCenters
                 .FirstOrDefaultAsync(h => h.HealthCenterId == healthCenterId);
         }
+
+        public async Task<List<HealthCenter>> GetHealthCenters()
+        {
+            return await _dbContext.HealthCenters
+                .ToListAsync();
+        }
     }
 }
