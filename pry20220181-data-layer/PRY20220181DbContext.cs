@@ -243,6 +243,11 @@ namespace pry20220181_data_layer
                 .HasOne(p => p.User)
                 .WithOne(u => u.HealthPersonnel)
                 .HasForeignKey<HealthPersonnel>(p => p.UserId);
+
+            modelBuilder.Entity<HealthPersonnel>()
+                .HasOne(c=> c.HealthCenter)
+                .WithMany(c=>c.HealthPersonnels)
+                .HasForeignKey(h=>h.HealthCenterId);
             #endregion
 
             #endregion

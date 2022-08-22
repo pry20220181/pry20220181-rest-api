@@ -10,7 +10,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Models
     {
         public int VaccinationSchemeId { get; set; }
         public string Name { get; set; }
-        //public string Description { get; set; }
+        public string Description { get; set; }
         public int InitialAge { get; set; }
         public int FinalAge { get; set; }
         

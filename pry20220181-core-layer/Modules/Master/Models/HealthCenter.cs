@@ -18,6 +18,7 @@ namespace pry20220181_core_layer.Modules.Master.Models
         #region Relations with another tables
         public Ubigeo Ubigeo { get; set; }
         public List<VaccinationCampaignLocation> VaccinationCampaignLocations { get; set; }
+        public List<HealthPersonnel> HealthPersonnels {get;set;} 
         public List<VaccineInventory> VaccineInventories { get; set; }
         #endregion
     }
