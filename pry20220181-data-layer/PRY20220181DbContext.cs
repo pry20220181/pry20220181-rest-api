@@ -519,6 +519,7 @@ namespace pry20220181_data_layer
             VaccinationScheme vaccinationScheme1 = new VaccinationScheme
             {
                 Name = "Esquema de Vacunacion para el Niño Menor de 1 Año",
+                Description = "Esquema de Vacunacion para el Niño Menor de 1 Año",
                 InitialAge = 0,
                 FinalAge = 1,
             };
@@ -527,6 +528,7 @@ namespace pry20220181_data_layer
             {
                 Name = "Esquema de Vacunacion para el Niño de 1 Año",
                 InitialAge = 1,
+                Description = "Esquema de Vacunacion para el Niño de 1 Año",
                 FinalAge = 1,
             };
 
@@ -534,6 +536,7 @@ namespace pry20220181_data_layer
             {
                 Name = "Esquema de Vacunacion para el Niño de 2, 3 y 4 Años",
                 InitialAge = 2,
+                Description = "Esquema de Vacunacion para el Niño de 2, 3 y 4 Años",
                 FinalAge = 4,
             };
 
@@ -541,6 +544,7 @@ namespace pry20220181_data_layer
             {
                 Name = "Esquema de Vacunacion para el Adolescente",
                 InitialAge = 9,
+                Description = "Esquema de Vacunacion para el Adolescente",
                 FinalAge = 17,
             };
 
@@ -1185,8 +1189,8 @@ namespace pry20220181_data_layer
                 Name = "Campaña Vacunación Infantes Norte",
                 StartDateTime = DateTime.UtcNow.AddDays(3),
                 EndDateTime = DateTime.UtcNow.AddDays(10),
-                Description = "Campaña de vacunación para los niños de los CS del Norte"
-                //Image = "https://www.tumbes.gob.pe/wp-content/uploads/2019/01/campaña-vacunacion-infantes.jpg",
+                Description = "Campaña de vacunación para los niños de los CS del Norte",
+                Image = "https://www.tumbes.gob.pe/wp-content/uploads/2019/01/campaña-vacunacion-infantes.jpg",
             };
 
             VaccinationCampaign vaccinationCampaign2 = new VaccinationCampaign()
@@ -1194,8 +1198,8 @@ namespace pry20220181_data_layer
                 Name = "Campaña Vacunación Niños Lima",
                 StartDateTime = DateTime.UtcNow.AddDays(8),
                 EndDateTime = DateTime.UtcNow.AddDays(15),
-                Description = "Campaña de vacunación para los niños de los CS de Lima"
-                //Image = "https://www.tumbes.gob.pe/wp-content/uploads/2019/01/campaña-vacunacion-infantes.jpg",
+                Description = "Campaña de vacunación para los niños de los CS de Lima",
+                Image = "https://www.tumbes.gob.pe/wp-content/uploads/2019/01/campaña-vacunacion-infantes.jpg",
             };
 
             if (!VaccinationCampaigns.Any())
