@@ -147,11 +147,12 @@ namespace pry20220181_rest_api.Controllers
             }
         }
 
-        [HttpDelete("doses", Name = "DeleteAlreadySentReminders")]
+        [HttpDelete(Name = "DeleteAlreadySentReminders")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [SwaggerResponse(200, "Delete Already Sent Reminders", typeof(int))]
         public async Task<IResult> DeleteAlreadySentReminders([FromBody] List<int> AlreadySentReminders)
         {
+            Console.WriteLine("Hello", AlreadySentReminders);
             var response = await _reminderService.DeleteAlreadySentReminders(AlreadySentReminders);
             return Results.Ok(new
             {
