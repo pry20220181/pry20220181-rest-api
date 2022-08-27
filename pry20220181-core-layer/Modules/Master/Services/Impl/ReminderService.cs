@@ -47,7 +47,10 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
                     Via = reminder.Via,
                     Parent = new VaccinationAppointmentReminderDTO.VAReminderParentDTO()
                     {
-                        ParentId = reminder.ParentId
+                        ParentId = reminder.ParentId,
+                        Firstname = reminder.Parent.User.FirstName,
+                        Lastname = reminder.Parent.User.LastName,
+                        Email = reminder.Parent.User.Email
                     },
                     VaccinationAppointment = new VaccinationAppointmentReminderDTO.VaccinationAppointmentPayload()
                     {
@@ -86,7 +89,10 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
                 SendDate = appointmentReminderFromDb.SendDate,
                 Parent = new VaccinationAppointmentReminderDTO.VAReminderParentDTO()
                 {
-                    ParentId = appointmentReminderFromDb.ParentId
+                    ParentId = appointmentReminderFromDb.ParentId,
+                    Firstname = appointmentReminderFromDb.Parent.User.FirstName,
+                    Lastname = appointmentReminderFromDb.Parent.User.LastName,
+                    Email = appointmentReminderFromDb.Parent.User.Email
                 },
                 VaccinationAppointment = new VaccinationAppointmentReminderDTO.VaccinationAppointmentPayload()
                 {

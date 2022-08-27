@@ -33,6 +33,9 @@ namespace pry20220181_core_layer.Modules.Master.DTOs.Output
         public class VAReminderParentDTO
         {
             public int ParentId { get; set; }
+            public string Firstname { get; set; }
+            public string Lastname { get; set; }
+            public string Email { get; set; }
         }
         public class VAReminderChildDTO
         {
