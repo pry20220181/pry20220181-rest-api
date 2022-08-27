@@ -42,27 +42,31 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
             {
                 remindersToReturn.Add(new VaccinationAppointmentReminderDTO()
                 {
+                    ReminderId = reminder.ReminderId,
+                    SendDate = reminder.SendDate,
+                    Via = reminder.Via,
                     Parent = new VaccinationAppointmentReminderDTO.VAReminderParentDTO()
                     {
                         ParentId = reminder.ParentId
                     },
-                    Child = new VaccinationAppointmentReminderDTO.VAReminderChildDTO()
+                    VaccinationAppointment = new VaccinationAppointmentReminderDTO.VaccinationAppointmentPayload()
                     {
-                        ChildId = reminder.ChildId,
-                        DNI = reminder.Child.DNI,
-                        Fullname = reminder.Child.Firstname + " " + reminder.Child.Lastname
-                    },
-                    HealthCenter = new VaccinationAppointmentReminderDTO.VAReminderHealthCenterDTO()
-                    {
-                        HealthCenterId = reminder.VaccinationAppointment.HealthCenterId,
-                        Name = reminder.VaccinationAppointment.HealthCenter.Name,
-                    },
-                    ReminderId = reminder.ReminderId,
-                    SendDate = reminder.SendDate,
-                    VaccinationAppointmentId = reminder.VaccinationAppointmentId,
-                    Via = reminder.Via,
-                    AppointmentDateTime = reminder.VaccinationAppointment.AppointmentDateTime,
-                    Vaccines = reminder.VaccinationAppointment.VaccinesForAppointment.Select(v => v.Vaccine.Name).ToList()
+                        Child = new VaccinationAppointmentReminderDTO.VAReminderChildDTO()
+                        {
+                            ChildId = reminder.ChildId,
+                            DNI = reminder.Child.DNI,
+                            Fullname = reminder.Child.Firstname + " " + reminder.Child.Lastname
+                        },
+                        HealthCenter = new VaccinationAppointmentReminderDTO.VAReminderHealthCenterDTO()
+                        {
+                            HealthCenterId = reminder.VaccinationAppointment.HealthCenterId,
+                            Name = reminder.VaccinationAppointment.HealthCenter.Name,
+                        },
+
+                        VaccinationAppointmentId = reminder.VaccinationAppointmentId,
+                        AppointmentDateTime = reminder.VaccinationAppointment.AppointmentDateTime,
+                        Vaccines = reminder.VaccinationAppointment.VaccinesForAppointment.Select(v => v.Vaccine.Name).ToList()
+                    }
                 });
             }
             return remindersToReturn;
@@ -78,19 +82,22 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
             return new VaccinationAppointmentReminderDTO()
             {
                 ReminderId = appointmentReminderFromDb.ReminderId,
-                VaccinationAppointmentId = appointmentReminderFromDb.VaccinationAppointmentId,
-                AppointmentDateTime = appointmentReminderFromDb.VaccinationAppointment.AppointmentDateTime,
                 Via = appointmentReminderFromDb.Via,
                 SendDate = appointmentReminderFromDb.SendDate,
                 Parent = new VaccinationAppointmentReminderDTO.VAReminderParentDTO()
                 {
                     ParentId = appointmentReminderFromDb.ParentId
                 },
-                HealthCenter = new VaccinationAppointmentReminderDTO.VAReminderHealthCenterDTO()
+                VaccinationAppointment = new VaccinationAppointmentReminderDTO.VaccinationAppointmentPayload()
                 {
-                    HealthCenterId = appointmentReminderFromDb.VaccinationAppointment.HealthCenterId,
-                    Name = appointmentReminderFromDb.VaccinationAppointment.HealthCenter.Name,
-                },
+                    VaccinationAppointmentId = appointmentReminderFromDb.VaccinationAppointmentId,
+                    AppointmentDateTime = appointmentReminderFromDb.VaccinationAppointment.AppointmentDateTime,
+                    HealthCenter = new VaccinationAppointmentReminderDTO.VAReminderHealthCenterDTO()
+                    {
+                        HealthCenterId = appointmentReminderFromDb.VaccinationAppointment.HealthCenterId,
+                        Name = appointmentReminderFromDb.VaccinationAppointment.HealthCenter.Name,
+                    },
+                }
             };
         }
 

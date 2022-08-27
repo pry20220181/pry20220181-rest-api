@@ -15,11 +15,16 @@ namespace pry20220181_core_layer.Modules.Master.DTOs.Output
         public string Via { get; set; }
         public DateTime SendDate { get; set; }
         public VAReminderParentDTO Parent { get; set; }
-        public int VaccinationAppointmentId { get; set; }
-        public VAReminderChildDTO Child { get; set; }
-        public VAReminderHealthCenterDTO HealthCenter { get; set; }
-        public DateTime AppointmentDateTime { get; set; }
-        public List<string> Vaccines { get; set; }
+        public VaccinationAppointmentPayload VaccinationAppointment { get; set; }
+
+        public class VaccinationAppointmentPayload
+        {
+            public int VaccinationAppointmentId { get; set; }
+            public VAReminderChildDTO Child { get; set; }
+            public VAReminderHealthCenterDTO HealthCenter { get; set; }
+            public DateTime AppointmentDateTime { get; set; }
+            public List<string> Vaccines { get; set; }
+        }
         public class VAReminderHealthCenterDTO
         {
             public int HealthCenterId { get; set; }

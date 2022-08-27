@@ -245,9 +245,9 @@ namespace pry20220181_data_layer
                 .HasForeignKey<HealthPersonnel>(p => p.UserId);
 
             modelBuilder.Entity<HealthPersonnel>()
-                .HasOne(c=> c.HealthCenter)
-                .WithMany(c=>c.HealthPersonnels)
-                .HasForeignKey(h=>h.HealthCenterId);
+                .HasOne(c => c.HealthCenter)
+                .WithMany(c => c.HealthPersonnels)
+                .HasForeignKey(h => h.HealthCenterId);
             #endregion
 
             #endregion
@@ -1309,15 +1309,90 @@ namespace pry20220181_data_layer
                 VaccinationCampaignId = vaccinationCampaign2.VaccinationCampaignId,
                 Via = ReminderVias.Email
             };
+            #endregion
+
+            #region VaccinationAppointment
+            VaccinationAppointment appointment1 = new VaccinationAppointment()
+            {
+                AppointmentDateTime = DateTime.UtcNow.AddDays(1),
+                ChildId = child1.ChildId,
+                HealthCenterId = TumbesCS.HealthCenterId,
+                ParentId = parent1.ParentId
+            };
+
+            VaccinationAppointment appointment2 = new VaccinationAppointment()
+            {
+                AppointmentDateTime = DateTime.UtcNow.AddDays(3),
+                ChildId = child1.ChildId,
+                HealthCenterId = TumbesCS.HealthCenterId,
+                ParentId = parent1.ParentId
+            };
+
+            if (!VaccinationAppointments.Any())
+            {
+                VaccinationAppointments.AddRange(new List<VaccinationAppointment>(){
+                    appointment1, appointment2
+                });
+                _logger.LogInformation("2 Citas de Vacunación Creadas");
+            }
+            #endregion
+
+            #region VaccinesForAppointment
+            VaccineForAppointment v1a1 = new VaccineForAppointment()
+            {
+                VaccinationAppointmentId = appointment1.VaccinationAppointmentId,
+                VaccineId = BCG.VaccineId
+            };
+
+            VaccineForAppointment v2a1 = new VaccineForAppointment()
+            {
+                VaccinationAppointmentId = appointment1.VaccinationAppointmentId,
+                VaccineId = HVB.VaccineId
+            };
+
+            VaccineForAppointment v1a2 = new VaccineForAppointment()
+            {
+                VaccinationAppointmentId = appointment2.VaccinationAppointmentId,
+                VaccineId = VacunaPentavalente.VaccineId
+            };
+
+            if (!VaccinesForAppointments.Any())
+            {
+                VaccinesForAppointments.AddRange(new List<VaccineForAppointment>(){
+                    v1a1, v2a1, v1a2
+                });
+                _logger.LogInformation("3 Detalle Citas de Vacunación Creados");
+            }
+            #endregion
+
+            #region VaccinationAppointmentReminders
+            Reminder reminderAppointment1 = new Reminder()
+            {
+                ChildId = child1.ChildId,
+                ParentId = parent1.ParentId,
+                SendDate = DateTime.Now,
+                VaccinationAppointmentId = appointment1.VaccinationAppointmentId,
+                Via = ReminderVias.Email
+            };
+
+            Reminder reminderAppointment2 = new Reminder()
+            {
+                ChildId = child1.ChildId,
+                ParentId = parent1.ParentId,
+                SendDate = DateTime.Now,
+                VaccinationAppointmentId = appointment2.VaccinationAppointmentId,
+                Via = ReminderVias.Email
+            };
+            #endregion
+
             if (!Reminders.Any())
             {
                 Reminders.AddRange(new List<Reminder>()
                 {
-                    reminderCampaign1, reminderCampaign2
+                    reminderCampaign1, reminderCampaign2, reminderAppointment1, reminderAppointment2
                 });
-                _logger.LogInformation("2 Recordatorios de Campañas de Vacunación Creadas");
+                _logger.LogInformation("2 Recordatorios de Campañas de Vacunación y 2 de Cita Creadas");
             }
-            #endregion
             SaveChanges();
         }
     }

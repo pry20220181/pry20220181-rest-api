@@ -83,6 +83,10 @@ builder.Services.AddPRY20220181Repositories();
 builder.Services.AddPRY20220181Services();
 #endregion
 
+builder.Services.AddCors( options => {
+                options.AddPolicy("AllowMyApp", policy => policy.AllowAnyOrigin());
+            });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -95,6 +99,8 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowMyApp");
 
 app.UseAuthentication();
 app.UseAuthorization();
