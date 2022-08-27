@@ -64,6 +64,7 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
                         {
                             HealthCenterId = reminder.VaccinationAppointment.HealthCenterId,
                             Name = reminder.VaccinationAppointment.HealthCenter.Name,
+                            Address = reminder.VaccinationAppointment.HealthCenter.Address
                         },
 
                         VaccinationAppointmentId = reminder.VaccinationAppointmentId,
@@ -102,6 +103,7 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
                     {
                         HealthCenterId = appointmentReminderFromDb.VaccinationAppointment.HealthCenterId,
                         Name = appointmentReminderFromDb.VaccinationAppointment.HealthCenter.Name,
+                            Address = appointmentReminderFromDb.VaccinationAppointment.HealthCenter.Address
                     },
                 }
             };

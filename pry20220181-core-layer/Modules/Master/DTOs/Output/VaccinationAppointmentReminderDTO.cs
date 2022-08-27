@@ -29,6 +29,7 @@ namespace pry20220181_core_layer.Modules.Master.DTOs.Output
         {
             public int HealthCenterId { get; set; }
             public string Name { get; set; }
+            public string Address { get; set; }
         }
         public class VAReminderParentDTO
         {
