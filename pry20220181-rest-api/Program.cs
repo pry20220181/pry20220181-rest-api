@@ -84,7 +84,9 @@ builder.Services.AddPRY20220181Services();
 #endregion
 
 builder.Services.AddCors( options => {
-                options.AddPolicy("AllowMyApp", policy => policy.AllowAnyOrigin());
+                options.AddPolicy("AllowMyApp", policy => policy.AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod());
             });
 
 var app = builder.Build();
