@@ -26,7 +26,10 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
             return new HealthPersonnelDTO()
             {
                 HealthPersonnelId = healthPersonnelFromDb.HealthPersonnelId,
-                DNI = healthPersonnelFromDb.DNI
+                DNI = healthPersonnelFromDb.DNI,
+                FirstName = healthPersonnelFromDb.User.FirstName,
+                LastName = healthPersonnelFromDb.User.LastName,
+                Email = healthPersonnelFromDb.User.Email                
             };
         }
 
@@ -36,7 +39,10 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
             return new ParentDTO()
             {
                 ParentId = parentFromDb.ParentId,
-                DNI = parentFromDb.DNI
+                DNI = parentFromDb.DNI,
+                FirstName = parentFromDb.User.FirstName,
+                LastName = parentFromDb.User.LastName,
+                Email = parentFromDb.User.Email    
             };
         }
     }

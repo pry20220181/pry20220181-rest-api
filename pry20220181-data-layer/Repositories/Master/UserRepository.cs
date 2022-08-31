@@ -23,12 +23,12 @@ namespace pry20220181_data_layer.Repositories.Master
 
         public async Task<HealthPersonnel> GetHealthPersonnelByUserIdAsync(string userId)
         {
-            return await _dbContext.HealthPersonnel.FirstOrDefaultAsync(h => h.UserId == userId);
+            return await _dbContext.HealthPersonnel.Include(h=>h.User).FirstOrDefaultAsync(h => h.UserId == userId);
         }
 
         public async Task<Parent> GetParentByUserIdAsync(string userId)
         {
-            return await _dbContext.Parents.FirstOrDefaultAsync(p => p.UserId == userId);
+            return await _dbContext.Parents.Include(h=>h.User).FirstOrDefaultAsync(p => p.UserId == userId);
         }
     }
 }
