@@ -30,7 +30,6 @@ namespace pry20220181_rest_api.Controllers
         public async Task<IResult> GetUserInfo()
         {
             var user = HttpContext.User;
-            Console.WriteLine(user);
             var userId = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Sid).Value;
             var role = user.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
             var dni = user.Claims.FirstOrDefault(c => c.Type == CustomClaimTypes.DNI).Value;
