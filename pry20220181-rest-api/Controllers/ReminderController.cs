@@ -4,6 +4,8 @@ using pry20220181_core_layer.Modules.Master.DTOs.Output;
 using pry20220181_core_layer.Modules.Master.Services;
 using pry20220181_core_layer.Modules.Master.Services.Impl;
 using Swashbuckle.AspNetCore.Annotations;
+using pry20220181_rest_api.Utils;
+using Microsoft.AspNetCore.Authorization;
 
 namespace pry20220181_rest_api.Controllers
 {
@@ -146,6 +148,30 @@ namespace pry20220181_rest_api.Controllers
                 return Results.Problem("Internal error", statusCode: 500);
             }
         }
+
+        [HttpGet("doses-by-parent", Name = "GetDosesRemindersByParent")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [SwaggerResponse(200, "Get Doses Reminders By Parent", typeof(List<DoseReminderDTO>))]
+        public async Task<IResult> GetDosesRemindersByParent()
+        {
+            try
+            {
+                var user = 0;//HttpContext.User;
+                var parentId = 0;//Convert.ToInt32(user.Claims.FirstOrDefault(c => c.Type == CustomClaimTypes.EntityId).Value);
+
+                //var remindersFromDb = await _reminderService.GetAllDoseRemindersByParentIdAsync(parentId.Value);
+                return Results.Ok(new
+                {
+                    Message = "Reminder for parent with id " + parentId
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message + "\nStacktrace " + ex.StackTrace);
+                return Results.Problem("Internal error", statusCode: 500);
+            }
+        }
+
 
         [HttpDelete(Name = "DeleteAlreadySentReminders")]
         [ProducesResponseType(StatusCodes.Status200OK)]
