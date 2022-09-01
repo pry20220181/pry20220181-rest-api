@@ -101,5 +101,52 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
 
             return createdParentId;
         }
+
+        public async Task<RegisteredParentDTO> RegisterParentAndChildrenForValidationAsync(ParentCreateDTO parentCreateDTO)
+        {
+            if(parentCreateDTO.DNI is null)
+            {
+                return null;
+            }
+
+            Parent parent = new Parent()
+            {
+                DNI = parentCreateDTO.DNI,
+                Telephone = parentCreateDTO.Telephone,
+                UbigeoId = parentCreateDTO.UbigeoId,
+                UserId = parentCreateDTO.UserId,
+                ChildParents = new List<ChildParent>()
+            };
+
+            var relationship = parentCreateDTO.Relationship;
+
+            foreach (var childItem in parentCreateDTO.Children)
+            {
+                Child child = new Child()
+                {
+                    DNI = childItem.DNI,
+                    Firstname = childItem.FirstName,
+                    Lastname = childItem.LastName,
+                    Gender = childItem.Gender,
+                    Birthdate = childItem.Birthdate
+                };
+                parent.ChildParents.Add(new ChildParent()
+                {
+                    Relationship = (relationship == "Father" ? Relationship.Father : Relationship.Mother),
+                    Parent = parent,
+                    //ParentId = parent.ParentId,
+                    Child = child,
+                });
+            }
+
+            var createdParentId = await _parentRepository.CreateWithChildrenAsync(parent);
+
+            _logger.LogInformation($"The parent with ID {createdParentId} and DNI {parent.DNI} was created. Has {parent.ChildParents.Count()} children");
+
+            return new RegisteredParentDTO(){
+                Children = parent.ChildParents.Select(c=> new RegisteredChildDTO() { ChildId = c.ChildId } ).ToList(),
+                ParentId = parent.ParentId
+            };
+        }
     }
 }

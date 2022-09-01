@@ -13,5 +13,6 @@ namespace pry20220181_core_layer.Modules.Master.Services
         public Task<int> RegisterParentAndChildrenAsync(ParentCreateDTO parentCreateDTO);
         public Task<List<ChildDTO>> GetChildrenAsync(int parentId);
         public Task<ParentDTO> GetParentAsync(int parentId);
+        public Task<RegisteredParentDTO> RegisterParentAndChildrenForValidationAsync(ParentCreateDTO parentCreateDTO);
     }
 }
