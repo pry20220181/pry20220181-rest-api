@@ -12,7 +12,7 @@ namespace pry20220181_rest_api.Controllers
     //[Authorize]
     [ApiController]
     [Route("reminders")]
-    public class ReminderController
+    public class ReminderController : ControllerBase
     {
         private IReminderService _reminderService { get; set; }
         private ILogger<ReminderController> _logger { get; set; }
@@ -149,6 +149,8 @@ namespace pry20220181_rest_api.Controllers
             }
         }
 
+        #region Get Reminders by Parent
+        [Authorize]
         [HttpGet("doses-by-parent", Name = "GetDosesRemindersByParent")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [SwaggerResponse(200, "Get Doses Reminders By Parent", typeof(List<DoseReminderDTO>))]
@@ -156,8 +158,8 @@ namespace pry20220181_rest_api.Controllers
         {
             try
             {
-                var user = 0;//HttpContext.User;
-                var parentId = 0;//Convert.ToInt32(user.Claims.FirstOrDefault(c => c.Type == CustomClaimTypes.EntityId).Value);
+                var user = HttpContext.User;
+                var parentId = Convert.ToInt32(user.Claims.FirstOrDefault(c => c.Type == CustomClaimTypes.EntityId).Value);
 
                 //var remindersFromDb = await _reminderService.GetAllDoseRemindersByParentIdAsync(parentId.Value);
                 return Results.Ok(new
@@ -172,6 +174,54 @@ namespace pry20220181_rest_api.Controllers
             }
         }
 
+        [Authorize]
+        [HttpGet("vaccination-campaigns-by-parent", Name = "GetVaccinationCampaignRemindersByParent")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [SwaggerResponse(200, "Get Vaccination Campaign Reminders By Parent", typeof(List<VaccinationCampaignReminderDTO>))]
+        public async Task<IResult> GetVaccinationCampaignRemindersByParent()
+        {
+            try
+            {
+                var user = HttpContext.User;
+                var parentId = Convert.ToInt32(user.Claims.FirstOrDefault(c => c.Type == CustomClaimTypes.EntityId).Value);
+
+                //var remindersFromDb = await _reminderService.GetAllDoseRemindersByParentIdAsync(parentId.Value);
+                return Results.Ok(new
+                {
+                    Message = "Reminder for parent with id " + parentId
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message + "\nStacktrace " + ex.StackTrace);
+                return Results.Problem("Internal error", statusCode: 500);
+            }
+        }
+
+        [Authorize]
+        [HttpGet("vaccination-appointments-by-parent", Name = "GetVaccinationAppointmentRemindersByParent")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [SwaggerResponse(200, "Get Vaccination Appointment Reminders By Parent", typeof(List<VaccinationAppointmentReminderDTO>))]
+        public async Task<IResult> GetVaccinationAppointmentRemindersByParent()
+        {
+            try
+            {
+                var user = HttpContext.User;
+                var parentId = Convert.ToInt32(user.Claims.FirstOrDefault(c => c.Type == CustomClaimTypes.EntityId).Value);
+
+                //var remindersFromDb = await _reminderService.GetAllDoseRemindersByParentIdAsync(parentId.Value);
+                return Results.Ok(new
+                {
+                    Message = "Reminder for parent with id " + parentId
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message + "\nStacktrace " + ex.StackTrace);
+                return Results.Problem("Internal error", statusCode: 500);
+            }
+        }
+        #endregion
 
         [HttpDelete(Name = "DeleteAlreadySentReminders")]
         [ProducesResponseType(StatusCodes.Status200OK)]
