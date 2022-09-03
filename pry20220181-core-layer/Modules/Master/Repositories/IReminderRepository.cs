@@ -15,11 +15,15 @@ namespace pry20220181_core_layer.Modules.Master.Repositories
         public Task<Reminder> GetVaccinationAppointmentReminderByIdAsync(int reminderId);
         public Task<List<Reminder>> GetAllVaccinationCampaignRemindersAsync(DateTime sendDate);
         public Task<Reminder> GetVaccinationCampaignReminderByIdAsync(int reminderId);
-        public Task<List<Reminder>> GetAllDoseReminderByParentIdAsync(int parentId);
         public Task<List<Reminder>> GetAllDoseReminderAsync(DateTime sendDate);
         public Task<int> GetReminderByDoseDetailAndChildIdAsync(int doseDetailId, int childId);
         public Task DeleteReminderAsync(int reminderId);
         public Task DeleteRemindersByDoseDetailAndChildIdAsync(int doseDetailId, int childId);
         public Task<int> DeleteAlreadySentReminders(List<int> AlreadySentReminders);
+
+
+        public Task<List<Reminder>> GetAllDoseRemindersByParentIdAsync(int parentId);
+        public Task<List<Reminder>> GetAllVaccinationCampaignRemindersByParentIdAsync(int parentId);
+        public Task<List<Reminder>> GetAllVaccinationAppointmentRemindersByParentIdAsync(int parentId);
     }
 }

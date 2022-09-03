@@ -161,10 +161,10 @@ namespace pry20220181_rest_api.Controllers
                 var user = HttpContext.User;
                 var parentId = Convert.ToInt32(user.Claims.FirstOrDefault(c => c.Type == CustomClaimTypes.EntityId).Value);
 
-                //var remindersFromDb = await _reminderService.GetAllDoseRemindersByParentIdAsync(parentId.Value);
+                var remindersFromDb = await _reminderService.GetAllDoseRemindersByParentIdAsync(parentId);
                 return Results.Ok(new
                 {
-                    Message = "Reminder for parent with id " + parentId
+                    Reminders = remindersFromDb
                 });
             }
             catch (Exception ex)
@@ -185,10 +185,10 @@ namespace pry20220181_rest_api.Controllers
                 var user = HttpContext.User;
                 var parentId = Convert.ToInt32(user.Claims.FirstOrDefault(c => c.Type == CustomClaimTypes.EntityId).Value);
 
-                //var remindersFromDb = await _reminderService.GetAllDoseRemindersByParentIdAsync(parentId.Value);
+                var remindersFromDb = await _reminderService.GetAllVaccinationCampaignRemindersByParentIdAsync(parentId);
                 return Results.Ok(new
                 {
-                    Message = "Reminder for parent with id " + parentId
+                    Reminders = remindersFromDb
                 });
             }
             catch (Exception ex)
@@ -209,10 +209,10 @@ namespace pry20220181_rest_api.Controllers
                 var user = HttpContext.User;
                 var parentId = Convert.ToInt32(user.Claims.FirstOrDefault(c => c.Type == CustomClaimTypes.EntityId).Value);
 
-                //var remindersFromDb = await _reminderService.GetAllDoseRemindersByParentIdAsync(parentId.Value);
+                var remindersFromDb = await _reminderService.GetAllVaccinationAppointmentRemindersByParentIdAsync(parentId);
                 return Results.Ok(new
                 {
-                    Message = "Reminder for parent with id " + parentId
+                    Reminders = remindersFromDb
                 });
             }
             catch (Exception ex)

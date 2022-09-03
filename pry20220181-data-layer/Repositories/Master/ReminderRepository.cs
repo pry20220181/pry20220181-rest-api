@@ -110,20 +110,6 @@ namespace pry20220181_data_layer.Repositories.Master
             _logger.LogInformation($"Reminder {reminderId} removed");
         }
 
-        public async Task<List<Reminder>> GetAllDoseReminderByParentIdAsync(int parentId)
-        {
-            return await _dbContext
-                .Reminders
-                .Where(r => r.ParentId == parentId && r.DoseDetailId != 0)
-                .Include(r => r.DoseDetail)
-                    .ThenInclude(r => r.VaccinationSchemeDetail)
-                        .ThenInclude(d => d.Vaccine)
-                .Include(r => r.Parent)
-                    .ThenInclude(p => p.ChildParents)
-                        .ThenInclude(c => c.Child)
-                .ToListAsync();
-        }
-
         public async Task DeleteRemindersByDoseDetailAndChildIdAsync(int doseDetailId, int childId)
         {
             var remindersToDelete = _dbContext.Reminders.Where(r => r.DoseDetailId == doseDetailId && r.ChildId == childId);
@@ -154,6 +140,53 @@ namespace pry20220181_data_layer.Repositories.Master
             _logger.LogInformation($"{remindersToDelete.Count()} reminders removed");
             await _dbContext.SaveChangesAsync();
             return AlreadySentReminders.Count;
+        }
+
+        
+        public async Task<List<Reminder>> GetAllDoseRemindersByParentIdAsync(int parentId)
+        {
+            return await _dbContext
+                .Reminders
+                .Where(r => r.ParentId == parentId && r.DoseDetailId != 0)
+                .Include(r => r.DoseDetail)
+                    .ThenInclude(r => r.VaccinationSchemeDetail)
+                        .ThenInclude(d => d.Vaccine)
+                .Include(r => r.Parent)
+                    .ThenInclude(p => p.ChildParents)
+                        .ThenInclude(c => c.Child)
+                .ToListAsync();
+        }
+
+        public async Task<List<Reminder>> GetAllVaccinationCampaignRemindersByParentIdAsync(int parentId)
+        {
+            return await _dbContext
+                .Reminders
+                .Where(r => r.ParentId == parentId && r.VaccinationCampaignId != 0)
+                .Include(r => r.VaccinationCampaign)
+                    .ThenInclude(c=>c.VaccinationCampaignLocations)
+                        .ThenInclude(l=>l.HealthCenter)
+                .Include(r => r.VaccinationCampaign)
+                    .ThenInclude(c=>c.VaccinationCampaignDetails)
+                        .ThenInclude(c=>c.Vaccine)
+                .Include(r => r.Parent)
+                    .ThenInclude(p => p.ChildParents)
+                        .ThenInclude(c => c.Child)
+                .ToListAsync();
+        }
+
+        public async Task<List<Reminder>> GetAllVaccinationAppointmentRemindersByParentIdAsync(int parentId)
+        {
+            return await _dbContext
+                .Reminders
+                .Where(r => r.ParentId == parentId && r.VaccinationAppointmentId != 0)
+                .Include(r => r.VaccinationAppointment)
+                    .ThenInclude(a=>a.HealthCenter)
+                .Include(r => r.VaccinationAppointment)
+                    .ThenInclude(a=>a.VaccinesForAppointment)
+                .Include(r => r.Parent)
+                    .ThenInclude(p => p.ChildParents)
+                        .ThenInclude(c => c.Child)
+                .ToListAsync();
         }
     }
 }

@@ -187,36 +187,6 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
             };
         }
 
-        public async Task<List<DoseReminderDTO>> GetAllDoseRemindersByParentIdAsync(int parentId)
-        {
-            var doseRemindersFromDb = await _reminderRepository.GetAllDoseReminderByParentIdAsync(parentId);
-            List<DoseReminderDTO> remindersToReturn = new List<DoseReminderDTO>();
-            foreach (var reminder in doseRemindersFromDb)
-            {
-                var child = reminder.Parent.ChildParents.Where(c => c.ChildId == reminder.ChildId).FirstOrDefault().Child;
-                remindersToReturn.Add(new DoseReminderDTO()
-                {
-                    ParentId = reminder.ParentId,
-                    ReminderId = reminder.ReminderId,
-                    SendDate = reminder.SendDate,
-                    Dose = new DoseReminderDTO.DoseDTO
-                    {
-                        DoseDetailId = reminder.DoseDetailId,
-                        VaccineName = reminder.DoseDetail.VaccinationSchemeDetail.Vaccine.Name,
-                        DoseNumber = reminder.DoseDetail.DoseNumber
-                    },
-                    Child = new DoseReminderDTO.DoseReminderChildDTO
-                    {
-                        ChildId = reminder.ChildId,
-                        Name = child.Firstname + " " + child.Lastname,
-                        DNI = child.DNI
-                    },
-                    Via = reminder.Via
-                });
-            }
-            return remindersToReturn;
-        }
-
         public async Task<List<DoseReminderDTO>> GetAllDoseRemindersAsync(DateTime sendDate)
         {
             var doseRemindersFromDb = await _reminderRepository.GetAllDoseReminderAsync(sendDate);
@@ -250,6 +220,108 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
         public async Task<int> DeleteAlreadySentReminders(List<int> AlreadySentReminders)
         {
             return await _reminderRepository.DeleteAlreadySentReminders(AlreadySentReminders);
+        }
+
+        public async Task<List<DoseReminderDTO>> GetAllDoseRemindersByParentIdAsync(int parentId)
+        {
+            var doseRemindersFromDb = await _reminderRepository.GetAllDoseRemindersByParentIdAsync(parentId);
+            List<DoseReminderDTO> remindersToReturn = new List<DoseReminderDTO>();
+            foreach (var reminder in doseRemindersFromDb)
+            {
+                var child = reminder.Parent.ChildParents.Where(c => c.ChildId == reminder.ChildId).FirstOrDefault().Child;
+                remindersToReturn.Add(new DoseReminderDTO()
+                {
+                    ParentId = reminder.ParentId,
+                    ReminderId = reminder.ReminderId,
+                    SendDate = reminder.SendDate,
+                    Dose = new DoseReminderDTO.DoseDTO
+                    {
+                        DoseDetailId = reminder.DoseDetailId,
+                        VaccineName = reminder.DoseDetail.VaccinationSchemeDetail.Vaccine.Name,
+                        DoseNumber = reminder.DoseDetail.DoseNumber
+                    },
+                    Child = new DoseReminderDTO.DoseReminderChildDTO
+                    {
+                        ChildId = reminder.ChildId,
+                        Name = child.Firstname + " " + child.Lastname,
+                        DNI = child.DNI
+                    },
+                    Via = reminder.Via
+                });
+            }
+            return remindersToReturn;
+        }
+
+        public async Task<List<VaccinationCampaignReminderDTO>> GetAllVaccinationCampaignRemindersByParentIdAsync(int parentId)
+        {
+            var remindersFromDb = await _reminderRepository.GetAllVaccinationCampaignRemindersByParentIdAsync(parentId);
+            List<VaccinationCampaignReminderDTO> remindersToReturn = new List<VaccinationCampaignReminderDTO>();
+
+            foreach (var reminder in remindersFromDb)
+            {
+                remindersToReturn.Add(new VaccinationCampaignReminderDTO()
+                {
+                    ReminderId = reminder.ReminderId,
+                    SendDate = reminder.SendDate,
+                    Via = reminder.Via,
+                    VaccinationCampaign = new VaccinationCampaignReminderDTO.VaccinationCampaignPayload()
+                    {
+                        VaccinationCampaignId = reminder.VaccinationCampaignId,
+
+                        Name = reminder.VaccinationCampaign.Name,
+                        Description = reminder.VaccinationCampaign.Description,
+                        EndDateTime = reminder.VaccinationCampaign.EndDateTime,
+                        StartDateTime = reminder.VaccinationCampaign.StartDateTime,
+                        HealthCenters = reminder.VaccinationCampaign.VaccinationCampaignLocations
+                        .Select(l => new VaccinationCampaignReminderDTO.VaccinationCampaignReminderHealthCenter
+                        {
+                            HealthCenterId = l.HealthCenter.HealthCenterId,
+                            Name = l.HealthCenter.Name,
+                            Address = l.HealthCenter.Address
+                        }).ToList(),
+                        Vaccines = reminder.VaccinationCampaign.VaccinationCampaignDetails.Select(d => d.Vaccine.Name).ToList()
+                    }
+                });
+            }
+
+            return remindersToReturn;
+        }
+
+        public async Task<List<VaccinationAppointmentReminderDTO>> GetAllVaccinationAppointmentRemindersByParentIdAsync(int parentId)
+        {
+            var remindersFromDb = await _reminderRepository.GetAllVaccinationAppointmentRemindersByParentIdAsync(parentId);
+            List<VaccinationAppointmentReminderDTO> remindersToReturn = new List<VaccinationAppointmentReminderDTO>();
+
+            foreach (var reminder in remindersFromDb)
+            {
+                remindersToReturn.Add(new VaccinationAppointmentReminderDTO()
+                {
+                    ReminderId = reminder.ReminderId,
+                    SendDate = reminder.SendDate,
+                    Via = reminder.Via,
+                    VaccinationAppointment = new VaccinationAppointmentReminderDTO.VaccinationAppointmentPayload()
+                    {
+                        Child = new VaccinationAppointmentReminderDTO.VAReminderChildDTO()
+                        {
+                            ChildId = reminder.ChildId,
+                            DNI = reminder.Child.DNI,
+                            Fullname = reminder.Child.Firstname + " " + reminder.Child.Lastname
+                        },
+                        HealthCenter = new VaccinationAppointmentReminderDTO.VAReminderHealthCenterDTO()
+                        {
+                            HealthCenterId = reminder.VaccinationAppointment.HealthCenterId,
+                            Name = reminder.VaccinationAppointment.HealthCenter.Name,
+                            Address = reminder.VaccinationAppointment.HealthCenter.Address
+                        },
+
+                        VaccinationAppointmentId = reminder.VaccinationAppointmentId,
+                        AppointmentDateTime = reminder.VaccinationAppointment.AppointmentDateTime,
+                        Vaccines = reminder.VaccinationAppointment.VaccinesForAppointment.Select(v => v.Vaccine.Name).ToList()
+                    }
+                });
+            }
+
+            return remindersToReturn;
         }
     }
 }
