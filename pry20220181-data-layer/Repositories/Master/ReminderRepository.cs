@@ -183,6 +183,7 @@ namespace pry20220181_data_layer.Repositories.Master
                     .ThenInclude(a=>a.HealthCenter)
                 .Include(r => r.VaccinationAppointment)
                     .ThenInclude(a=>a.VaccinesForAppointment)
+                        .ThenInclude(v=>v.Vaccine)
                 .Include(r => r.Parent)
                     .ThenInclude(p => p.ChildParents)
                         .ThenInclude(c => c.Child)

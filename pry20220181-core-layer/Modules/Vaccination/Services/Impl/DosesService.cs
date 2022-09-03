@@ -129,7 +129,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
             {
                 var parentId = child.ChildParents[0].ParentId;
                 var remindersToCreate = new List<Reminder>();
-                var remindersForThisParent = await _reminderRepository.GetAllDoseReminderByParentIdAsync(parentId);
+                var remindersForThisParent = await _reminderRepository.GetAllDoseRemindersByParentIdAsync(parentId);
 
                 foreach (var remainingDose in remainingDosesToAdministerThatCanBePut)
                 {
