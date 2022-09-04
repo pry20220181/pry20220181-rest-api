@@ -105,6 +105,7 @@ namespace pry20220181_core_layer.Modules.Campaigns.Services.Impl
                 Description = vaccinationCampaignCreateDTO.Description,
                 StartDateTime = vaccinationCampaignCreateDTO.StartDateTime,
                 EndDateTime = vaccinationCampaignCreateDTO.EndDateTime,
+                Image = vaccinationCampaignCreateDTO.Image,
                 VaccinationCampaignDetails = new List<VaccinationCampaignDetail>(),
                 VaccinationCampaignLocations = new List<VaccinationCampaignLocation>()
             };

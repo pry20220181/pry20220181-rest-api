@@ -11,6 +11,7 @@ namespace pry20220181_core_layer.Modules.Campaigns.DTOs.Input
     {
         public string Name { get; set; }
         public string Description { get; set; }
+        public string Image { get; set; }
         public DateTime StartDateTime { get; set; }
         public DateTime EndDateTime { get; set; }
 

@@ -137,7 +137,7 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
 
                     vaccinationSchemesToReturn.Add(vaccinationSchemeToReturn);
                     alreadyRegisteredVaccinationSchemes.Add(vaccinationScheme.VaccinationSchemeId);
-                    _logger.LogInformation($"The Vaccination Scheme with ID {vaccinationScheme.VaccinationSchemeId} was added to the List to return with its related info");
+                    //_logger.LogInformation($"The Vaccination Scheme with ID {vaccinationScheme.VaccinationSchemeId} was added to the List to return with its related info");
                 }
             }
 

@@ -130,5 +130,33 @@ namespace pry20220181_rest_api.Controllers
                 return Results.Problem("Internal error", statusCode: 500);
             }
         }
+
+        [HttpGet("administered-doses/{id}", Name = "GetAdministeredDoseById")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [SwaggerResponse(200, "Get Administered Dose By Id", typeof(AdministeredDoseDTO))]
+        public async Task<IResult> GetAdministeredDoseById([FromRoute] int id = 0)
+        {
+            try
+            {
+                return Results.Ok(new
+                {
+                    AdministeredDose = new AdministeredDoseDTO(){
+                        AdministeredDoseId = id.ToString()
+                    }
+                });
+
+                // var administeredDose = await _dosesService.GetAdministeredDoseById(id);
+                // return Results.Ok(new
+                // {
+                //     AdministeredDose = administeredDose
+                // });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message + "\nStacktrace " + ex.StackTrace);
+                return Results.Problem("Internal error", statusCode: 500);
+            }
+        }
     }
 }
