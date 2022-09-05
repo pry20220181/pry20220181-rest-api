@@ -12,9 +12,10 @@ namespace pry20220181_data_layer.Blockchain.Impl
     {
         public async Task<string> CreateAsync(AdministeredDose administeredDose)
         {
+            administeredDose.AdministeredDoseId = Guid.NewGuid().ToString();
             BlockchainInMemory.AdministeredDoses.Add(administeredDose);
 
-            return "nuevoGuid";
+            return administeredDose.AdministeredDoseId;
         }
 
         public async Task<List<AdministeredDose>> GetByChildIdAsync(int childId)
