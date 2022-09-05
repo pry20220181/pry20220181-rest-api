@@ -10,6 +10,7 @@ namespace pry20220181_data_layer.Blockchain
     public interface IBlockchainClient
     {
         public Task<List<AdministeredDose>> GetByChildIdAsync(int childId);
+        public Task<AdministeredDose> GetAdministeredDoseByIdAsync(string id);
         public Task<string> CreateAsync(AdministeredDose administeredDose);
     }
 }

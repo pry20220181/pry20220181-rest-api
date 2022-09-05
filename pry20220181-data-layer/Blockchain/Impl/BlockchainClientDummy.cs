@@ -18,6 +18,11 @@ namespace pry20220181_data_layer.Blockchain.Impl
             return administeredDose.AdministeredDoseId;
         }
 
+        public async Task<AdministeredDose> GetAdministeredDoseByIdAsync(string id)
+        {
+            return BlockchainInMemory.AdministeredDoses.FirstOrDefault(d=>d.AdministeredDoseId == id);
+        }
+
         public async Task<List<AdministeredDose>> GetByChildIdAsync(int childId)
         {
             return BlockchainInMemory.AdministeredDoses.Where(d => d.ChildId == childId).ToList();

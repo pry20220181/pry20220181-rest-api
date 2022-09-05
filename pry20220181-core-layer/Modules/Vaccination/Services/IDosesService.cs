@@ -17,6 +17,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services
         /// <param name="childId"></param>
         /// <returns></returns>
         public Task<List<AdministeredDoseDTO>> GetAdministeredDosesByChild(int childId);
+        public Task<AdministeredDoseDTO> GetAdministeredDoseByIdAsync(string administeredDoseId);
         public Task<string> CreateAdministeredDose(AdministeredDoseCreationDTO administeredDoseCreationDTO);
     }
 }

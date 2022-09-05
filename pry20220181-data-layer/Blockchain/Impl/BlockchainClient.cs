@@ -75,5 +75,10 @@ namespace pry20220181_data_layer.Blockchain.Impl
                 }).ToList();
             }
         }
+
+        public Task<AdministeredDose> GetAdministeredDoseByIdAsync(string id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

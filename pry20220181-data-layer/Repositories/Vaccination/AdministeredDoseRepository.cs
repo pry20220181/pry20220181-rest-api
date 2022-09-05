@@ -66,5 +66,28 @@ namespace pry20220181_data_layer.Repositories.Vaccination
 
             return administeredDoses.Where(a => doseDetailIds.Contains(a.DoseDetailId)).ToList();
         }
+
+        public async Task<AdministeredDose> GetAdministeredDoseByIdAsync(string administeredDoseId)
+        {
+            var administeredDose = await _blockchainClient.GetAdministeredDoseByIdAsync(administeredDoseId);
+
+            var dosesDetails = await _dbContext.DosesDetails
+                .Include(d => d.VaccinationSchemeDetail.VaccinationScheme)
+                .Include(d => d.VaccinationSchemeDetail.Vaccine)
+                .Where(d => d.DoseDetailId == administeredDose.DoseDetailId)
+                .ToListAsync();
+
+            var healthCenter = await _dbContext.HealthCenters.FirstOrDefaultAsync(h => h.HealthCenterId == administeredDose.HealthCenterId);
+
+            var healthPersonnel = await _dbContext.HealthPersonnel
+                .Include(h => h.User)
+                .FirstOrDefaultAsync(h => h.HealthPersonnelId == administeredDose.HealthPersonnelId);
+
+                administeredDose.DoseDetail = dosesDetails.FirstOrDefault(d => d.DoseDetailId == administeredDose.DoseDetailId);
+                administeredDose.HealthCenter = healthCenter;
+                administeredDose.HealthPersonnel = healthPersonnel;
+
+            return administeredDose;
+        }
     }
 }

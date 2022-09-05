@@ -22,6 +22,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Repositories
         /// <returns>The List of Administered Dose with all its related Info</returns>
         public Task<List<AdministeredDose>> GetByChildIdWithAllRelatedInfoAsync(int childId);
         public Task<List<AdministeredDose>> GetByDosesIdList(int childId, List<int> doseDetailIds);
+        public Task<AdministeredDose> GetAdministeredDoseByIdAsync(string administeredDoseId);
         public Task<string> CreateAsync(AdministeredDose administeredDose);
     }
 }

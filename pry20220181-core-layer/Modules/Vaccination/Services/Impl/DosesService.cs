@@ -184,7 +184,7 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
 
             foreach (var administeredDose in administeredDosesToChildFromDb)
             {
-              
+
                 AdministeredDoseDTO administeredDoseDTO = new AdministeredDoseDTO()
                 {
                     AdministeredDoseId = administeredDose.AdministeredDoseId,
@@ -206,6 +206,28 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
             }
 
             return administeredDosesToChildToReturn;
+        }
+
+        public async Task<AdministeredDoseDTO> GetAdministeredDoseByIdAsync(string administeredDoseId)
+        {
+            var administeredDose = await _administeredDoseRepository.GetAdministeredDoseByIdAsync(administeredDoseId);
+
+            return new AdministeredDoseDTO()
+            {
+                AdministeredDoseId = administeredDose.AdministeredDoseId,
+                VaccineName = administeredDose.DoseDetail.VaccinationSchemeDetail.Vaccine.Name,
+                VaccineId = administeredDose.DoseDetail.VaccinationSchemeDetail.Vaccine.VaccineId,
+                DoseNumber = administeredDose.DoseDetail.DoseNumber,
+                AdministrationDate = administeredDose.DoseDate,
+                HealthCenterName = administeredDose.HealthCenter.Name,
+                HealthPersonnelName = administeredDose.HealthPersonnel.User.FirstName + " " + administeredDose.HealthPersonnel.User.LastName,
+                VaccinationSchemeName = administeredDose.DoseDetail.VaccinationSchemeDetail.VaccinationScheme.Name,
+                WhenShouldBePut = WhenPutVaccine.ToString(administeredDose.DoseDetail),
+                VaccinationSchemeDetailId = administeredDose.DoseDetail.VaccinationSchemeDetailId,
+                VaccinationSchemeId = administeredDose.DoseDetail.VaccinationSchemeDetail.VaccinationSchemeId,
+                DoseId = administeredDose.DoseDetailId,
+                Observations = administeredDose.Observations
+            };
         }
     }
 }
