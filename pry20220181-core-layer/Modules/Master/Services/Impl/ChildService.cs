@@ -16,15 +16,17 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
     public class ChildService : IChildService
     {
         private readonly IChildRepository _childRepository;
+        private readonly IParentRepository _parentRepository;
         private readonly IVaccinationSchemeDetailRepository _vaccinationSchemeDetailRepository;
         private readonly IAdministeredDoseRepository _administeredDoseRepository;
         private ILogger<ChildService> _logger { get; set; }
-        public ChildService(IChildRepository childRepository, IVaccinationSchemeDetailRepository vaccinationSchemeDetailRepository, IAdministeredDoseRepository administeredDoseRepository, ILogger<ChildService> logger)
+        public ChildService(IChildRepository childRepository, IVaccinationSchemeDetailRepository vaccinationSchemeDetailRepository, IAdministeredDoseRepository administeredDoseRepository, ILogger<ChildService> logger, IParentRepository parentRepository)
         {
             _childRepository = childRepository;
             _vaccinationSchemeDetailRepository = vaccinationSchemeDetailRepository;
             _administeredDoseRepository = administeredDoseRepository;
             _logger = logger;
+            _parentRepository = parentRepository;
         }
 
         public async Task<ChildDTO> GetChildByDniAsync(string DNI)
@@ -49,8 +51,14 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
             return childToReturn;
         }
 
-        public async Task<VaccinationCardDTO> GetVaccinationCardAsync(int childId)
+        public async Task<VaccinationCardDTO> GetVaccinationCardAsync(int childId, int parentId)
         {
+            var childrenIds = await _parentRepository.GetChildrenIdAsync(parentId);
+            
+            if(!childrenIds.Contains(childId)){
+                throw new NotIsTheirChildException(parentId, childId);
+            }
+
             var childFromDb = await _childRepository.GetByIdAsync(childId);
 
             if (childFromDb is null)

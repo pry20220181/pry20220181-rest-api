@@ -4,11 +4,12 @@ using pry20220181_core_layer.Modules.Master.DTOs.Output;
 using pry20220181_core_layer.Modules.Master.Services;
 using pry20220181_core_layer.Modules.Vaccination.DTOs.Output;
 using pry20220181_core_layer.Modules.Vaccination.Models;
+using pry20220181_rest_api.Utils;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace pry20220181_rest_api.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [ApiController]
     [Route("children")]
     public class ChildrenController : ControllerBase
@@ -76,8 +77,13 @@ namespace pry20220181_rest_api.Controllers
                 {
                     return Results.BadRequest("ChildId is required");
                 }
+                
+                //TRAER LOS CHILDREN DEL PARENT Y VER SI LO INCLUYEK SINO RETORNO 401 o 403
 
-                var vaccinationCard = await _childService.GetVaccinationCardAsync(childId);
+                var user = HttpContext.User;
+                var parentId = Convert.ToInt32(user.Claims.FirstOrDefault(c => c.Type == CustomClaimTypes.EntityId).Value);
+
+                var vaccinationCard = await _childService.GetVaccinationCardAsync(childId, parentId);
                 if (vaccinationCard is null)
                 {
                     var errorMessage = $"Something was wrong when get the vaccination card of child with ID {childId}";
@@ -88,6 +94,14 @@ namespace pry20220181_rest_api.Controllers
                 return Results.Ok(new
                 {
                     VaccinationCard = vaccinationCard
+                });
+            }
+            catch(NotIsTheirChildException ex){
+                _logger.LogWarning(ex.Message);
+                return Results.BadRequest(new
+                {
+                    StatusCode = 403,
+                    Message = "No access"
                 });
             }
             catch (Exception ex)

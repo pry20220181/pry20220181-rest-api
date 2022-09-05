@@ -69,5 +69,16 @@ namespace pry20220181_data_layer.Repositories.Master
                 .Include(p=>p.User)
                 .Where(p => ubigeoIds.Contains(p.UbigeoId)).ToListAsync();
         }
+
+        public async Task<List<int>> GetChildrenIdAsync(int parentId)
+        {
+            var children = await _dbContext.ChildrenParents
+                .Include(p => p.Child)
+                .Where(p => p.ParentId == parentId)
+                .Select(c=>c.ChildId)
+                .ToListAsync();
+
+            return children;
+        }
     }
 }

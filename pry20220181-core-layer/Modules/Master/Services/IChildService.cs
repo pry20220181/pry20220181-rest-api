@@ -17,6 +17,6 @@ namespace pry20220181_core_layer.Modules.Master.Services
         /// </summary>
         /// <param name="childId"></param>
         /// <returns>The vaccination card info (Child's info, Vaccination Schemes, Vaccines and Doses)</returns>
-        public Task<VaccinationCardDTO> GetVaccinationCardAsync(int childId);
+        public Task<VaccinationCardDTO> GetVaccinationCardAsync(int childId, int parentId);
     }
 }
