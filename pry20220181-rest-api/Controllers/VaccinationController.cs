@@ -135,22 +135,15 @@ namespace pry20220181_rest_api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [SwaggerResponse(200, "Get Administered Dose By Id", typeof(AdministeredDoseDTO))]
-        public async Task<IResult> GetAdministeredDoseById([FromRoute] int id = 0)
+        public async Task<IResult> GetAdministeredDoseById([FromRoute] string id)
         {
             try
             {
+                var administeredDose = await _dosesService.GetAdministeredDoseByIdAsync(id);
                 return Results.Ok(new
                 {
-                    AdministeredDose = new AdministeredDoseDTO(){
-                        AdministeredDoseId = id.ToString()
-                    }
+                    AdministeredDose = administeredDose
                 });
-
-                // var administeredDose = await _dosesService.GetAdministeredDoseById(id);
-                // return Results.Ok(new
-                // {
-                //     AdministeredDose = administeredDose
-                // });
             }
             catch (Exception ex)
             {
