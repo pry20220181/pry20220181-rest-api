@@ -1,14 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using pry20220181_core_layer.Modules.Master.DTOs.Output;
 using pry20220181_core_layer.Modules.Master.Models;
 using pry20220181_core_layer.Modules.Vaccination.DTOs.Input;
 using pry20220181_core_layer.Modules.Vaccination.Services;
 using pry20220181_core_layer.Modules.Vaccination.Services.Impl;
+using pry20220181_core_layer.Utils;
+using pry20220181_rest_api.Utils;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace pry20220181_rest_api.Controllers
 {
-    //[Authorize]
+    [Authorize(Roles = Roles.Parent)]
     [ApiController]
     [Route("vaccination/appointments")]
     public class VaccinationAppointmentController : ControllerBase
@@ -34,6 +37,15 @@ namespace pry20220181_rest_api.Controllers
                 {
                     return Results.BadRequest("Not information to register is found");
                 }
+
+                var user = HttpContext.User;
+                var parentId = Convert.ToInt32(user.Claims.FirstOrDefault(c => c.Type == CustomClaimTypes.EntityId).Value);
+                if (parentId == 0)
+                {
+                    return Results.BadRequest();
+                }
+
+                vaccinationAppointmentCreationDTO.ParentId = parentId;
 
                 var registeredVaccinationAppointmentId = await _vaccinationAppointmentService.CreateVaccinationAppointmentAsync(vaccinationAppointmentCreationDTO);
 
