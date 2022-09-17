@@ -130,6 +130,8 @@ namespace pry20220181_data_layer.Repositories.Master
                     .Include(r => r.Parent)
                         .ThenInclude(p => p.ChildParents)
                             .ThenInclude(c => c.Child)
+                    .Include(r => r.Parent)
+                        .ThenInclude(p => p.User)
                     .ToListAsync();
         }
 
@@ -154,6 +156,8 @@ namespace pry20220181_data_layer.Repositories.Master
                 .Include(r => r.Parent)
                     .ThenInclude(p => p.ChildParents)
                         .ThenInclude(c => c.Child)
+                .Include(r => r.Parent)
+                    .ThenInclude(p => p.User)
                 .ToListAsync();
         }
 
