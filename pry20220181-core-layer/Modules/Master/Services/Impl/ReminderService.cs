@@ -196,7 +196,12 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
                 var child = reminder.Parent.ChildParents.Where(c => c.ChildId == reminder.ChildId).FirstOrDefault().Child;
                 remindersToReturn.Add(new DoseReminderDTO()
                 {
-                    ParentId = reminder.ParentId,
+                    Parent = new DoseReminderDTO.DoseReminderParentDTO(){
+                        ParentId = reminder.Parent.ParentId,
+                        Firstname = reminder.Parent.User.FirstName,
+                        Lastname = reminder.Parent.User.LastName,
+                        Email = reminder.Parent.User.Email
+                    },
                     ReminderId = reminder.ReminderId,
                     SendDate = reminder.SendDate,
                     Dose = new DoseReminderDTO.DoseDTO
@@ -232,7 +237,12 @@ namespace pry20220181_core_layer.Modules.Master.Services.Impl
                 var child = reminder.Parent.ChildParents.Where(c => c.ChildId == reminder.ChildId).FirstOrDefault().Child;
                 remindersToReturn.Add(new DoseReminderDTO()
                 {
-                    ParentId = reminder.ParentId,
+                    Parent = new DoseReminderDTO.DoseReminderParentDTO(){
+                        ParentId = reminder.Parent.ParentId,
+                        Firstname = reminder.Parent.User.FirstName,
+                        Lastname = reminder.Parent.User.LastName,
+                        Email = reminder.Parent.User.Email
+                    },
                     ReminderId = reminder.ReminderId,
                     SendDate = reminder.SendDate,
                     Dose = new DoseReminderDTO.DoseDTO
