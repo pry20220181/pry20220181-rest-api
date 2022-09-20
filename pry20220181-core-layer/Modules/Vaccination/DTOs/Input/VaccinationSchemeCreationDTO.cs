@@ -12,6 +12,6 @@ namespace pry20220181_core_layer.Modules.Vaccination.DTOs.Input
         public int VaccinationSchemeId { get; set; }
         public int NumberOfDoses { get; set; }
         public string PossibleEffectsPostVaccine { get; set; }
-        public List<VaccineDoseCreationDTO> VaccineDoses { get; set; } = new List<VaccineDoseCreationDTO>();
+        // public List<VaccineDoseCreationDTO> VaccineDoses { get; set; } = new List<VaccineDoseCreationDTO>();
     }
 }

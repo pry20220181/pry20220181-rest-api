@@ -95,32 +95,32 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
             _logger.LogInformation($"{createdVaccinationSchemeDetails.Count()} vaccination scheme details created for the Vaccine {vaccineCreationDTO.Name}");
             #endregion
 
-            #region We register all the Details (Doses) about the vaccinationSchemeDetail of this Vaccine
-            foreach (var vaccinationSchemeItem in vaccineCreationDTO.VaccinationSchemes)
-            {
-                var vaccinationSchemeDetailId = createdVaccinationSchemeDetails
-                    .FirstOrDefault(v => v.VaccinationSchemeId == vaccinationSchemeItem.VaccinationSchemeId)
-                    .VaccinationSchemeDetailId;
-                foreach (var vaccineDose in vaccinationSchemeItem.VaccineDoses)
-                {
-                    DoseDetail doseDetailToCreate = new DoseDetail()
-                    {
-                        DoseNumber = vaccineDose.DoseNumber,
-                        // PutWhenNewBorn = vaccineDose.PutWhenNewBorn,
-                        PutWhenHasMonths = vaccineDose.PutWhenHasMonths,
-                        // PutMonthsAfterPreviousDosis = vaccineDose.PutMonthsAfterPreviousDosis,
-                        // PutBetweenStartMonth = vaccineDose.PutBetweenStartMonth,
-                        // PutBetweenEndMonth = vaccineDose.PutBetweenEndMonth,
-                        // PutEveryYear = vaccineDose.PutEveryYear,
-                        VaccinationSchemeDetailId = vaccinationSchemeDetailId
-                    };
-                    vaccineDosesToCreate.Add(doseDetailToCreate);
-                }
-            }
+            // #region We register all the Details (Doses) about the vaccinationSchemeDetail of this Vaccine
+            // foreach (var vaccinationSchemeItem in vaccineCreationDTO.VaccinationSchemes)
+            // {
+            //     var vaccinationSchemeDetailId = createdVaccinationSchemeDetails
+            //         .FirstOrDefault(v => v.VaccinationSchemeId == vaccinationSchemeItem.VaccinationSchemeId)
+            //         .VaccinationSchemeDetailId;
+            //     foreach (var vaccineDose in vaccinationSchemeItem.VaccineDoses)
+            //     {
+            //         DoseDetail doseDetailToCreate = new DoseDetail()
+            //         {
+            //             DoseNumber = vaccineDose.DoseNumber,
+            //             // PutWhenNewBorn = vaccineDose.PutWhenNewBorn,
+            //             PutWhenHasMonths = vaccineDose.PutWhenHasMonths,
+            //             // PutMonthsAfterPreviousDosis = vaccineDose.PutMonthsAfterPreviousDosis,
+            //             // PutBetweenStartMonth = vaccineDose.PutBetweenStartMonth,
+            //             // PutBetweenEndMonth = vaccineDose.PutBetweenEndMonth,
+            //             // PutEveryYear = vaccineDose.PutEveryYear,
+            //             VaccinationSchemeDetailId = vaccinationSchemeDetailId
+            //         };
+            //         vaccineDosesToCreate.Add(doseDetailToCreate);
+            //     }
+            // }
 
-            var createdDoseDetails = await _doseDetailRepository.CreateRangeAsync(vaccineDosesToCreate);
-            _logger.LogInformation($"{createdDoseDetails.Count()} doses created for the Vaccine {vaccineCreationDTO.Name}");
-            #endregion
+            // var createdDoseDetails = await _doseDetailRepository.CreateRangeAsync(vaccineDosesToCreate);
+            // _logger.LogInformation($"{createdDoseDetails.Count()} doses created for the Vaccine {vaccineCreationDTO.Name}");
+            // #endregion
 
 
             return vaccineId;
