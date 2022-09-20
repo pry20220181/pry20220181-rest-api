@@ -49,6 +49,16 @@ builder.Services.AddIdentityCore<User>()
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<PRY20220181DbContext>();
 
+builder.Services.Configure<IdentityOptions>(options =>
+	{
+		// Password settings
+		options.Password.RequireDigit = false;
+		options.Password.RequiredLength = 4;
+		options.Password.RequireNonAlphanumeric = false;
+		options.Password.RequireUppercase = false;
+		options.Password.RequireLowercase = false;
+	});
+
 builder.Services
     .AddHttpContextAccessor()
     .AddAuthorization()
