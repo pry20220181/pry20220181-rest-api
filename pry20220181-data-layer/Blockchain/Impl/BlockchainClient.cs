@@ -76,9 +76,30 @@ namespace pry20220181_data_layer.Blockchain.Impl
             }
         }
 
-        public Task<AdministeredDose> GetAdministeredDoseByIdAsync(string id)
+        public async Task<AdministeredDose> GetAdministeredDoseByIdAsync(string id)
         {
-            throw new NotImplementedException();
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Add("Api-Key", _blockchainClientConfiguration.BlockchainServiceKey);
+
+                _logger.LogInformation("Llamada a API de Blockchain iniciada en " + DateTime.Now);
+
+                var response = await httpClient.GetAsync($"{_blockchainClientConfiguration.BlockchainServiceUrl}/administered-doses/{id}");
+                var blockchainResponse = await response.Content.ReadFromJsonAsync<BlockchainServiceResponse>();
+                _logger.LogInformation("Llamada a API de Blockchain finalizada en " + DateTime.Now);
+                return new AdministeredDose()
+                {
+                    AdministeredDoseId = blockchainResponse.administeredDoseId,
+                    DoseDetailId = blockchainResponse.doseId,
+                    ChildId = blockchainResponse.childId,
+                    DoseDate = blockchainResponse.doseDate,
+                    HealthCenterId = blockchainResponse.healthCenterId,
+                    HealthPersonnelId = blockchainResponse.healthPersonnelId,
+                    VaccinationAppointmentId = blockchainResponse.vaccinationAppointmentId,
+                    VaccinationCampaignId = blockchainResponse.vaccinationCampaignId,
+                    Observations = blockchainResponse.observations
+                };
+            }
         }
     }
 }
