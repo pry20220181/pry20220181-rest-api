@@ -506,10 +506,28 @@ namespace pry20220181_data_layer
             VaccineInventory vaccineInventory2 = new VaccineInventory { HealthCenterId = TumbesCS.HealthCenterId, VaccineId = VacunaPentavalente.VaccineId, Stock = 18 };
             VaccineInventory vaccineInventory3 = new VaccineInventory { HealthCenterId = TumbesCS.HealthCenterId, VaccineId = VacunaAntineumococica.VaccineId, Stock = 13 };
             VaccineInventory vaccineInventory4 = new VaccineInventory { HealthCenterId = TumbesCS.HealthCenterId, VaccineId = VacunaContraLaVaricela.VaccineId, Stock = 9 };
+
+            VaccineInventory vaccineInventory5 = new VaccineInventory { HealthCenterId = BreñaCS.HealthCenterId, VaccineId = BCG.VaccineId, Stock = 70 };
+            VaccineInventory vaccineInventory6 = new VaccineInventory { HealthCenterId = BreñaCS.HealthCenterId, VaccineId = VacunaPentavalente.VaccineId, Stock = 100 };
+            VaccineInventory vaccineInventory7 = new VaccineInventory { HealthCenterId = BreñaCS.HealthCenterId, VaccineId = VacunaAntineumococica.VaccineId, Stock = 110 };
+            VaccineInventory vaccineInventory8 = new VaccineInventory { HealthCenterId = BreñaCS.HealthCenterId, VaccineId = VacunaContraLaVaricela.VaccineId, Stock = 90 };
+
+            VaccineInventory vaccineInventory9 = new VaccineInventory { HealthCenterId = AteCS.HealthCenterId, VaccineId = BCG.VaccineId, Stock = 90 };
+            VaccineInventory vaccineInventory10 = new VaccineInventory { HealthCenterId = AteCS.HealthCenterId, VaccineId = VacunaPentavalente.VaccineId, Stock = 160 };
+            VaccineInventory vaccineInventory11 = new VaccineInventory { HealthCenterId = AteCS.HealthCenterId, VaccineId = VacunaAntineumococica.VaccineId, Stock = 210 };
+            VaccineInventory vaccineInventory12 = new VaccineInventory { HealthCenterId = AteCS.HealthCenterId, VaccineId = VacunaContraLaVaricela.VaccineId, Stock = 135 };
+
+            VaccineInventory vaccineInventory13 = new VaccineInventory { HealthCenterId = CorralesCS.HealthCenterId, VaccineId = BCG.VaccineId, Stock = 9 };
+            VaccineInventory vaccineInventory14 = new VaccineInventory { HealthCenterId = CorralesCS.HealthCenterId, VaccineId = VacunaPentavalente.VaccineId, Stock = 6 };
+            VaccineInventory vaccineInventory15 = new VaccineInventory { HealthCenterId = CorralesCS.HealthCenterId, VaccineId = VacunaAntineumococica.VaccineId, Stock = 15 };
+            VaccineInventory vaccineInventory16 = new VaccineInventory { HealthCenterId = CorralesCS.HealthCenterId, VaccineId = VacunaContraLaVaricela.VaccineId, Stock = 19 };
             if (!VaccineInventory.Any())
             {
                 VaccineInventory.AddRange(new List<VaccineInventory>() {
-                    vaccineInventory1, vaccineInventory2, vaccineInventory3, vaccineInventory4
+                    vaccineInventory1, vaccineInventory2, vaccineInventory3, vaccineInventory4, 
+                    vaccineInventory5, vaccineInventory6, vaccineInventory7, vaccineInventory8,
+                    vaccineInventory9, vaccineInventory10, vaccineInventory11, vaccineInventory12,
+                    vaccineInventory13, vaccineInventory14, vaccineInventory15, vaccineInventory16
                 });
                 _logger.LogInformation("4 VaccineInventory Creados");
             }

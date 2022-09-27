@@ -41,7 +41,9 @@ namespace pry20220181_data_layer.Repositories.Master
                 .Include(r => r.VaccinationAppointment)
                     .ThenInclude(v => v.VaccinesForAppointment)
                     .ThenInclude(v => v.Vaccine)
-                .Include(r=>r.Child)
+                .Include(r => r.Parent)
+                    .ThenInclude(p => p.ChildParents)
+                    .ThenInclude(c => c.Child)
                 .ToListAsync();
         }
 
@@ -65,8 +67,8 @@ namespace pry20220181_data_layer.Repositories.Master
                     .Include(r => r.VaccinationCampaign)
                         .ThenInclude(r => r.VaccinationCampaignDetails)
                             .ThenInclude(d => d.Vaccine)
-                    .Include(r=>r.Parent)
-                        .ThenInclude(p=>p.User)
+                    .Include(r => r.Parent)
+                        .ThenInclude(p => p.User)
                     .ToListAsync();
         }
 
@@ -144,7 +146,7 @@ namespace pry20220181_data_layer.Repositories.Master
             return AlreadySentReminders.Count;
         }
 
-        
+
         public async Task<List<Reminder>> GetAllDoseRemindersByParentIdAsync(int parentId)
         {
             return await _dbContext
@@ -167,11 +169,11 @@ namespace pry20220181_data_layer.Repositories.Master
                 .Reminders
                 .Where(r => r.ParentId == parentId && r.VaccinationCampaignId != 0)
                 .Include(r => r.VaccinationCampaign)
-                    .ThenInclude(c=>c.VaccinationCampaignLocations)
-                        .ThenInclude(l=>l.HealthCenter)
+                    .ThenInclude(c => c.VaccinationCampaignLocations)
+                        .ThenInclude(l => l.HealthCenter)
                 .Include(r => r.VaccinationCampaign)
-                    .ThenInclude(c=>c.VaccinationCampaignDetails)
-                        .ThenInclude(c=>c.Vaccine)
+                    .ThenInclude(c => c.VaccinationCampaignDetails)
+                        .ThenInclude(c => c.Vaccine)
                 .Include(r => r.Parent)
                     .ThenInclude(p => p.ChildParents)
                         .ThenInclude(c => c.Child)
@@ -184,10 +186,10 @@ namespace pry20220181_data_layer.Repositories.Master
                 .Reminders
                 .Where(r => r.ParentId == parentId && r.VaccinationAppointmentId != 0)
                 .Include(r => r.VaccinationAppointment)
-                    .ThenInclude(a=>a.HealthCenter)
+                    .ThenInclude(a => a.HealthCenter)
                 .Include(r => r.VaccinationAppointment)
-                    .ThenInclude(a=>a.VaccinesForAppointment)
-                        .ThenInclude(v=>v.Vaccine)
+                    .ThenInclude(a => a.VaccinesForAppointment)
+                        .ThenInclude(v => v.Vaccine)
                 .Include(r => r.Parent)
                     .ThenInclude(p => p.ChildParents)
                         .ThenInclude(c => c.Child)

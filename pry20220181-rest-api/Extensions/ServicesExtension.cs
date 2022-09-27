@@ -44,8 +44,8 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IVaccinationSchemeRepository, VaccinationSchemeRepository>();
             services.AddScoped<IVaccinationSchemeDetailRepository, VaccinationSchemeDetailRepository>();
 
-            // services.AddScoped<IBlockchainClient, BlockchainClientDummy>();
-            services.AddScoped<IBlockchainClient, BlockchainClient>();
+            services.AddScoped<IBlockchainClient, BlockchainClientDummy>();
+            // services.AddScoped<IBlockchainClient, BlockchainClient>();
         }
 
         /// <summary>
