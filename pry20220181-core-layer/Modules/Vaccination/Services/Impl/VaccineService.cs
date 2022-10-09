@@ -84,8 +84,8 @@ namespace pry20220181_core_layer.Modules.Vaccination.Services.Impl
             {
                 VaccinationSchemeDetail vaccinationSchemeDetailToCreate = new VaccinationSchemeDetail()
                 {
-                    NumberOfDosesToAdminister = vaccinationSchemeItem.NumberOfDoses,
-                    PossibleEffectsPostVaccine = vaccinationSchemeItem.PossibleEffectsPostVaccine,
+                    NumberOfDosesToAdminister = 1,//vaccinationSchemeItem.NumberOfDoses,
+                    PossibleEffectsPostVaccine = "Ninguno",
                     VaccineId = vaccineId,
                     VaccinationSchemeId = vaccinationSchemeItem.VaccinationSchemeId
                 };
